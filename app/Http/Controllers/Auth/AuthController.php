@@ -19,8 +19,8 @@ class AuthController extends Controller
     {
         $request->validate(
             [
-                'username' => 'required',
-                'password' => 'required'
+                'username' => 'required|string|max:30',
+                'password' => 'required|min:8',
             ],
             [
                 'username.required' => 'กรุณากรอกชื่อผู้ใช้งาน',
@@ -33,13 +33,15 @@ class AuthController extends Controller
             'password' => $request->password,
         ], $request->password);
 
+        $request->session()->regenerate();
+
         if ($validated) {
-            if (auth()->user()->status == '1') {
+            if (auth()->user()->status == 1) {
                 return redirect()->route('home')->with('success', 'เข้าสู่ระบบสำเร็จ');
-            } else if (auth()->user()->status == '9') {
+            }
+            
+            if (auth()->user()->status == 9) {
                 return redirect()->route('dashboard')->with('success', 'เข้าสู่ระบบสำเร็จ');
-            } else {
-                return redirect()->back()->with('error', 'เข้าสู่ระบบไม่สำเร็จ');
             }
         } else {
             return redirect()->back()->with('error', 'เข้าสู่ระบบไม่สำเร็จ');
@@ -54,13 +56,15 @@ class AuthController extends Controller
     public function postRegister(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|max:250',
-            'email' => 'required|email|max:250|unique:users',
-            'password' => 'required|min:8|confirmed'
+            'username' => 'required|string|max:30',
+            'email' => 'required|email|max:30|unique:users',
+            'password' => 'required|min:8|confirmed',
+
         ], [
             'username.required' => 'กรุณากรอกชื่อผู้ใช้งาน',
             'email.required' => 'กรุณากรอกอีเมล',
             'password.required' => 'กรุณากรอกรหัสผ่าน',
+
         ]);
 
         User::create([

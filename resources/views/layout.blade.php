@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TWIN LOTUS {{ isset($title) ? '| ' . $title : '' }}</title>
+    <title>เว็บไซต์จองสนามกีฬา {{ isset($title) ? '| ' . $title : '' }}</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -25,7 +25,7 @@
 
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container">
-            <a class="navbar-brand" href="{{ URL('/') }}">Custom Login Register</a>
+            <a class="navbar-brand" href="{{ URL('/') }}">จองสนามกีฬา</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
