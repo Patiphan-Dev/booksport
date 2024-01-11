@@ -17,14 +17,16 @@ class AuthController extends Controller
 
     public function postLogin(Request $request)
     {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required'
-        ], 
-        [
-            'username.required' => 'กรุณากรอกชื่อผู้ใช้งาน',
-            'password.required' => 'กรุณากรอกรหัสผ่าน',
-        ]);
+        $request->validate(
+            [
+                'username' => 'required',
+                'password' => 'required'
+            ],
+            [
+                'username.required' => 'กรุณากรอกชื่อผู้ใช้งาน',
+                'password.required' => 'กรุณากรอกรหัสผ่าน',
+            ]
+        );
 
         $validated = auth()->attempt([
             'username' => $request->username,
@@ -32,7 +34,13 @@ class AuthController extends Controller
         ], $request->password);
 
         if ($validated) {
-            return redirect()->route('home')->with('success', 'เข้าสู่ระบบสำเร็จ');
+            if (auth()->user()->status == '1') {
+                return redirect()->route('home')->with('success', 'เข้าสู่ระบบสำเร็จ');
+            } else if (auth()->user()->status == '9') {
+                return redirect()->route('dashboard')->with('success', 'เข้าสู่ระบบสำเร็จ');
+            } else {
+                return redirect()->back()->with('error', 'เข้าสู่ระบบไม่สำเร็จ');
+            }
         } else {
             return redirect()->back()->with('error', 'เข้าสู่ระบบไม่สำเร็จ');
         }
@@ -43,13 +51,13 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function postRegister(Request $request) 
+    public function postRegister(Request $request)
     {
         $request->validate([
             'username' => 'required|string|max:250',
             'email' => 'required|email|max:250|unique:users',
             'password' => 'required|min:8|confirmed'
-        ],[
+        ], [
             'username.required' => 'กรุณากรอกชื่อผู้ใช้งาน',
             'email.required' => 'กรุณากรอกอีเมล',
             'password.required' => 'กรุณากรอกรหัสผ่าน',
@@ -73,5 +81,11 @@ class AuthController extends Controller
         } else {
             return redirect()->back()->with('error', 'เข้าสู่ระบบไม่สำเร็จ');
         }
+    }
+
+    public function logout()
+    {
+        auth()->logout();
+        return redirect()->route('getLogin')->with('success', 'คุณออกจากระบบเรียบร้อยแล้ว');
     }
 }
