@@ -1,6 +1,6 @@
 @extends('layout')
 @section('body')
     <div>
-        home
+        booking
     </div>
 @endsection

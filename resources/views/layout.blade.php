@@ -18,19 +18,42 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <!-- sweetalert2 -->
     <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
-
+    <style>
+        body {
+            padding-top: 56px;
+            /* Adjust for the fixed navbar */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
 
 <body>
-
-    <nav class="navbar navbar-expand-lg bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top py-3">
         <div class="container">
-            <a class="navbar-brand" href="{{ URL('/') }}">จองสนามกีฬา</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="{{ URL('/') }}">Your Logo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Stadium</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Booking</a>
+                    </li>
+                </ul>
                 <ul class="navbar-nav ms-auto">
                     @guest
                         <li class="nav-item">
@@ -60,16 +83,16 @@
         </div>
     </nav>
 
-    @include('sweetalert::alert')
+    <div class="container">
+        <section class="content">
+            @include('sweetalert::alert')
+            @yield('content-header')
 
-    @yield('content-header')
-
-    <!-- Main content -->
-    <section class="content">
-        <div class="container-fluid">
-            @yield('body')
-        </div>
-    </section>
+            <div class="container-fluid">
+                @yield('body')
+            </div>
+        </section>
+    </div>
 
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"

@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class RuleController extends Controller
 {
     public function index()
     {
         $data = [
-            'title' => 'แดชบอร์ด'
+            'title' => 'กฎกติกา'
         ];
-        return view('admin.dashboard',$data);
+        return view('admin.rule',$data);
     }
 }
