@@ -58,11 +58,11 @@
 
     <script>
         $(document).ready(function() {
-            $('#details').summernote({
+            $('#std_details').summernote({
                 tabsize: 2,
                 height: 200
             });
-            $('#facilities').summernote({
+            $('#std_facilities').summernote({
                 tabsize: 2,
                 height: 200
             });

@@ -16,17 +16,34 @@ class StadiumController extends Controller
         $data = [
             'title' => 'สนามกีฬา'
         ];
-        return view('admin.stadium',$data);
+        return view('admin.stadium', $data);
     }
 
     public function addStadium(Request $request)
     {
+
+        $images = $request->file('files');
+        if ($request->hasFile('files')) :
+            $i = 1;
+            foreach ($images as $item) :
+                $var = date_create();
+                $time = date_format($var, 'YmdHis');
+                $imageName = $request->std_name . '-' . $time. '-' .$i++;
+                $item->move(base_path() . '/uploads/images_stadiums/', $imageName);
+                $arr[] = $imageName;
+            endforeach;
+            $image = implode(",", $arr);
+        else :
+            $image = '';
+        endif;
+
         //บันทึกข้อมูล
         $stadium = new Stadiums;
         $stadium->std_name = $request->std_name;
         $stadium->std_details = $request->std_details;
         $stadium->std_price = $request->std_price;
         $stadium->std_facilities = $request->std_facilities;
+        $stadium->std_img_path = array('image' => $image);
         $stadium->status = '1';
 
         $stadium->save();

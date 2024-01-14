@@ -1,6 +1,6 @@
 @extends('admin.layout')
 @section('body')
-    
+
     <div class="container text-center">
         <div class="row g-2">
             <div class="col-3">
@@ -17,7 +17,7 @@
             <div class="col-3">
                 <div class="card text-center">
                     <div class="card-body">
-                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                        <i class="fa-solid fa-bookmark"></i>
                         <h5 class="card-title">การจองทั้งหมด</h5>
                     </div>
                     <div class="card-footer text-body-secondary">
@@ -28,6 +28,7 @@
             <div class="col-3">
                 <div class="card text-center">
                     <div class="card-body">
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
                         <h5 class="card-title">รอตรวจสอบการชำระเงิน</h5>
                     </div>
                     <div class="card-footer text-body-secondary">
@@ -38,6 +39,7 @@
             <div class="col-3">
                 <div class="card text-center">
                     <div class="card-body">
+                        <i class="fa-solid fa-bookmark"></i>
                         <h5 class="card-title">Special title treatment</h5>
                     </div>
                     <div class="card-footer text-body-secondary">
