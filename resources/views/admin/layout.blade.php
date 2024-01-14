@@ -19,67 +19,20 @@
     <!-- sweetalert2 -->
     <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
 
+    <!-- include libraries(jQuery, bootstrap) -->
+    {{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet"> --}}
+    <script type="text/javascript" src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> --}}
+
+    <!-- include summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 </head>
 
 <body>
 
     <main class="d-flex flex-nowrap" style="height: 100vh">
-        <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <span class="fs-4">ระบบจองสนามกีฬา</span>
-            </a>
-            <hr>
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <a href="{{route('dashboard')}}" class="nav-link active" aria-current="page">
-                        <i class="fa-solid fa-gauge"></i>
-                        แดชบอร์ด
-                    </a>
-                </li>
-                <li>
-                    <a href="{{route('stadium')}}" class="nav-link text-white">
-                        <i class="fa-solid fa-medal"></i>
-                        สนามกีฬา
-                    </a>
-                </li>
-                <li>
-                    <a href="{{route('reserve')}}" class="nav-link text-white">
-                        <i class="fa-solid fa-bookmark"></i>
-                        การจอง
-                    </a>
-                </li>
-                <li>
-                    <a href="{{route('payment')}}" class="nav-link text-white">
-                        <i class="fa-solid fa-hand-holding-dollar"></i>
-                        การชำระเงิน
-                    </a>
-                </li>
-                <li>
-                    <a href="{{route('rule')}}" class="nav-link text-white">
-                        <i class="fa-solid fa-scale-balanced"></i>
-                        กฎกติกา
-                    </a>
-                </li>
-            </ul>
-            <hr>
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item dropdown">
-                    <div class="dropdown">
-                        <a href="#"
-                            class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://github.com/mdo.png" alt="" width="32" height="32"
-                                class="rounded-circle me-2">
-                            <strong>{{ Auth::user()->username }}</strong>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                            <li><a class="dropdown-item" href="{{ route('logout') }}">ออกจากระบบ <i
-                                        class="fa-solid fa-right-from-bracket"></i></a></li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-        </div>
+        @include('admin.navbar')
         <div class="container">
             <section class="content">
                 @include('sweetalert::alert')
@@ -87,13 +40,15 @@
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1 class="m-0"> {{ isset($title) ? '| ' . $title : '' }}</h1>
+                                <h1 class="m-0"> {{ isset($title) ? '' . $title : '' }}</h1>
                             </div>
                         </div>
                     </div>
                 </div>
+                <hr>
                 <div class="container-fluid">
                     @yield('body')
+
                 </div>
             </section>
         </div>
@@ -101,7 +56,18 @@
     </main>
 
 
-
+    <script>
+        $(document).ready(function() {
+            $('#details').summernote({
+                tabsize: 2,
+                height: 200
+            });
+            $('#facilities').summernote({
+                tabsize: 2,
+                height: 200
+            });
+        });
+    </script>
 
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -109,7 +75,6 @@
     </script>
     <!-- sweetalert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
-
 
 </body>
 

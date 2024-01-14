@@ -31,7 +31,6 @@ class StadiumController extends Controller
 
         $stadium->save();
 
-        // แจ้งเตือน ไลน์
         Alert::success('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
         return redirect()->back()->with('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
     }

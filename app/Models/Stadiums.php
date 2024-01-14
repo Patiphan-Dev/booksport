@@ -13,6 +13,7 @@ class Stadiums extends Model
         'std_details',
         'std_price',
         'std_facilities',
+        'std_images',
         'std_status',
     ];
 }

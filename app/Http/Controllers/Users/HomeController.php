@@ -13,7 +13,7 @@ class HomeController extends Controller
         $data = [
             'title' => 'หน้าแรก'
         ];
-        $stadiums = Stadiums::all();
+        $stadiums = Stadiums::get();
         return view('home', compact('stadiums'), $data);
     }
 }
