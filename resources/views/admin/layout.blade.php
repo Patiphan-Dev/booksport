@@ -20,9 +20,7 @@
     <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
 
     <!-- include libraries(jQuery, bootstrap) -->
-    {{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet"> --}}
     <script type="text/javascript" src="//code.jquery.com/jquery-3.6.0.min.js"></script>
-    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> --}}
 
     <!-- include summernote css/js -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
@@ -48,13 +46,10 @@
                 <hr>
                 <div class="container-fluid">
                     @yield('body')
-
                 </div>
             </section>
         </div>
-
     </main>
-
 
     <script>
         $(document).ready(function() {

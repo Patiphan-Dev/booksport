@@ -44,18 +44,18 @@ Route::group(['middleware' => ['login_auth']], function () {
 
         Route::get('/stadium', [StadiumController::class, 'index'])->name('stadium');
         Route::post('/addstadium', [StadiumController::class, 'addStadium'])->name('addStadium');
-        Route::post('/editstadium', [StadiumController::class, 'editStadium'])->name('editStadium');
+        Route::get('/editstadium', [StadiumController::class, 'editStadium'])->name('editStadium');
         Route::post('/updatestadium', [StadiumController::class, 'updateStadium'])->name('updateStadium');
         Route::post('/deletestadium', [StadiumController::class, 'deleteStadium'])->name('deleteStadium');
 
         Route::get('/reserve', [ReserveController::class, 'index'])->name('reserve');
         Route::post('/addreserve', [ReserveController::class, 'addReserve'])->name('addReserve');
-        Route::post('/editreserve', [ReserveController::class, 'editReserve'])->name('editReserve');
+        Route::get('/editreserve', [ReserveController::class, 'editReserve'])->name('editReserve');
         Route::post('/deletereserve', [ReserveController::class, 'deleteReserve'])->name('deleteReserve');
 
         Route::get('/payment', [PaymentController::class, 'index'])->name('payment');
         Route::post('/addpayment', [PaymentController::class, 'addPayment'])->name('addPayment');
-        Route::post('/editpayment', [PaymentController::class, 'editPayment'])->name('editPayment');
+        Route::get('/editpayment', [PaymentController::class, 'editPayment'])->name('editPayment');
         Route::post('/deletepayment', [PaymentController::class, 'deletePayment'])->name('deletePayment');
 
         Route::get('/rule', [RuleController::class, 'index'])->name('rule');

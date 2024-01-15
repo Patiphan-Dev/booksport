@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Stadiums;
-
 use RealRashid\SweetAlert\Facades\Alert;
 
 class StadiumController extends Controller
@@ -21,32 +20,34 @@ class StadiumController extends Controller
 
     public function addStadium(Request $request)
     {
+        $time = date("Y-m-d");
+        
+        if ($files = $request->file('std_img_path')) {
 
-        $images = $request->file('files');
-        if ($request->hasFile('files')) :
+            // dd($files);
+
             $i = 1;
-            foreach ($images as $item) :
-                $var = date_create();
-                $time = date_format($var, 'YmdHis');
-                $imageName = $request->std_name . '-' . $time. '-' .$i++;
-                $item->move(base_path() . '/uploads/images_stadiums/', $imageName);
-                $arr[] = $imageName;
-            endforeach;
-            $image = implode(",", $arr);
-        else :
-            $image = '';
-        endif;
+            foreach ($files as $file) {
+                $std_img_path =  $request->std_name . '-' . $time . '-img-' . $i++;
+                $ext = strtolower($file->getClientOriginalExtension());
+                $image_full_name = $std_img_path . '.' . $ext;
+                $uploade_path = 'uploads/stadiums/';
+                $image_url = $uploade_path . $image_full_name;
+                $file->move($uploade_path, $image_full_name);
+                $arr[] = $image_url;
+            }
+            $std_img_path = implode(",", $arr);
 
-        //บันทึกข้อมูล
-        $stadium = new Stadiums;
-        $stadium->std_name = $request->std_name;
-        $stadium->std_details = $request->std_details;
-        $stadium->std_price = $request->std_price;
-        $stadium->std_facilities = $request->std_facilities;
-        $stadium->std_img_path = array('image' => $image);
-        $stadium->status = '1';
-
-        $stadium->save();
+            //บันทึกข้อมูล
+            $stadium = new Stadiums;
+            $stadium->std_name = $request->std_name;
+            $stadium->std_details = $request->std_details;
+            $stadium->std_price = $request->std_price;
+            $stadium->std_facilities = $request->std_facilities;
+            $stadium->std_img_path = $std_img_path;
+            $stadium->std_status = '1';
+            $stadium->save();
+        }
 
         Alert::success('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
         return redirect()->back()->with('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
