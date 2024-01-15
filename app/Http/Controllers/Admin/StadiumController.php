@@ -15,13 +15,14 @@ class StadiumController extends Controller
         $data = [
             'title' => 'สนามกีฬา'
         ];
-        return view('admin.stadium', $data);
+        $stadiums = Stadiums::all();
+        return view('admin.stadium', compact('stadiums'), $data);
     }
 
     public function addStadium(Request $request)
     {
         $time = date("Y-m-d");
-        
+
         if ($files = $request->file('std_img_path')) {
 
             // dd($files);
