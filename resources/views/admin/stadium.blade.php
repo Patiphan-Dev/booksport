@@ -4,6 +4,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
     <div class="clearfix">
         <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addstadium">
             เพิ่มสนาม
@@ -59,13 +60,14 @@
             </div>
         </div>
     </div>
+
     <div class="container">
         <div class="row g-2">
             @foreach ($stadiums as $std)
                 @php
                     $image = explode(',', $std->std_img_path);
                 @endphp
-            
+
                 <div class="col-6 col-sm-4 col-md-3 text-center">
                     <a class="card text-center h-100 viewStadium" href="" data-id="{{ $std->std_name }}"
                         data-bs-toggle="modal" data-bs-target="#StadiumDetail{{ $std->id }}">
@@ -76,8 +78,8 @@
                     </a>
                 </div>
 
-                <div class="modal fade" id="StadiumDetail{{ $std->id }}" data-bs-backdrop="static"
-                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal fade" id="StadiumDetail{{ $std->id }}" tabindex="-1"
+                    aria-labelledby="StadiumDetailLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -90,7 +92,8 @@
                                 <div id="carousel{{ $std->id }}" class="carousel slide mb-4">
                                     <div class="carousel-inner">
                                         @foreach ($image as $key => $img)
-                                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}" style="max-height:300px">
+                                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}"
+                                                style="max-height:300px">
                                                 <img src="{{ asset($img) }}" class="d-block w-100" alt="...">
                                             </div>
                                         @endforeach
@@ -115,6 +118,78 @@
                                     {!! $std->std_facilities !!}
                                 </div>
                             </div>
+                            <div class="clearfix">
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary editModal" data-id="{{ $std->id }}"
+                                        data-bs-target="#editModal{{ $std->id }}"
+                                        data-bs-toggle="modal">แก้ไขข้อมูล</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal fade" id="editModal{{ $std->id }}" aria-hidden="true"
+                    aria-labelledby="editModalLabel{{ $std->id }}" data-bs-backdrop="static"
+                    data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="editModalLabel">เพิ่มสนามกีฬา</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('updateStadium') }}" method="post"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-12 col-md-6 mb-3">
+                                            <label for="std_name" class="form-label">ชื่อสนาม <span>*</span></label>
+                                            <input type="text" class="form-control" id="std_name" name="std_name"
+                                                placeholder="สนามกีฬา" value="{{ $std->std_name }}" required>
+                                        </div>
+                                        <div class="col-12 col-md-6 mb-3">
+                                            <label for="std_price" class="form-label">ราคา <span>*</span></label>
+                                            <input type="number" class="form-control" id="std_price" name="std_price"
+                                                placeholder="999" value="{{ $std->std_price }}" required>
+
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label for="std_details" class="form-label">รายละเอียด</label>
+                                            <textarea id="edit_std_details{{ $std->id }}" name="std_details" required>{!! $std->std_details !!}</textarea>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label for="std_facilities" class="form-label">สิ่งอำนวยความสะดวก</label>
+                                            <textarea id="edit_std_facilities{{ $std->id }}" name="std_facilities" required>{!! $std->std_facilities !!}</textarea>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">รูปภาพสนาม <span>*</span></label>
+                                            <input type="file" class="form-control" id="files"
+                                                name="std_img_path[]" accept="image/gif, image/jpeg, image/png" required
+                                                multiple>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div id="std_img_path"></div>
+                                            <div id="max_size"></div>
+                                            @foreach ($image as $key => $img)
+                                            <div class="col-6 col-md-4">
+                                                <div class="card {{ $key == 0 ? 'active' : '' }}"
+                                                    style="max-height:300px">
+                                                    <img src="{{ asset($img) }}" class="d-block w-100" alt="...">
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                            <div class="row justify-content-center" id="gallery">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="submit" class="btn btn-primary" id="submit" value="บันทึก">
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -123,6 +198,7 @@
     </div>
     <script>
         $(document).ready(function() {
+
             let maxSize = 500000; //5MB
             $("#files").on("change", function(e) {
                 let files = e.target.files,
@@ -166,13 +242,40 @@
 
             $('.viewStadium').on('click', function(e) {
                 e.preventDefault();
-                var id = $(this).data('id');
-                var currentUrl = window.location.href;
-                var newUrl = '?=' + id;
+                const id = $(this).data('id');
+                const currentUrl = window.location.href;
+                const newUrl = '?=' + id;
                 window.history.pushState({
                     path: newUrl
                 }, '', newUrl);
+
+
+
             });
+
+            $('.editModal').on('click', function(e) {
+                const id = $(this).data('id');
+                $('#edit_std_details' + id).summernote({
+                    tabsize: 2,
+                    height: 150
+                });
+                $('#edit_std_facilities' + id).summernote({
+                    tabsize: 2,
+                    height: 150
+                });
+            });
+
+            $('#std_details').summernote({
+                tabsize: 2,
+                height: 150
+            });
+            $('#std_facilities').summernote({
+                tabsize: 2,
+                height: 150
+            });
+
+
+
 
         });
     </script>

@@ -53,14 +53,22 @@
 
     <script>
         $(document).ready(function() {
-            $('#std_details').summernote({
-                tabsize: 2,
-                height: 200
-            });
-            $('#std_facilities').summernote({
-                tabsize: 2,
-                height: 200
-            });
+            // $('#std_details').summernote({
+            //     tabsize: 2,
+            //     height: 200
+            // });
+            // $('#std_facilities').summernote({
+            //     tabsize: 2,
+            //     height: 200
+            // });
+            // $('#edit_std_details').summernote({
+            //     tabsize: 2,
+            //     height: 200
+            // });
+            // $('#edit_std_facilities').summernote({
+            //     tabsize: 2,
+            //     height: 200
+            // });
         });
     </script>
 
