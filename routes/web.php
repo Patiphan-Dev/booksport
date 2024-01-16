@@ -43,6 +43,7 @@ Route::group(['middleware' => ['login_auth']], function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/stadium', [StadiumController::class, 'index'])->name('stadium');
+        Route::get('/stadium/{id}', [StadiumController::class, 'index'])->name('getstadium');
         Route::post('/addstadium', [StadiumController::class, 'addStadium'])->name('addStadium');
         Route::get('/editstadium', [StadiumController::class, 'editStadium'])->name('editStadium');
         Route::post('/updatestadium', [StadiumController::class, 'updateStadium'])->name('updateStadium');

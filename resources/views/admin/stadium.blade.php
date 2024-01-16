@@ -20,12 +20,12 @@
                             @csrf
                             <div class="row">
                                 <div class="col-12 col-md-6 mb-3">
-                                    <label for="std_name" class="form-label">ชื่อสนาม</label>
+                                    <label for="std_name" class="form-label">ชื่อสนาม <span>*</span></label>
                                     <input type="text" class="form-control" id="std_name" name="std_name"
                                         placeholder="สนามกีฬา" required>
                                 </div>
                                 <div class="col-12 col-md-6 mb-3">
-                                    <label for="std_price" class="form-label">ราคา</label>
+                                    <label for="std_price" class="form-label">ราคา <span>*</span></label>
                                     <input type="number" class="form-control" id="std_price" name="std_price"
                                         placeholder="999" required>
 
@@ -39,16 +39,14 @@
                                     <textarea id="std_facilities" name="std_facilities" required></textarea>
                                 </div>
                                 <div class="col-12 mb-3">
-                                    <label class="form-label">รูปภาพสนาม</label>
+                                    <label class="form-label">รูปภาพสนาม <span>*</span></label>
                                     <input type="file" class="form-control" id="files" name="std_img_path[]"
                                         accept="image/gif, image/jpeg, image/png" required multiple>
                                 </div>
                                 <div class="col-12 mb-3">
                                     <div id="std_img_path"></div>
-                                    <div id="max_size"></div><br>
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <div class="row justify-content-center mb-5" id="gallery">
+                                    <div id="max_size"></div>
+                                    <div class="row justify-content-center" id="gallery">
                                     </div>
                                 </div>
                             </div>
@@ -67,59 +65,58 @@
                 @php
                     $image = explode(',', $std->std_img_path);
                 @endphp
-                <div class="col-3">
-                    <a href="{{ route('stadium', ['id' => $std->id]) }}" class="card text-center" id="viewStadium">
+                {{-- href="{{ route('stadium', ['id' => $std->id]) }}" --}}
+                <div class="col-6 col-sm-4 col-md-3">
+                    <a class="card text-center h-100 viewStadium" href="" data-id="{{ $std->std_name }}"
+                        data-bs-toggle="modal" data-bs-target="#StadiumDetail{{ $std->id }}">
                         <img src="{{ asset($image[0]) }}" class="card-img-top" alt="...">
                         <div class="card-body">
                             {{ $std->std_name }}
                         </div>
                     </a>
+                </div>
+
+                <div class="modal fade" id="StadiumDetail{{ $std->id }}" data-bs-backdrop="static"
+                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <div id="StadiumName"></div>
+                                <h1 class="modal-title fs-5">{{ $std->std_name }} </h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="carousel{{ $std->id }}" class="carousel slide">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img src="{{ asset($image[0]) }}" class="d-block w-100" alt="...">
+                                        </div>
+                                        @foreach ($image as $img)
+                                            <div class="carousel-item">
+                                                <img src="{{ asset($img) }}" class="d-block w-100"
+                                                    alt="...">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carousel{{ $std->id }}" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carousel{{ $std->id }}" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @endforeach
         </div>
-
     </div>
-    <div class="modal fade" id="StadiumDetail" aria-hidden="true" aria-labelledby="StadiumDetailLabel" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered  modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="StadiumDetailLabel">เพิ่มสนามกีฬา</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-
-
-    {{-- <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">ลำดับ</th>
-                <th scope="col">ชื่อมนาม</th>
-                <th scope="col">ราคา</th>
-                <th scope="col">รายละเอียด</th>
-                <th scope="col">สิ่งอำนวยความสะดวก</th>
-                <th scope="col">สถานะ</th>
-                <th scope="col">ตั้งค่า</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($stadiums as $std)
-                <tr>
-                    <th scope="row">{{ $std->id }}</th>
-                    <td>{{ $std->std_name }}</td>
-                    <td>{{ $std->std_price }}</td>
-                    <td>{{ $std->std_details }}</td>
-                    <td>{{ $std->std_facilities }}</td>
-                    <td>{{ $std->std_status }}</td>
-                    <td>ลบ | แก้ไข</td>
-                </tr>
-            @endforeach
-
-        </tbody>
-    </table> --}}
     <script>
         $(document).ready(function() {
             let maxSize = 500000; //5MB
@@ -163,11 +160,15 @@
                 imagesPreview(this, '#gallery');
             });
 
-
-            $('#viewStadium').on("click",function() {
-                $('#StadiumDetail').modal('show');
+            $('.viewStadium').on('click', function(e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                var currentUrl = window.location.href;
+                var newUrl = '?=' + id;
+                window.history.pushState({
+                    path: newUrl
+                }, '', newUrl);
             });
-
 
         });
     </script>

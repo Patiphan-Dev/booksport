@@ -10,11 +10,15 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class StadiumController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $data = [
             'title' => 'สนามกีฬา'
         ];
+
+        $id = $request->input('id');
+        // dd($id);
+
         $stadiums = Stadiums::all();
         return view('admin.stadium', compact('stadiums'), $data);
     }
