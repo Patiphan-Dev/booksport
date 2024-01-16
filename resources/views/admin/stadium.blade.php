@@ -59,14 +59,14 @@
             </div>
         </div>
     </div>
-    <div class="container text-center">
+    <div class="container">
         <div class="row g-2">
             @foreach ($stadiums as $std)
                 @php
                     $image = explode(',', $std->std_img_path);
                 @endphp
-                {{-- href="{{ route('stadium', ['id' => $std->id]) }}" --}}
-                <div class="col-6 col-sm-4 col-md-3">
+            
+                <div class="col-6 col-sm-4 col-md-3 text-center">
                     <a class="card text-center h-100 viewStadium" href="" data-id="{{ $std->std_name }}"
                         data-bs-toggle="modal" data-bs-target="#StadiumDetail{{ $std->id }}">
                         <img src="{{ asset($image[0]) }}" class="card-img-top" alt="...">
@@ -86,16 +86,12 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
-                                <div id="carousel{{ $std->id }}" class="carousel slide">
+                            <div class="modal-body text-left">
+                                <div id="carousel{{ $std->id }}" class="carousel slide mb-4">
                                     <div class="carousel-inner">
-                                        <div class="carousel-item active">
-                                            <img src="{{ asset($image[0]) }}" class="d-block w-100" alt="...">
-                                        </div>
-                                        @foreach ($image as $img)
-                                            <div class="carousel-item">
-                                                <img src="{{ asset($img) }}" class="d-block w-100"
-                                                    alt="...">
+                                        @foreach ($image as $key => $img)
+                                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}" style="max-height:300px">
+                                                <img src="{{ asset($img) }}" class="d-block w-100" alt="...">
                                             </div>
                                         @endforeach
                                     </div>
@@ -109,6 +105,14 @@
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
                                     </button>
+                                </div>
+                                <div class="row">
+                                    <h4><u>รายละเอียด</u></h4>
+                                    {!! $std->std_details !!}
+                                </div>
+                                <div class="row">
+                                    <h4><u>สิ่งอำนวยความสะดวก</u></h4>
+                                    {!! $std->std_facilities !!}
                                 </div>
                             </div>
                         </div>
