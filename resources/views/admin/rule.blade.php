@@ -1,22 +1,26 @@
 @extends('admin.layout')
 
 @section('body')
-<div class="row justify-content-center mt-5">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">rule</div>
-            <div class="card-body">
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-success">
-                        {{ $message }}
-                    </div>
-                @else
-                    <div class="alert alert-success">
-                        You are logged in!
-                    </div>       
-                @endif                
+    <div class="row justify-content-center mt-5">
+        <form
+            @if ($rule != '') action="{{ route('updateRule') }}"@else action="{{ route('addRule') }}" @endif
+            method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="col-10">
+                <textarea id="rule" name="rule_detail" required>
+                    @if ($rule != ''){!! $rule->rule_detail !!}@endif
+                </textarea>
             </div>
-        </div>
-    </div>    
-</div>
+            <input type="submit" class="btn btn-primary" id="submit" value="บันทึก">
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#rule').summernote({
+                tabsize: 2,
+                height: 400
+            });
+        });
+    </script>
 @endsection

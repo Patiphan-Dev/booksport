@@ -14,7 +14,7 @@ class ReserveController extends Controller
         $data = [
             'title' => 'การจอง'
         ];
-        return view('admin.reserve',$data);
+        return view('admin.reserve', $data);
     }
 
     public function addReserve(Request $request)

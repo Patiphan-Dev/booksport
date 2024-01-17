@@ -46,8 +46,8 @@ Route::group(['middleware' => ['login_auth']], function () {
         Route::get('/stadium/{id}', [StadiumController::class, 'index'])->name('getstadium');
         Route::post('/addstadium', [StadiumController::class, 'addStadium'])->name('addStadium');
         Route::get('/editstadium', [StadiumController::class, 'editStadium'])->name('editStadium');
-        Route::post('/updatestadium', [StadiumController::class, 'updateStadium'])->name('updateStadium');
-        Route::post('/deletestadium', [StadiumController::class, 'deleteStadium'])->name('deleteStadium');
+        Route::post('/updatestadium/{id}', [StadiumController::class, 'updateStadium'])->name('updateStadium');
+        Route::post('/deletestadium/{id}', [StadiumController::class, 'deleteStadium'])->name('deleteStadium');
 
         Route::get('/reserve', [ReserveController::class, 'index'])->name('reserve');
         Route::post('/addreserve', [ReserveController::class, 'addReserve'])->name('addReserve');
@@ -60,6 +60,9 @@ Route::group(['middleware' => ['login_auth']], function () {
         Route::post('/deletepayment', [PaymentController::class, 'deletePayment'])->name('deletePayment');
 
         Route::get('/rule', [RuleController::class, 'index'])->name('rule');
+        Route::post('/addrule', [RuleController::class, 'addRule'])->name('addRule');
+        Route::post('/updaterule', [RuleController::class, 'updateRule'])->name('updateRule');
+
 
     });
 });
