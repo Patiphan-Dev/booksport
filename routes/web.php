@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\RuleController;
 use App\Http\Controllers\Users\HomeController;
 use App\Http\Controllers\Users\BookingController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,16 +35,18 @@ Route::group(['middleware' => ['login_auth']], function () {
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::post('/booking', [BookingController::class, 'index'])->name('booking');
+    Route::get('/booking/{id}', [BookingController::class, 'index'])->name('booking');
     Route::post('/addbooking', [BookingController::class, 'addBooking'])->name('addBooking');
-    Route::post('/editbooking', [BookingController::class, 'editBooking'])->name('editBooking');
-    Route::post('/deletebooking', [BookingController::class, 'deleteBooking'])->name('deleteBooking');
+    Route::get('/editbooking', [BookingController::class, 'editBooking'])->name('editBooking');
+    Route::post('/updatebooking/{id}', [BookingController::class, 'updateBooking'])->name('updateBooking');
+    Route::post('/deletebooking/{id}', [BookingController::class, 'deleteBooking'])->name('deleteBooking');
+
+    Route::get('/stadium/{id}', [StadiumController::class, 'getStadium'])->name('getStadium');
 
     Route::group(['middleware' => ['admin_auth']], function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/stadium', [StadiumController::class, 'index'])->name('stadium');
-        Route::get('/stadium/{id}', [StadiumController::class, 'index'])->name('getstadium');
         Route::post('/addstadium', [StadiumController::class, 'addStadium'])->name('addStadium');
         Route::get('/editstadium', [StadiumController::class, 'editStadium'])->name('editStadium');
         Route::post('/updatestadium/{id}', [StadiumController::class, 'updateStadium'])->name('updateStadium');

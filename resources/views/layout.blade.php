@@ -12,7 +12,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
     <!-- Ionicons -->
-    {{-- <link rel="icon" type="image/x-icon" href="{{ asset('assets/logo.gif') }}"> --}}
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/Icons.png') }}">
     <!-- Tempusdominus Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -32,7 +32,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top py-3">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3"> {{-- fixed-top --}}
         <div class="container">
             <a class="navbar-brand" href="{{ URL('/') }}">Your Logo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -42,16 +42,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{{ route('home') }}">หน้าแรก</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
+                        <a class="nav-link" href="#">เกี่ยวกับเรา</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Stadium</a>
+                        <a class="nav-link" href="#">สนามกีฬา</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Booking</a>
+                        <a class="nav-link" href="#">จองสนาม</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
@@ -87,11 +87,23 @@
         <section class="content">
             @include('sweetalert::alert')
             @yield('content-header')
-
             <div class="container-fluid">
                 @yield('body')
             </div>
         </section>
+    </div>
+
+    <div class="bg-dark">
+        <footer class="container py-3 mt-4">
+            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Features</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-white">About</a></li>
+            </ul>
+            <p class="text-center text-white">© 2023 Company, Inc</p>
+        </footer>
     </div>
 
     <!-- Bootstrap -->

@@ -18,7 +18,6 @@ class StadiumController extends Controller
         ];
 
         $id = $request->input('id');
-        // dd($id);
 
         $stadiums = Stadiums::all();
         return view('admin.stadium', compact('stadiums'), $data);
@@ -29,9 +28,6 @@ class StadiumController extends Controller
         $date = date("Y-m-d");
 
         if ($files = $request->file('std_img_path')) {
-
-            // dd($files);
-
             $i = 1;
             foreach ($files as $file) {
                 $std_img_path =  $request->std_name . '-' . $date . '-img-' . $i++;
@@ -135,5 +131,15 @@ class StadiumController extends Controller
         Stadiums::find($id)->delete();
         Alert::success('สำเร็จ', 'ลบข้อมูสำเร็จ');
         return redirect()->back()->with('success', 'ลบข้อมูสำเร็จ');
+    }
+
+    public function getStadium($id)
+    {
+        $data = [
+            'title' => 'ข้อมูลสนามกีฬา'
+        ];
+
+        $stadium = Stadiums::find($id);
+        return view('stadium', compact('stadium'), $data);
     }
 }

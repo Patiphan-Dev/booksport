@@ -10,31 +10,35 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="{{route('dashboard')}}" class="nav-link text-white {{ $current_route == 'dashboard' ? 'active' : '' }}" aria-current="page">
+            <a href="{{ route('dashboard') }}"
+                class="nav-link text-white {{ $current_route == 'dashboard' ? 'active' : '' }}" aria-current="page">
                 <i class="fa-solid fa-gauge"></i>
                 แดชบอร์ด
             </a>
         </li>
         <li>
-            <a href="{{route('stadium')}}" class="nav-link text-white {{ $current_route == 'stadium' ? 'active' : '' }}">
+            <a href="{{ route('stadium') }}"
+                class="nav-link text-white {{ $current_route == 'stadium' ? 'active' : '' }}">
                 <i class="fa-solid fa-medal"></i>
                 สนามกีฬา
             </a>
         </li>
         <li>
-            <a href="{{route('reserve')}}" class="nav-link text-white {{ $current_route == 'reserve' ? 'active' : '' }}">
+            <a href="{{ route('reserve') }}"
+                class="nav-link text-white {{ $current_route == 'reserve' ? 'active' : '' }}">
                 <i class="fa-solid fa-bookmark"></i>
                 การจอง
             </a>
         </li>
         <li>
-            <a href="{{route('payment')}}" class="nav-link text-white {{ $current_route == 'payment' ? 'active' : '' }}">
+            <a href="{{ route('payment') }}"
+                class="nav-link text-white {{ $current_route == 'payment' ? 'active' : '' }}">
                 <i class="fa-solid fa-hand-holding-dollar"></i>
                 การชำระเงิน
             </a>
         </li>
         <li>
-            <a href="{{route('rule')}}" class="nav-link text-white {{ $current_route == 'rule' ? 'active' : '' }}">
+            <a href="{{ route('rule') }}" class="nav-link text-white {{ $current_route == 'rule' ? 'active' : '' }}">
                 <i class="fa-solid fa-scale-balanced"></i>
                 กฎกติกา
             </a>
@@ -44,8 +48,7 @@
     <ul class="navbar-nav ms-auto">
         <li class="nav-item dropdown">
             <div class="dropdown">
-                <a href="#"
-                    class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                     data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="https://github.com/mdo.png" alt="" width="32" height="32"
                         class="rounded-circle me-2">
