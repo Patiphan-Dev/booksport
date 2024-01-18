@@ -18,15 +18,20 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <!-- sweetalert2 -->
     <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
+
+    <!-- moment lib -->
+    <script src='https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js'></script>
+
+    <!-- fullcalendar bundle -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+
+    <!-- the moment-to-fullcalendar connector. must go AFTER the moment lib -->
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@6.1.10/index.global.min.js'></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <style>
-        body {
-            padding-top: 56px;
-            /* Adjust for the fixed navbar */
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            scroll-behavior: smooth;
+        .content {
+            /* height: calc(100vh - 25vh); */
         }
     </style>
 </head>
@@ -51,7 +56,7 @@
                         <a class="nav-link" href="#">สนามกีฬา</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">จองสนาม</a>
+                        <a class="nav-link" href="{{ route('bookingAll') }}">จองสนาม</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
@@ -94,7 +99,7 @@
     </div>
 
     <div class="bg-dark">
-        <footer class="container py-3 mt-4">
+        <footer class="container py-3 mt-3">
             <ul class="nav justify-content-center border-bottom pb-3 mb-3">
                 <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Home</a></li>
                 <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Features</a></li>

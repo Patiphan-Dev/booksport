@@ -35,7 +35,8 @@ Route::group(['middleware' => ['login_auth']], function () {
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/booking/{id}', [BookingController::class, 'index'])->name('booking');
+    Route::get('/booking/{id}', [BookingController::class,'index'])->name('booking');
+    Route::get('/booking', [BookingController::class,  'indexAll'])->name('bookingAll');
     Route::post('/addbooking', [BookingController::class, 'addBooking'])->name('addBooking');
     Route::get('/editbooking', [BookingController::class, 'editBooking'])->name('editBooking');
     Route::post('/updatebooking/{id}', [BookingController::class, 'updateBooking'])->name('updateBooking');

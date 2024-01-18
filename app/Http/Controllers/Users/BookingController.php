@@ -18,8 +18,22 @@ class BookingController extends Controller
         ];
         $bookings = Booking::where('bk_std_id', $id)->get();
         $stadiums = Stadiums::all();
+        $search = Stadiums::find($id);
 
-        return view('booking',compact('bookings','stadiums'), $data);
+
+        return view('booking',compact('bookings','stadiums','search'), $data);
+    }
+
+    public function indexAll()
+    {
+        $data = [
+            'title' => 'จองสนามกีฬา'
+        ];
+        $stadiums = Stadiums::all();
+        $search = "";
+
+
+        return view('booking',compact('stadiums','search'), $data);
     }
 
     public function addBooking(Request $request)
