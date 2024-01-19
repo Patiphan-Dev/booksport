@@ -1,7 +1,7 @@
 @extends('layout')
 @section('body')
     <div class="row mb-4">
-        <div id="carouselExampleCaptions" class="carousel slide">
+        <div id="carouselStadium" class="carousel slide">
             <div class="row">
                 <div class="col-10">
                     <div class="carousel-inner">
@@ -12,19 +12,19 @@
                             <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
                                 <img src="{{ asset($img) }}" class="d-block w-100" alt="...">
                                 <div class="carousel-caption d-none d-md-block">
-                                    <button type="button" class="btn btn-warning">
-                                        <i class="fa-solid fa-check"></i> จอง
-                                    </button>
+                                    <a href="{{ route('booking', ['id' => $stadium->id]) }}" class="btn btn-warning">
+                                        <i class="fa-solid fa-check"></i>จองสนาม
+                                    </a>
                                 </div>
                             </div>
                         @endforeach
 
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselStadium"
                             data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselStadium"
                             data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
@@ -37,7 +37,7 @@
                             $image = explode(',', $stadium->std_img_path);
                         @endphp
                         @foreach ($image as $key => $img)
-                            <img src="{{ asset($img) }}" data-bs-target="#carouselExampleCaptions"
+                            <img src="{{ asset($img) }}" data-bs-target="#carouselStadium"
                                 data-bs-slide-to="{{ $key }}" class="{{ $key == 0 ? 'active' : '' }}"
                                 aria-current="true" aria-label="Slide {{ $key }}">
                         @endforeach

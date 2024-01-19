@@ -16,12 +16,12 @@ class BookingController extends Controller
         $data = [
             'title' => 'จองสนามกีฬา'
         ];
-        $bookings = Booking::where('bk_std_id', $id)->get();
+        $booking = Booking::where('bk_std_id', $id)->get();
+        $history = Booking::where('bk_username', auth()->user()->username)->get();
+        $bookings = Booking::all();
         $stadiums = Stadiums::all();
         $search = Stadiums::find($id);
-
-
-        return view('booking',compact('bookings','stadiums','search'), $data);
+        return view('booking',compact('booking','bookings','stadiums','search','history'), $data);
     }
 
     public function indexAll()
@@ -29,25 +29,26 @@ class BookingController extends Controller
         $data = [
             'title' => 'จองสนามกีฬา'
         ];
+        $booking = Booking::get();
+        $history = Booking::where('bk_username', auth()->user()->username)->get();
+        $bookings = Booking::get();
         $stadiums = Stadiums::all();
-        $search = "";
-
-
-        return view('booking',compact('stadiums','search'), $data);
+        $search = '';
+        return view('booking',compact('booking','bookings','stadiums','search','history'), $data);
     }
 
     public function addBooking(Request $request)
     {
         //บันทึกข้อมูล
-        $Booking = new Booking;
-        $Booking->bk_std_id = $request->bk_std_id;
-        $Booking->bk_username = $request->bk_username;
-        $Booking->bk_date = $request->bk_date;
-        $Booking->bk_str_time = $request->bk_str_time;
-        $Booking->bk_end_time = $request->bk_end_time;
-        $Booking->bk_slip = $request->bk_slip;
-        $Booking->bk_status = $request->bk_status;
-        $Booking->save();
+        $booking = new Booking;
+        $booking->bk_std_id = $request->bk_std_id;
+        $booking->bk_username = auth()->user()->username;
+        $booking->bk_date = $request->bk_date;
+        $booking->bk_str_time = $request->bk_str_time;
+        $booking->bk_end_time = $request->bk_end_time;
+        $booking->bk_slip = $request->bk_slip;
+        $booking->bk_status = 1;
+        $booking->save();
 
         // แจ้งเตือน ไลน์
         Alert::success('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');

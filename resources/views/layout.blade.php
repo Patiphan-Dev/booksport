@@ -19,6 +19,9 @@
     <!-- sweetalert2 -->
     <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
 
+    <!-- fullCalendar -->
+    <link rel="stylesheet" href="{{ asset('plugins/fullcalendar/main.css') }}">
+
     <!-- moment lib -->
     <script src='https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js'></script>
 
@@ -27,11 +30,14 @@
 
     <!-- the moment-to-fullcalendar connector. must go AFTER the moment lib -->
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@6.1.10/index.global.min.js'></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <style>
         .content {
-            /* height: calc(100vh - 25vh); */
+            height: 100vh - 1vh;
+            z-index: 0;
         }
     </style>
 </head>

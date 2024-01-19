@@ -1,24 +1,18 @@
 @extends('layout')
 @section('body')
     <div class="row">
-        <div id="carouselExampleCaptions" class="carousel slide">
+        <div id="carouselStadiums" class="carousel slide">
             <div class="row">
-                <div class="col-2">
+                <div class="col-2 overflow-y-auto">
                     <div class="carousel-indicators">
                         @foreach ($stadiums as $key => $std)
                             @php
                                 $image = explode(',', $std->std_img_path);
                             @endphp
-                            <img src="{{ asset($image[0]) }}" data-bs-target="#carouselExampleCaptions"
+                            <img src="{{ asset($image[0]) }}" data-bs-target="#carouselStadiums"
                                 data-bs-slide-to="{{ $key }}" class="{{ $key == 0 ? 'active' : '' }}"
                                 aria-current="true" aria-label="Slide {{ $key }}">
                         @endforeach
-
-                        {{-- 
-                    <img src="https://s.isanook.com/tr/0/ud/285/1428121/4.jpg?ip/resize/w728/q80/jpg"
-                        data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2">
-                    <img src="https://s.isanook.com/tr/0/ud/285/1428121/6.jpg?ip/resize/w728/q80/jpg"
-                        data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"> --}}
                     </div>
                 </div>
                 <div class="col-10">
@@ -43,12 +37,12 @@
                             </div>
                         @endforeach
 
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselStadiums"
                             data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselStadiums"
                             data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
@@ -60,6 +54,15 @@
     </div>
 
     <style>
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #88888850;
+            border-radius: 6px;
+        }
+
         .carousel-item {
             width: 100%;
             max-height: 500px;
@@ -85,17 +88,18 @@
             height: 100%;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('.getStadium').on('click', function(e) {
-                e.preventDefault();
-                const id = $(this).data('id');
-                const currentUrl = window.location.href;
-                const newUrl = '?=' + id;
-                window.history.pushState({
-                    path: newUrl
-                }, '', newUrl);
-            });
-        });
+        // $(document).ready(function() {
+        //     $('.getStadium').on('click', function(e) {
+        //         e.preventDefault();
+        //         const id = $(this).data('id');
+        //         const currentUrl = window.location.href;
+        //         const newUrl = '?=' + id;
+        //         window.history.pushState({
+        //             path: newUrl
+        //         }, '', newUrl);
+        //     });
+        // });
     </script>
 @endsection
