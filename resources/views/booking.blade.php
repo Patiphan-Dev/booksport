@@ -12,10 +12,10 @@
                 <div class="col-3 col-md-3">
                     <label for="stadium_id">สนามกีฬา :</label>
                     <select class="form-select" name="bk_std_id" id="bk_std_id"
-                        @if ($search != '') disabled @endif required>
+                        required >
                         <option value="" disabled>--- กรุณาเลือกสนาม ---</option>
                         @foreach ($stadiums as $stadium)
-                            <option value="{{ $stadium->id }}" @if ($search->id == $stadium->id) selected @endif>
+                            <option value="{{ $stadium->id }}" @if (!empty($search)) @if ($search->id == $stadium->id) selected @endif @endif>
                                 {{ $stadium->std_name }}</option>
                         @endforeach
                     </select>
@@ -82,7 +82,9 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('.form-select').on('click', function(e) {
+            
+            var id = $('#bk_std_id').val();
+            $('#bk_std_id').on('click', function(e) {
                 const id = $('#bk_std_id').val();
                 $.ajax({
                     url: '/booking/' + id,
@@ -103,13 +105,13 @@
                     }
                 });
             });
-
-            let searchParams = new url(window.location.href)
-            console.log(searchParams);
+            console.log(id);
+            // let searchParams = window.location.href;
+            // console.log(searchParams);
             // if () {
-                $('.form-select').on('change', function(e) {
-                    $('#bk_std_id').val(searchParams);
-                });
+                // $('.form-select').on('change', function(e) {
+                    $('#bk_std_id').val(id);
+                // });
             // }
         });
     </script>
@@ -152,7 +154,7 @@
                             start: '{{ date($row->bk_date) }}T{{ date($row->bk_str_time) }}',
                             end: '{{ date($row->bk_date) }}T{{ date($row->bk_end_time) }}',
                             allDay: false,
-                            url: "{{ '/stadium/' . $row->id }}",
+                            url: "{{ '/stadium/' . $row->bk_std_id }}",
                             @if ($row->bk_status == '1')
                                 backgroundColor: '#00a65a ',
                                 borderColor: '#00a65a',
