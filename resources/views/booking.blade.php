@@ -15,10 +15,7 @@
                         @if ($search != '') disabled @endif required>
                         <option value="" disabled>--- กรุณาเลือกสนาม ---</option>
                         @foreach ($stadiums as $stadium)
-                            <option
-                                @if ($search != '') value="{{ $search->id }}" @else value="{{ $stadium->id }}" @endif
-                                @if ($search != '') @if ($search->id == $stadium->id) selected @endif
-                                @endif >
+                            <option value="{{ $stadium->id }}" @if ($search->id == $stadium->id) selected @endif>
                                 {{ $stadium->std_name }}</option>
                         @endforeach
                     </select>
@@ -45,18 +42,19 @@
             </div>
         </form>
     </div>
+
     <div class="card mt-3">
         <div class="card-body">
             <div class="row">
-                <div class="col-12">
+                <div class="col-8">
                     <div id="calendar"></div>
                 </div>
-                <div class="col-12">
+                <div class="col-4">
                     <h3>ประวัติการจอง</h3>
                     <ul class="list-group">
                         @foreach ($history as $row)
                             <li class="list-group-item">
-                                {{ $row->bk_std_id }}-{{ $row->bk_date }}-{{ $row->bk_str_time }}-{{ $row->bk_end_time }}-{{ $row->bk_status }}
+                                {{ $row->std_name }}-{{ $row->bk_date }}-{{ $row->bk_str_time }}-{{ $row->bk_end_time }}-{{ $row->bk_status }}
                             </li>
                         @endforeach
 
@@ -105,6 +103,14 @@
                     }
                 });
             });
+
+            let searchParams = new url(window.location.href)
+            console.log(searchParams);
+            // if () {
+                $('.form-select').on('change', function(e) {
+                    $('#bk_std_id').val(searchParams);
+                });
+            // }
         });
     </script>
 
@@ -142,9 +148,9 @@
                     @foreach ($bookings as $row)
                         {
                             id: '{{ $row->id }}',
-                            title: '{{ $row->bk_std_id }}',
-                            start: '{{ $row->bk_str_date }}T{{ $row->bk_str_time }}',
-                            end: '{{ $row->bk_str_date }}T{{ $row->bk_end_time }}',
+                            title: '{{ $row->std_name }}',
+                            start: '{{ date($row->bk_date) }}T{{ date($row->bk_str_time) }}',
+                            end: '{{ date($row->bk_date) }}T{{ date($row->bk_end_time) }}',
                             allDay: false,
                             url: "{{ '/stadium/' . $row->id }}",
                             @if ($row->bk_status == '1')

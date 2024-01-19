@@ -16,9 +16,9 @@ class BookingController extends Controller
         $data = [
             'title' => 'จองสนามกีฬา'
         ];
-        $booking = Booking::where('bk_std_id', $id)->get();
-        $history = Booking::where('bk_username', auth()->user()->username)->get();
-        $bookings = Booking::all();
+        $booking = Booking::where('bk_std_id', $id)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id') ->select('bookings.*','stadiums.std_name')->get();
+        $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id') ->select('bookings.*','stadiums.std_name')->get();
+        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*','stadiums.std_name')->get();
         $stadiums = Stadiums::all();
         $search = Stadiums::find($id);
         return view('booking',compact('booking','bookings','stadiums','search','history'), $data);
@@ -29,9 +29,9 @@ class BookingController extends Controller
         $data = [
             'title' => 'จองสนามกีฬา'
         ];
-        $booking = Booking::get();
-        $history = Booking::where('bk_username', auth()->user()->username)->get();
-        $bookings = Booking::get();
+        $booking = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id') ->select('bookings.*','stadiums.std_name')->get();
+        $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id') ->select('bookings.*','stadiums.std_name')->get();
+        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id') ->select('bookings.*','stadiums.std_name')->get();
         $stadiums = Stadiums::all();
         $search = '';
         return view('booking',compact('booking','bookings','stadiums','search','history'), $data);
@@ -39,6 +39,7 @@ class BookingController extends Controller
 
     public function addBooking(Request $request)
     {
+        // $booking = Booking::where('',$request->bk_std_id);
         //บันทึกข้อมูล
         $booking = new Booking;
         $booking->bk_std_id = $request->bk_std_id;

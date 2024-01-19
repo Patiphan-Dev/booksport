@@ -19,9 +19,6 @@
     <!-- sweetalert2 -->
     <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
 
-    <!-- fullCalendar -->
-    <link rel="stylesheet" href="{{ asset('plugins/fullcalendar/main.css') }}">
-
     <!-- moment lib -->
     <script src='https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js'></script>
 
