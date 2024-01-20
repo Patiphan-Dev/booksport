@@ -11,11 +11,12 @@
             <div class="row">
                 <div class="col-3 col-md-3">
                     <label for="stadium_id">สนามกีฬา :</label>
-                    <select class="form-select" name="bk_std_id" id="bk_std_id"
-                        required >
-                        <option value="" disabled>--- กรุณาเลือกสนาม ---</option>
+                    <select class="form-select" name="bk_std_id" id="bk_std_id" required>
+                        <option value="" disabled selected>--- กรุณาเลือกสนาม ---</option>
                         @foreach ($stadiums as $stadium)
-                            <option value="{{ $stadium->id }}" @if (!empty($search)) @if ($search->id == $stadium->id) selected @endif @endif>
+                            <option value="{{ $stadium->id }}"
+                                @if (!empty($search)) @if ($search->id == $stadium->id) selected @endif
+                                @endif>
                                 {{ $stadium->std_name }}</option>
                         @endforeach
                     </select>
@@ -53,8 +54,8 @@
                     <h3>ประวัติการจอง</h3>
                     <ul class="list-group">
                         @foreach ($history as $row)
-                            <li class="list-group-item">
-                                {{ $row->std_name }}-{{ $row->bk_date }}-{{ $row->bk_str_time }}-{{ $row->bk_end_time }}-{{ $row->bk_status }}
+                            <li class="list-group-item @if ($row->bk_status == 1) bg-warning @elseif($row->bk_status == 2) bg-primary @else bg-danger @endif">
+                                {{ $row->std_name }}-{{ $row->bk_date }}-{{ $row->bk_str_time }}-{{ $row->bk_end_time }}
                             </li>
                         @endforeach
 
@@ -82,8 +83,9 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         $(document).ready(function() {
-            
+
             var id = $('#bk_std_id').val();
+
             $('#bk_std_id').on('click', function(e) {
                 const id = $('#bk_std_id').val();
                 $.ajax({
@@ -109,9 +111,9 @@
             // let searchParams = window.location.href;
             // console.log(searchParams);
             // if () {
-                // $('.form-select').on('change', function(e) {
-                    $('#bk_std_id').val(id);
-                // });
+            // $('.form-select').on('change', function(e) {
+            $('#bk_std_id').val(id);
+            // });
             // }
         });
     </script>
@@ -156,23 +158,18 @@
                             allDay: false,
                             url: "{{ '/stadium/' . $row->bk_std_id }}",
                             @if ($row->bk_status == '1')
-                                backgroundColor: '#00a65a ',
-                                borderColor: '#00a65a',
+                                backgroundColor: '#FFBF00',
+                                borderColor: '#FFBF00',
                                 color: 'orange',
                                 textColor: 'black',
                             @elseif ($row->bk_status == '2')
-                                backgroundColor: '#0073b7',
-                                    borderColor: '#0073b7',
+                                backgroundColor: '#6495ED',
+                                    borderColor: '#6495ED',
                                     color: 'orange',
                                     textColor: 'black',
-                            @elseif ($row->bk_status == '3')
-                                backgroundColor: '#f39c12',
-                                    borderColor: '#f39c12',
-                                    color: 'orange',
-                                    textColor: 'black',
-                            @elseif ($row->bk_status == '4')
-                                backgroundColor: '#f56954',
-                                    borderColor: '#f56954',
+                            @else
+                                backgroundColor: '#FF0000',
+                                    borderColor: '#FF0000',
                                     color: 'orange',
                                     textColor: 'black',
                             @endif
