@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Stadiums;
 use RealRashid\SweetAlert\Facades\Alert;
-use File;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -16,12 +16,12 @@ class BookingController extends Controller
         $data = [
             'title' => 'จองสนามกีฬา'
         ];
-        $booking = Booking::where('bk_std_id', $id)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id') ->select('bookings.*','stadiums.std_name')->get();
-        $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id') ->select('bookings.*','stadiums.std_name')->get();
-        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*','stadiums.std_name')->get();
+        $booking = Booking::where('bk_std_id', $id)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
+        $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
+        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
         $stadiums = Stadiums::all();
         $search = Stadiums::find($id);
-        return view('booking',compact('booking','bookings','stadiums','search','history'), $data);
+        return view('booking', compact('booking', 'bookings', 'stadiums', 'search', 'history'), $data);
     }
 
     public function indexAll()
@@ -29,18 +29,28 @@ class BookingController extends Controller
         $data = [
             'title' => 'จองสนามกีฬา'
         ];
-        $booking = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id') ->select('bookings.*','stadiums.std_name')->get();
-        $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id') ->select('bookings.*','stadiums.std_name')->get();
-        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id') ->select('bookings.*','stadiums.std_name')->get();
+        $booking = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
+        $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
+        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
         $stadiums = Stadiums::all();
         $search = '';
-        return view('booking',compact('booking','bookings','stadiums','search','history'), $data);
+        return view('booking', compact('booking', 'bookings', 'stadiums', 'search', 'history'), $data);
     }
 
     public function addBooking(Request $request)
     {
-        // $booking = Booking::where('',$request->bk_std_id);
-        //บันทึกข้อมูล
+        $booking = Booking::where('bk_std_id', $request->bk_std_id)
+            ->where('bk_date',  $request->bk_date)
+            // ->where('bk_str_time', '>=', date($request->bk_str_time))
+            // ->where('bk_end_time', '<=', date($request->bk_end_time))
+            // ->where('bk_str_time', '<=', date($request->bk_end_time))
+            // ->where('bk_end_time', '>=', date($request->bk_str_time))
+            ->whereBetween('bk_str_time', [date($request->bk_str_time), date($request->bk_end_time)])
+            ->whereBetween('bk_end_time', [date($request->bk_str_time), date($request->bk_end_time)])->get();
+
+        dd(date($request->bk_str_time), $request->bk_end_time, $booking);
+        
+        //บันทึกข้อมูล;
         $booking = new Booking;
         $booking->bk_std_id = $request->bk_std_id;
         $booking->bk_username = auth()->user()->username;
