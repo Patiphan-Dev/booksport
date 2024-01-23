@@ -108,9 +108,8 @@
                             </a>
                         </ul>
                         <div class="text-center">
-                            <div id="slipeView"></div>
-                            <input type="file" class="btn btn-primary" name="bk_slipe" id="files"
-                                accept="image/jpeg, image/png">
+                            <input type="file" id="image-input" accept="image/*">
+                            <img id="image-preview" alt="Image Preview">
                         </div>
 
                     </div>
@@ -139,27 +138,31 @@
             max-height: 500px;
             border-top: 10px solid transparent;
         }
-    </style>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            let imagesPreview = function(input, placeToInsertImagePreview) {
-                if (input.files) {
-                    var reader = new FileReader();
-                    reader.onload = function(event) {
-                        $($.parseHTML('<img class="col-6 col-md-4 mb-3">')).attr('src', event
-                                .target
-                                .result)
-                            .appendTo(
-                                placeToInsertImagePreview);
-                    }
-                    reader.readAsDataURL(input.files);
-                }
-            };
 
-            $('#files').on('change', function() {
-                imagesPreview(this, '#slipeView');
-            });
+        #image-preview {
+            max-width: 100%;
+            max-height: 200px;
+        }
+    </style>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> --}}
+    <script>
+         function previewImage(input) {
+            const file = input.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imagePreview = document.getElementById('image-preview');
+                    imagePreview.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.getElementById('image-input').addEventListener('change', function (event) {
+            previewImage(event.target);
         });
     </script>
     <script>
