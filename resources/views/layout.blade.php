@@ -24,7 +24,7 @@
 
     <!-- fullcalendar bundle -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
-
+    
     <!-- the moment-to-fullcalendar connector. must go AFTER the moment lib -->
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@6.1.10/index.global.min.js'></script>
     <script type="text/javascript" src="//code.jquery.com/jquery-3.6.0.min.js"></script>

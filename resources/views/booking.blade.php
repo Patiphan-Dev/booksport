@@ -5,8 +5,8 @@
             @csrf
             @php
                 $date = date('Y-m-d');
-                $str_time = date('H:i');
-                $end_time = date('H:i', strtotime('+1 hour'));
+                $str_time = date('H:00');
+                $end_time = date('H:00', strtotime('+1 hour'));
             @endphp
             <div class="row">
                 <div class="col-3 col-md-3">
@@ -47,16 +47,31 @@
     <div class="card mt-3">
         <div class="card-body">
             <div class="row">
-                <div class="col-8">
+                <div class="col-12 col-md-8">
                     <div id="calendar"></div>
                 </div>
-                <div class="col-4">
+                <div class="col-12 col-md-4">
                     <h3>ประวัติการจอง</h3>
-                    <ul class="list-group">
+                    <ul class="list-group list-group-flush">
                         @foreach ($history as $row)
-                            <li class="list-group-item @if ($row->bk_status == 1) bg-warning @elseif($row->bk_status == 2) bg-primary @else bg-danger @endif">
-                                {{ $row->std_name }}-{{ $row->bk_date }}-{{ $row->bk_str_time }}-{{ $row->bk_end_time }}
-                            </li>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#eventModal{{ $row->id }}"
+                                class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="me-auto">
+                                    <div class="fw-bold">สถานที่ : {{ $row->std_name }}</div>
+                                    วันที่ : {{ $row->bk_date }} <br>
+                                    เวลา : {{ $row->bk_str_time }} น. ถึง {{ $row->bk_end_time }} น.
+                                </div>
+
+                                @if ($row->bk_status == 1)
+                                    <span class="badge bg-warning rounded-pill"> รอชำระเงิน</span>
+                                @elseif($row->bk_status == 2)
+                                    <span class="badge bg-primary rounded-pill"> รอตรวจสอบ</span>
+                                @elseif($row->bk_status == 3)
+                                    <span class="badge bg-success rounded-pill"> อนุมัติ</span>
+                                @else
+                                    <span class="badge bg-danger rounded-pill"> ยกเลิก</span>
+                                @endif
+                            </a>
                         @endforeach
 
                     </ul>
@@ -64,6 +79,51 @@
             </div>
         </div>
     </div>
+    @foreach ($history as $row)
+        <div class="modal fade" id="eventModal{{ $row->id }}" tabindex="-1" aria-labelledby="eventModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close  float-end" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        <ul class="list-group list-group-flush">
+                            <a href="#" class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2me-auto">
+                                    <div class="fw-bold">สถานที่ : {{ $row->std_name }}</div>
+                                    <span> วันที่ : {{ $row->bk_date }} </span><br>
+                                    <span>เวลา : {{ $row->bk_str_time }} น. ถึง {{ $row->bk_end_time }} น. </span><br>
+                                    <span>ผู้จอง : คุณ {{ $row->bk_username }} </span><br>
+                                    <span>วันที่จอง : {{ $row->created_at }}</span><br>
+                                </div>
+                                @if ($row->bk_status == 1)
+                                    <span class="badge bg-warning rounded-pill"> รอชำระเงิน</span>
+                                @elseif($row->bk_status == 2)
+                                    <span class="badge bg-primary rounded-pill"> รอตรวจสอบ</span>
+                                @elseif($row->bk_status == 3)
+                                    <span class="badge bg-success rounded-pill"> อนุมัติ</span>
+                                @else
+                                    <span class="badge bg-danger rounded-pill"> ยกเลิก</span>
+                                @endif
+                            </a>
+                        </ul>
+                        <div class="text-center">
+                            <div id="slipeView"></div>
+                            <input type="file" class="btn btn-primary" name="bk_slipe" id="files"
+                                accept="image/jpeg, image/png">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer float-end">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+
     <style>
         ::-webkit-scrollbar {
             width: 4px;
@@ -83,7 +143,27 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         $(document).ready(function() {
+            let imagesPreview = function(input, placeToInsertImagePreview) {
+                if (input.files) {
+                    var reader = new FileReader();
+                    reader.onload = function(event) {
+                        $($.parseHTML('<img class="col-6 col-md-4 mb-3">')).attr('src', event
+                                .target
+                                .result)
+                            .appendTo(
+                                placeToInsertImagePreview);
+                    }
+                    reader.readAsDataURL(input.files);
+                }
+            };
 
+            $('#files').on('change', function() {
+                imagesPreview(this, '#slipeView');
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
             var id = $('#bk_std_id').val();
 
             $('#bk_std_id').on('click', function(e) {
@@ -100,27 +180,19 @@
                         window.history.pushState({
                             path: newUrl
                         }, '', newUrl);
-                        console.log(id);
                     },
                     error: function(error) {
                         console.log(error);
                     }
                 });
             });
-            console.log(id);
-            // let searchParams = window.location.href;
-            // console.log(searchParams);
-            // if () {
-            // $('.form-select').on('change', function(e) {
             $('#bk_std_id').val(id);
-            // });
-            // }
         });
     </script>
-
     <script>
         var calendar; // สร้างตัวแปรไว้ด้านนอก เพื่อให้สามารถอ้างอิงแบบ global ได้
         $(document).ready(function() {
+
             var date = new Date()
             var d = date.getDate(),
                 m = date.getMonth(),
@@ -128,6 +200,8 @@
             var Calendar = FullCalendar.Calendar;
             var calendarEl = document.getElementById('calendar');
             var calendar = new Calendar(calendarEl, {
+                // initialView: 'listWeek',
+                editable: true,
                 locale: 'th',
                 timeZone: 'Asia/Bangkok',
                 titleFormat: {
@@ -145,7 +219,8 @@
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
+
                 },
                 themeSystem: 'bootstrap5',
                 events: [
@@ -156,26 +231,31 @@
                             start: '{{ date($row->bk_date) }}T{{ date($row->bk_str_time) }}',
                             end: '{{ date($row->bk_date) }}T{{ date($row->bk_end_time) }}',
                             allDay: false,
-                            url: "{{ '/stadium/' . $row->bk_std_id }}",
+                            // url: "{{ '/stadium/' . $row->bk_std_id }}",
+                            status: '{{ $row->bk_status }}',
                             @if ($row->bk_status == '1')
                                 backgroundColor: '#FFBF00',
                                 borderColor: '#FFBF00',
-                                color: 'orange',
-                                textColor: 'black',
                             @elseif ($row->bk_status == '2')
-                                backgroundColor: '#6495ED',
-                                    borderColor: '#6495ED',
-                                    color: 'orange',
-                                    textColor: 'black',
+                                backgroundColor: '#0000FF',
+                                    borderColor: '#0000FF',
+                            @elseif ($row->bk_status == '3')
+                                backgroundColor: '#008000',
+                                    borderColor: '#008000',
                             @else
                                 backgroundColor: '#FF0000',
-                                    borderColor: '#FF0000',
-                                    color: 'orange',
-                                    textColor: 'black',
+                                borderColor: '#FF0000',
                             @endif
+                            color: 'orange',
+                            textColor: 'black',
                         },
                     @endforeach
                 ],
+
+                eventClick: function(info) {
+                    $('#eventModal' + info.event.id).modal('show');
+                    // $('#eventModalTitle' + info.event.id).html(info.event.title);
+                }
 
             });
 

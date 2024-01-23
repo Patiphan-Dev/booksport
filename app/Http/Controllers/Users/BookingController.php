@@ -17,7 +17,7 @@ class BookingController extends Controller
             'title' => 'จองสนามกีฬา'
         ];
         $booking = Booking::where('bk_std_id', $id)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
-        $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
+        $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
         $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
         $stadiums = Stadiums::all();
         $search = Stadiums::find($id);
@@ -30,7 +30,7 @@ class BookingController extends Controller
             'title' => 'จองสนามกีฬา'
         ];
         $booking = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
-        $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
+        $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
         $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
         $stadiums = Stadiums::all();
         $search = '';
@@ -41,29 +41,45 @@ class BookingController extends Controller
     {
         $booking = Booking::where('bk_std_id', $request->bk_std_id)
             ->where('bk_date',  $request->bk_date)
-            // ->where('bk_str_time', '>=', date($request->bk_str_time))
-            // ->where('bk_end_time', '<=', date($request->bk_end_time))
-            // ->where('bk_str_time', '<=', date($request->bk_end_time))
-            // ->where('bk_end_time', '>=', date($request->bk_str_time))
-            ->whereBetween('bk_str_time', [date($request->bk_str_time), date($request->bk_end_time)])
-            ->whereBetween('bk_end_time', [date($request->bk_str_time), date($request->bk_end_time)])->get();
+            ->get();
+        // dd(count($booking));
+        if (count($booking) == 0) {
+            //บันทึกข้อมูล;
+            $booking = new Booking;
+            $booking->bk_std_id = $request->bk_std_id;
+            $booking->bk_username = auth()->user()->username;
+            $booking->bk_date = $request->bk_date;
+            $booking->bk_str_time = $request->bk_str_time;
+            $booking->bk_end_time = $request->bk_end_time;
+            $booking->bk_slip = $request->bk_slip;
+            $booking->bk_status = 1;
+            $booking->save();
+            Alert::success('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
+            return redirect()->back()->with('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
+        } else {
 
-        dd(date($request->bk_str_time), $request->bk_end_time, $booking);
-        
-        //บันทึกข้อมูล;
-        $booking = new Booking;
-        $booking->bk_std_id = $request->bk_std_id;
-        $booking->bk_username = auth()->user()->username;
-        $booking->bk_date = $request->bk_date;
-        $booking->bk_str_time = $request->bk_str_time;
-        $booking->bk_end_time = $request->bk_end_time;
-        $booking->bk_slip = $request->bk_slip;
-        $booking->bk_status = 1;
-        $booking->save();
+            foreach ($booking as $bk) {
+                if (($bk->bk_str_time >= $request->bk_str_time && $bk->bk_str_time >= $request->bk_end_time) || ($bk->bk_end_time <= $request->bk_str_time && $bk->bk_end_time <= $request->bk_end_time)) {
+                    //บันทึกข้อมูล;
+                    $booking = new Booking;
+                    $booking->bk_std_id = $request->bk_std_id;
+                    $booking->bk_username = auth()->user()->username;
+                    $booking->bk_date = $request->bk_date;
+                    $booking->bk_str_time = $request->bk_str_time;
+                    $booking->bk_end_time = $request->bk_end_time;
+                    $booking->bk_slip = $request->bk_slip;
+                    $booking->bk_status = 1;
+                    $booking->save();
 
-        // แจ้งเตือน ไลน์
-        Alert::success('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
-        return redirect()->back()->with('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
+                    Alert::success('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
+                    return redirect()->back()->with('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
+                } else {
+
+                    Alert::error('ไม่สำเร็จ', 'ไม่สามารถจองในช่วงเวลาดังกล่าวได้');
+                    return redirect()->back()->with('ไม่สำเร็จ', 'ไม่สามารถจองในช่วงเวลาดังกล่าวได้');
+                }
+            }
+        }
     }
 
     public function editBooking($id)
