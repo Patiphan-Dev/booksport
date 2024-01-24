@@ -128,7 +128,7 @@ class StadiumController extends Controller
             }
         }
         Stadiums::find($id)->delete();
-        Alert::success('สำเร็จ', 'ลบข้อมูสำเร็จ');
+        // Alert::success('สำเร็จ', 'ลบข้อมูสำเร็จ');
         return redirect()->back()->with('success', 'ลบข้อมูสำเร็จ');
     }
 

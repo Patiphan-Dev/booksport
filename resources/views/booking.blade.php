@@ -95,7 +95,7 @@
                         <form action="{{ url('updatebooking/' . $row->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
-                                <div class="col-12 @if (Auth::user()->username == $row->bk_username) col-md-7 @endif">
+                                <div class="col-12 @if (Auth::user()->username == $row->bk_username) col-lg-7 @endif">
                                     <ul class="list-group list-group-flush">
                                         <a href="#"
                                             class="list-group-item d-flex justify-content-between align-items-start">
@@ -155,26 +155,27 @@
                                     @endif
                                 </div>
                                 @if (Auth::user()->username == $row->bk_username)
-                                    <div class="col-12 col-md-5">
+                                    <div class="col-12 col-lg-5">
                                         <div class="col-12 text-center mt-3">
                                             <label for="bk_end_time" class="form-label">
                                                 หลักฐานการชำระเงิน <span>*</span>
                                             </label>
-                                            <img id="img_bk_slip" alt="อัพโหลดสลิปโอนเงิน"
-                                                @if ($row->bk_slip != null) src="/{{ $row->bk_slip }}" @endif
-                                                class="mx-auto d-block img-thumbnail mb-3">
+                                            <img id="img_bk_slip{{ $row->id }}" alt="อัพโหลดสลิปโอนเงิน"
+                                                @if ($row->bk_slip != null) src="{{ asset($row->bk_slip) }}" @endif
+                                                class="mx-auto d-block img-thumbnail mb-3 img_bk_slip">
                                             <input type="file" id="bk_slip" name="bk_slip"
-                                                class="form-control mb-3" onchange="displayImage()">
+                                                class="form-control mb-3" onchange="displayImage('{{ $row->id }}')">
 
                                         </div>
                                     </div>
                                 @endif
                             </div>
-                            
+
                             @if (Auth::user()->username == $row->bk_username)
-                            <hr>
+                                <hr>
                                 <div class="form-group text-center">
-                                        <button type="button" class="btn btn-danger" onclick="deleteBooking('{{ $row->id }}')">ยกเลิกการจอง</button>
+                                    <div class="btn btn-danger"
+                                        onclick="deleteBooking('{{ $row->id }}')">ยกเลิกการจอง</div>
                                     <input type="submit" class="btn btn-success" id="submit" value="บันทึก">
                                 </div>
                             @endif
@@ -185,9 +186,8 @@
         </div>
     @endforeach
 
-
     <style>
-        #img_bk_slip {
+        .img_bk_slip {
             max-width: 300px;
             border: 1px solid #88888850;
             border-radius: 6px;
@@ -219,16 +219,15 @@
             max-height: 200px;
         }
     </style>
-    {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> --}}
     <script>
-        function displayImage() {
-            const input = document.getElementById("bk_slip");
+        function displayImage(id) {
+            const input = document.getElementById("bk_slip" + id);
             const file = input.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     const imageDataUrl = event.target.result;
-                    updateImageSrc(imageDataUrl);
+                    updateImageSrc(imageDataUrl, id);
                 };
                 reader.onerror = function(error) {
                     console.error("Error:", error)
@@ -237,12 +236,12 @@
             }
         }
 
-        function updateImageSrc(imageDataUrl) {
-            const imageElement = document.getElementById("img_bk_slip");
+        function updateImageSrc(imageDataUrl, id) {
+            const imageElement = document.getElementById("img_bk_slip" + id);
             imageElement.src = imageDataUrl;
         }
 
-        function deleteBooking(strValue) {
+        function deleteBooking(id) {
             Swal.fire({
                 title: "คุณแน่ใจไหม?",
                 text: "คุณจะไม่สามารถย้อนกลับสิ่งนี้ได้!",
@@ -255,7 +254,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/deletebooking/' + strValue,
+                        url: '/deletebooking/' + id,
                         method: 'POST',
                         data: {
                             id: id

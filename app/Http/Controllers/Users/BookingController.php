@@ -20,6 +20,7 @@ class BookingController extends Controller
         $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
         $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
         $search = Stadiums::find($id);
+        $stadiums = Stadiums::all();
         return view('booking', compact('booking', 'bookings', 'stadiums', 'search', 'history'), $data);
     }
 
@@ -136,8 +137,18 @@ class BookingController extends Controller
 
     public function deleteBooking($id)
     {
+        $booking = Booking::find($id);
+
+        dd($booking);
+        $img_paths = $booking->bk_slip;
+        if ($img_paths != null) {
+            $image_path = public_path('/' . $img_paths);
+            if (File::exists($image_path)) {
+                File::delete($image_path);
+            }
+        }
         Booking::find($id)->delete();
-        Alert::success('สำเร็จ', 'ลบข้อมูสำเร็จ');
+        // Alert::success('สำเร็จ', 'ลบข้อมูสำเร็จ');
         return redirect()->back()->with('success', 'ลบข้อมูสำเร็จ');
     }
 }

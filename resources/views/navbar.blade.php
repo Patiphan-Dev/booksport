@@ -13,41 +13,42 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link {{ $current_route == 'home' ? 'active' : '' }}" aria-current="page"
+                    <a class="nav-link fw-bold py-1 {{ $current_route == 'home' ? 'active' : '' }}" aria-current="page"
                         href="{{ route('home') }}">หน้าแรก</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ $current_route == 'about' ? 'active' : '' }}"
+                    <a class="nav-link fw-bold py-1 {{ $current_route == 'about' ? 'active' : '' }}"
                         href="{{ route('about') }}">เกี่ยวกับเรา</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ $current_route == 'stadium' ? 'active' : '' }}"
+                    <a class="nav-link fw-bold py-1 {{ $current_route == 'getStadium' ? 'active' : '' }}"
                         href="{{ route('getStadium',['id'=>1]) }}">สนามกีฬา</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ $current_route == 'stadium' ? 'active' : '' }}"
+                    <a class="nav-link fw-bold py-1 {{ $current_route == 'bookingAll' ? 'active' : '' }}"
                         href="{{ route('bookingAll') }}">จองสนาม</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">
                 @guest
-                    <li class="nav-item">
+                    <li class="nav-item fw-bold py-1">
                         <a class="btn btn-sm btn-outline-secondary nav-link {{ request()->is('login') ? 'active' : '' }}"
                             href="{{ route('getLogin') }}">เข้าสู่ระบบ</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item fw-bold py-1">
                         <a class="btn btn-sm btn-outline-secondary nav-link {{ request()->is('register') ? 'active' : '' }}"
                             href="{{ route('getRegister') }}">สมัครสมาชิก</a>
                     </li>
                 @else
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        <a class="nav-link fw-bold py-1 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            {{ Auth::user()->username }}
+                            ยินดีต้อนรับ คุณ {{ Auth::user()->username }}
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="dropdown-item" href="{{ route('logout') }}">Logout
+                                <a class="dropdown-item" href="{{ route('logout') }}">
+                                    ออกจากระบบ <i class="fa-solid fa-arrow-right-from-bracket"></i>
                                 </a>
                             </li>
                         </ul>

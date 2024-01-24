@@ -160,7 +160,7 @@
                 height: 150
             });
         });
-        function deleteStadium(strValue) {
+        function deleteStadium(id) {
             Swal.fire({
                 title: "คุณแน่ใจไหม?",
                 text: "คุณจะไม่สามารถย้อนกลับสิ่งนี้ได้!",
@@ -173,7 +173,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/deletestadium/' + strValue,
+                        url: '/deletestadium/' + id,
                         method: 'POST',
                         data: {
                             id: id

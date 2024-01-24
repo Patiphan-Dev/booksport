@@ -30,7 +30,7 @@ Route::get('/register', [AuthController::class, 'getRegister'])->name('getRegist
 Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/about', [HomeController::class, 'index'])->name('about');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/stadium/{id}', [StadiumController::class, 'getStadium'])->name('getStadium');
 
 
