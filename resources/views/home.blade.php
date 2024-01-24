@@ -24,14 +24,14 @@
                             <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
                                 <img src="{{ asset($image[0]) }}" class="d-block w-100" alt="...">
                                 <div class="carousel-caption d-none d-md-block">
-                                    <h1>{{ $std->std_name }}</h1>
-                                    <h5>{{ $std->std_price }} / ครั้ง</h5>
+                                    <h2>{{ $std->std_name }}</h2>
+                                    <h6>{{ $std->std_price }} / ครั้ง</h6>
 
-                                    <a href="{{ route('booking', ['id' => $std->id]) }}" class="btn btn-warning">
-                                        <i class="fa-solid fa-check"></i>จองสนาม
+                                    <a href="{{ route('booking', ['id' => $std->id]) }}" class="btn btn-warning btn-sm">
+                                        <i class="fa-solid fa-check"></i> จองสนาม
                                     </a>
                                     <a href="{{ route('getStadium', ['id' => $std->id]) }}"
-                                        class="btn btn-primary getStadium">ดูข้อมูลเพิ่มเติม
+                                        class="btn btn-primary btn-sm getStadium"> ดูข้อมูลเพิ่มเติม
                                     </a>
                                 </div>
                             </div>

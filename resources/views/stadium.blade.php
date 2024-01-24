@@ -3,7 +3,7 @@
     <div class="row mb-4">
         <div id="carouselStadium" class="carousel slide">
             <div class="row">
-                <div class="col-10">
+                <div class="col-9">
                     <div class="carousel-inner">
                         @php
                             $image = explode(',', $stadium->std_img_path);
@@ -31,7 +31,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-2 overflow-y-auto">
+                <div class="col-3 overflow-y-auto mt-2">
                     <div class="carousel-indicators">
                         @php
                             $image = explode(',', $stadium->std_img_path);
@@ -47,54 +47,55 @@
         </div>
     </div>
 
-    <div class="row">
-        <h1> ราคา {{ $stadium->std_price }} บาท / ครั้ง</h1>
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="pb-4 mb-4 fst-italic border-bottom">
+                        {{ $stadium->std_name }} ราคา {{ $stadium->std_price }} บาท / ชั่วโมง
+                    </h2>
+
+                    <article class="blog-post">
+                        <h3>รายละเอียด</h3>
+                        {!! $stadium->std_details !!}
+                    </article>
+                    <article class="blog-post">
+                        <h3>สิ่งอำนวยความสะดวก</h3>
+                        {!! $stadium->std_facilities !!}
+                    </article>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="position-sticky" style="top: 5.5rem;">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="fst-italic">สนามกีฬาเพิ่มเติม</h4>
+                        <ul class="list-unstyled">
+                            @foreach ($stadiums as $key => $std)
+                                <li @if ($stadium->id == $std->id) hidden @endif>
+                                    <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
+                                        href="{{ route('getStadium', ['id' => $std->id]) }}">
+                                        @php
+                                            $image = explode(',', $std->std_img_path);
+                                        @endphp
+                                        <img src="{{ asset($image[0]) }}" data-bs-target="#carouselStadiums"
+                                            data-bs-slide-to="{{ $key }}" class="bd-placeholder-img"
+                                            width="100%" height="100" aria-current="true">
+                                        <div class="col-lg-8">
+                                            <h5 class="mb-0">{{ $std->std_name }}</h5>
+                                            <span class="text-body-secondary">ราคา {{ $std->std_price }} บาท /
+                                                ชั่วโมง</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="row">
-        <h1>รายละเอียด</h1>
-        {!! $stadium->std_details !!}
-    </div>
-
-    <div class="row">
-        <h1>สิ่งอำนวยความสะดวก</h1>
-        {!! $stadium->std_facilities !!}
-    </div>
-
-    <style>
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background-color: #88888850;
-            border-radius: 6px;
-        }
-
-        .carousel-item {
-            width: 100%;
-            max-height: 500px;
-            border-top: 10px solid transparent;
-        }
-
-        .carousel-indicators {
-            position: static !important;
-            display: block !important;
-            width: 100%;
-            max-height: 150px;
-            margin-right: 0;
-            margin-bottom: 1rem;
-            margin-left: 0;
-            z-index: 0 !important;
-        }
-
-        .carousel-indicators [data-bs-target].active {
-            opacity: 1;
-        }
-
-        .carousel-indicators [data-bs-target] {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+    
 @endsection

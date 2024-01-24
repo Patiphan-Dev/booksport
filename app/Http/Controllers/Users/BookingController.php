@@ -117,7 +117,6 @@ class BookingController extends Controller
                     'bk_end_time' => $request->bk_end_time,
                     'bk_slip' => $image_url,
                     'bk_status' => 2,
-                    
                 ]
             );
         } else {
@@ -128,7 +127,6 @@ class BookingController extends Controller
                     'bk_str_time' => $request->bk_str_time,
                     'bk_end_time' => $request->bk_end_time,
                     'bk_status' => 1,
-
                 ]
             );
         }
@@ -138,7 +136,7 @@ class BookingController extends Controller
 
     public function deleteBooking($id)
     {
-        $delete = Booking::find($id)->delete();
+        Booking::find($id)->delete();
         Alert::success('สำเร็จ', 'ลบข้อมูสำเร็จ');
         return redirect()->back()->with('success', 'ลบข้อมูสำเร็จ');
     }

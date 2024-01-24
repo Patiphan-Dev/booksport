@@ -137,8 +137,8 @@ class StadiumController extends Controller
         $data = [
             'title' => 'ข้อมูลสนามกีฬา'
         ];
-
+        $stadiums = Stadiums::all();
         $stadium = Stadiums::find($id);
-        return view('stadium', compact('stadium'), $data);
+        return view('stadium', compact('stadium','stadiums'), $data);
     }
 }

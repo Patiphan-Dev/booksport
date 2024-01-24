@@ -24,7 +24,7 @@
 
     <!-- fullcalendar bundle -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
-    
+
     <!-- the moment-to-fullcalendar connector. must go AFTER the moment lib -->
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@6.1.10/index.global.min.js'></script>
     <script type="text/javascript" src="//code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -36,64 +36,64 @@
             height: 100vh - 1vh;
             z-index: 0;
         }
+
         .modal label span {
             color: red
+        }
+
+        ::-webkit-scrollbar {
+            background-color: #91919150;
+            width: 8px;
+            cursor: auto;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #919191;
+            border-radius: 8px;
+        }
+
+        .carousel ::-webkit-scrollbar {
+            background-color: #91919150;
+            width: 4px;
+        }
+
+        .carousel ::-webkit-scrollbar-thumb {
+            background-color: #91919150;
+            border-radius: 8px;
+        }
+
+        .carousel .carousel-item {
+            width: 100%;
+            max-height: 500px;
+            border-top: 10px solid transparent;
+        }
+
+        .carousel .carousel-indicators {
+            position: static !important;
+            display: block !important;
+            width: 100%;
+            max-height: 150px;
+            margin-right: 0;
+            margin-bottom: 1rem;
+            margin-left: 0;
+            margin-top: 0px;
+            z-index: 0 !important;
+        }
+
+        .carousel .carousel-indicators [data-bs-target].active {
+            opacity: 1;
+        }
+
+        .carousel .carousel-indicators [data-bs-target] {
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3"> {{-- fixed-top --}}
-        <div class="container">
-            <a class="navbar-brand" href="{{ URL('/') }}">Your Logo</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ route('home') }}">หน้าแรก</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">เกี่ยวกับเรา</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">สนามกีฬา</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('bookingAll') }}">จองสนาม</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto">
-                    @guest
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->is('login') ? 'active' : '' }}"
-                                href="{{ route('getLogin') }}">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->is('register') ? 'active' : '' }}"
-                                href="{{ route('getRegister') }}">Register</a>
-                        </li>
-                    @else
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                {{ Auth::user()->username }}
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('logout') }}">Logout
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    @endguest
-                </ul>
-            </div>
-        </div>
-    </nav>
 
+    @include('navbar')
     <div class="container">
         <section class="content">
             @include('sweetalert::alert')

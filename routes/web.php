@@ -30,6 +30,9 @@ Route::get('/register', [AuthController::class, 'getRegister'])->name('getRegist
 Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about', [HomeController::class, 'index'])->name('about');
+Route::get('/stadium/{id}', [StadiumController::class, 'getStadium'])->name('getStadium');
+
 
 Route::group(['middleware' => ['login_auth']], function () {
 
@@ -41,8 +44,6 @@ Route::group(['middleware' => ['login_auth']], function () {
     Route::get('/editbooking', [BookingController::class, 'editBooking'])->name('editBooking');
     Route::post('/updatebooking/{id}', [BookingController::class, 'updateBooking'])->name('updateBooking');
     Route::post('/deletebooking/{id}', [BookingController::class, 'deleteBooking'])->name('deleteBooking');
-
-    Route::get('/stadium/{id}', [StadiumController::class, 'getStadium'])->name('getStadium');
 
     Route::group(['middleware' => ['admin_auth']], function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

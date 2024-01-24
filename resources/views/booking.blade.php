@@ -74,7 +74,7 @@
                                     @elseif($row->bk_status == 3)
                                         <span class="badge bg-success rounded-pill"> อนุมัติ</span>
                                     @else
-                                        <span class="badge bg-danger rounded-pill"> ยกเลิก</span>
+                                        <span class="badge bg-danger rounded-pill"> ไม่อนุมัติ</span>
                                     @endif
                                 </a>
                             @endforeach
@@ -84,10 +84,10 @@
             </div>
         </div>
     </div>
-    @foreach ($history as $row)
+    @foreach ($bookings as $row)
         <div class="modal fade" id="eventModal{{ $row->id }}" tabindex="-1" aria-labelledby="eventModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog @if (Auth::user()->username == $row->bk_username) modal-lg @endif">
                 <div class="modal-content">
                     <div class="modal-body">
                         <button type="button" class="btn-close float-end" data-bs-dismiss="modal"
@@ -95,7 +95,7 @@
                         <form action="{{ url('updatebooking/' . $row->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
-                                <div class="col-12 col-md-7">
+                                <div class="col-12 @if (Auth::user()->username == $row->bk_username) col-md-7 @endif">
                                     <ul class="list-group list-group-flush">
                                         <a href="#"
                                             class="list-group-item d-flex justify-content-between align-items-start">
@@ -114,7 +114,7 @@
                                             @elseif($row->bk_status == 3)
                                                 <span class="badge bg-success rounded-pill"> อนุมัติ</span>
                                             @else
-                                                <span class="badge bg-danger rounded-pill"> ยกเลิก</span>
+                                                <span class="badge bg-danger rounded-pill"> ไม่อนุมัติ</span>
                                             @endif
                                         </a>
                                     </ul>
@@ -170,10 +170,11 @@
                                     </div>
                                 @endif
                             </div>
+                            
                             @if (Auth::user()->username == $row->bk_username)
+                            <hr>
                                 <div class="form-group text-center">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
-                                        aria-label="Close">ยกเลิก</button>
+                                        <button type="button" class="btn btn-danger" onclick="deleteBooking('{{ $row->id }}')">ยกเลิกการจอง</button>
                                     <input type="submit" class="btn btn-success" id="submit" value="บันทึก">
                                 </div>
                             @endif
@@ -192,8 +193,8 @@
             border-radius: 6px;
             padding: 6px;
             width: 15vw;
-            height: 50vh;
-            background-color: antiquewhite;
+            height: 40vh;
+            background-color: rgb(255, 242, 228);
             align-items: center;
             text-align: center
         }
@@ -239,6 +240,45 @@
         function updateImageSrc(imageDataUrl) {
             const imageElement = document.getElementById("img_bk_slip");
             imageElement.src = imageDataUrl;
+        }
+
+        function deleteBooking(strValue) {
+            Swal.fire({
+                title: "คุณแน่ใจไหม?",
+                text: "คุณจะไม่สามารถย้อนกลับสิ่งนี้ได้!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "แน่ใจ!",
+                cancelButtonText: "ยกเลิก"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/deletebooking/' + strValue,
+                        method: 'POST',
+                        data: {
+                            id: id
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                title: "ลบแล้ว!",
+                                text: "ไฟล์ของคุณถูกลบแล้ว.",
+                                icon: "success"
+                            });
+                        },
+                        error: function(error) {
+                            Swal.fire({
+                                title: "ลบไม่สำเร็จ!",
+                                text: "ไฟล์ของคุณยังไม่ถูกลบ.",
+                                icon: "error"
+                            });
+                            console.log(error);
+                        }
+                    });
+
+                }
+            });
         }
     </script>
     <script>
