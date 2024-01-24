@@ -52,29 +52,34 @@
                 </div>
                 <div class="col-12 col-md-4">
                     <h3>ประวัติการจอง</h3>
-                    <ul class="list-group list-group-flush">
-                        @foreach ($history as $row)
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#eventModal{{ $row->id }}"
-                                class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="me-auto">
-                                    <div class="fw-bold">สถานที่ : {{ $row->std_name }}</div>
-                                    วันที่ : {{ $row->bk_date }} <br>
-                                    เวลา : {{ $row->bk_str_time }} น. ถึง {{ $row->bk_end_time }} น.
-                                </div>
+                    @if (count($history) == 0)
+                        <div class="alert alert-warning" role="alert">
+                            ไม่มีประวัติการจองสนาม !!
+                        </div>
+                    @else
+                        <ul class="list-group list-group-flush">
+                            @foreach ($history as $row)
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#eventModal{{ $row->id }}"
+                                    class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="me-auto">
+                                        <div class="fw-bold">สถานที่ : {{ $row->std_name }}</div>
+                                        วันที่ : {{ $row->bk_date }} <br>
+                                        เวลา : {{ $row->bk_str_time }} น. ถึง {{ $row->bk_end_time }} น.
+                                    </div>
 
-                                @if ($row->bk_status == 1)
-                                    <span class="badge bg-warning rounded-pill"> รอชำระเงิน</span>
-                                @elseif($row->bk_status == 2)
-                                    <span class="badge bg-primary rounded-pill"> รอตรวจสอบ</span>
-                                @elseif($row->bk_status == 3)
-                                    <span class="badge bg-success rounded-pill"> อนุมัติ</span>
-                                @else
-                                    <span class="badge bg-danger rounded-pill"> ยกเลิก</span>
-                                @endif
-                            </a>
-                        @endforeach
-
-                    </ul>
+                                    @if ($row->bk_status == 1)
+                                        <span class="badge bg-warning rounded-pill"> รอชำระเงิน</span>
+                                    @elseif($row->bk_status == 2)
+                                        <span class="badge bg-primary rounded-pill"> รอตรวจสอบ</span>
+                                    @elseif($row->bk_status == 3)
+                                        <span class="badge bg-success rounded-pill"> อนุมัติ</span>
+                                    @else
+                                        <span class="badge bg-danger rounded-pill"> ยกเลิก</span>
+                                    @endif
+                                </a>
+                            @endforeach
+                        </ul>
+                    @endif
                 </div>
             </div>
         </div>
@@ -113,58 +118,65 @@
                                             @endif
                                         </a>
                                     </ul>
-                                    <hr>
-                                    <div class="row g-0 g-3 needs-validation mb-3" novalidate>
-                                        <div class="col-12 col-md-6">
-                                            <label for="bk_stadium" class="form-label">สนามกีฬา<span>*</span></label>
-                                            <select class="form-select" name="bk_std_id" id="bk_std_id" required>
-                                                <option value="" disabled selected>--- กรุณาเลือกสนาม ---
-                                                </option>
-                                                @foreach ($stadiums as $stadium)
-                                                    <option value="{{ $stadium->id }}"
-                                                        @if ($row->bk_std_id == $stadium->id) selected @endif>
-                                                        {{ $stadium->std_name }}</option>
-                                                @endforeach
-                                            </select>
+                                    @if (Auth::user()->username == $row->bk_username)
+                                        <hr>
+                                        <div class="row g-0 g-3 needs-validation mb-3" novalidate>
+                                            <div class="col-12 col-md-6">
+                                                <label for="bk_stadium" class="form-label">สนามกีฬา<span>*</span></label>
+                                                <select class="form-select" name="bk_std_id" id="bk_std_id" required>
+                                                    <option value="" disabled selected>--- กรุณาเลือกสนาม ---
+                                                    </option>
+                                                    @foreach ($stadiums as $stadium)
+                                                        <option value="{{ $stadium->id }}"
+                                                            @if ($row->bk_std_id == $stadium->id) selected @endif>
+                                                            {{ $stadium->std_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="bk_date" class="form-label">วันที่จอง
+                                                    <span>*</span></label>
+                                                <input type="date" class="form-control" name="bk_date" id="bk_date"
+                                                    value="{{ $row->bk_date }}" required>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="bk_str_time" class="form-label">เวลาเข้า
+                                                    <span>*</span></label>
+                                                <input type="time" class="form-control" name="bk_str_time"
+                                                    id="bk_str_time" value="{{ $row->bk_str_time }}" required>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="bk_end_time" class="form-label">เวลาออก
+                                                    <span>*</span></label>
+                                                <input type="time" class="form-control" name="bk_end_time"
+                                                    id="bk_end_time" value="{{ $row->bk_end_time }}" required>
+                                            </div>
                                         </div>
-                                        <div class="col-12 col-md-6">
-                                            <label for="bk_date" class="form-label">วันที่จอง
-                                                <span>*</span></label>
-                                            <input type="date" class="form-control" name="bk_date" id="bk_date"
-                                                value="{{ $row->bk_date }}" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label for="bk_str_time" class="form-label">เวลาเข้า
-                                                <span>*</span></label>
-                                            <input type="time" class="form-control" name="bk_str_time"
-                                                id="bk_str_time" value="{{ $row->bk_str_time }}" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label for="bk_end_time" class="form-label">เวลาออก
-                                                <span>*</span></label>
-                                            <input type="time" class="form-control" name="bk_end_time"
-                                                id="bk_end_time" value="{{ $row->bk_end_time }}" required>
-                                        </div>
-                                    </div>
+                                    @endif
                                 </div>
-                                <div class="col-12 col-md-5">
-                                    <div class="col-12 text-center mt-3">
-                                        <label for="bk_end_time" class="form-label">
-                                            หลักฐานการชำระเงิน <span>*</span>
-                                        </label>
-                                        <img id="img_bk_slip" alt="อัพโหลดสลิปโอนเงิน" @if($row->bk_slip != null) src="/{{$row->bk_slip}}" @endif
-                                            class="mx-auto d-block img-thumbnail mb-3">
-                                        <input type="file" id="bk_slip" name="bk_slip" class="form-control mb-3"
-                                            onchange="displayImage()">
+                                @if (Auth::user()->username == $row->bk_username)
+                                    <div class="col-12 col-md-5">
+                                        <div class="col-12 text-center mt-3">
+                                            <label for="bk_end_time" class="form-label">
+                                                หลักฐานการชำระเงิน <span>*</span>
+                                            </label>
+                                            <img id="img_bk_slip" alt="อัพโหลดสลิปโอนเงิน"
+                                                @if ($row->bk_slip != null) src="/{{ $row->bk_slip }}" @endif
+                                                class="mx-auto d-block img-thumbnail mb-3">
+                                            <input type="file" id="bk_slip" name="bk_slip"
+                                                class="form-control mb-3" onchange="displayImage()">
 
+                                        </div>
                                     </div>
+                                @endif
+                            </div>
+                            @if (Auth::user()->username == $row->bk_username)
+                                <div class="form-group text-center">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                                        aria-label="Close">ยกเลิก</button>
+                                    <input type="submit" class="btn btn-success" id="submit" value="บันทึก">
                                 </div>
-                            </div>
-                            <div class="form-group text-center">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
-                                    aria-label="Close">ยกเลิก</button>
-                                <input type="submit" class="btn btn-success" id="submit" value="บันทึก">
-                            </div>
+                            @endif
                         </form>
                     </div>
                 </div>
