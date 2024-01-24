@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Stadiums;
 use RealRashid\SweetAlert\Facades\Alert;
-use Carbon\Carbon;
+use File;
 
 class BookingController extends Controller
 {
@@ -16,10 +16,9 @@ class BookingController extends Controller
         $data = [
             'title' => 'จองสนามกีฬา'
         ];
-        $booking = Booking::where('bk_std_id', $id)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
+        $booking = Booking::where('bk_std_id', $id)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
         $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
-        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
-        $stadiums = Stadiums::all();
+        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
         $search = Stadiums::find($id);
         return view('booking', compact('booking', 'bookings', 'stadiums', 'search', 'history'), $data);
     }
@@ -29,9 +28,9 @@ class BookingController extends Controller
         $data = [
             'title' => 'จองสนามกีฬา'
         ];
-        $booking = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
+        $booking = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
         $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
-        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->get();
+        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
         $stadiums = Stadiums::all();
         $search = '';
         return view('booking', compact('booking', 'bookings', 'stadiums', 'search', 'history'), $data);
@@ -90,17 +89,49 @@ class BookingController extends Controller
 
     public function updateBooking(Request $request, $id)
     {
-        $update = Booking::find($id)->update(
-            [
-                'bk_std_id' => $request->bk_std_id,
-                'bk_username' => $request->bk_username,
-                'bk_date' => $request->bk_date,
-                'bk_str_time' => $request->bk_str_time,
-                'bk_end_time' => $request->bk_end_time,
-                'bk_slip' => $request->bk_slip,
-                'bk_status' => $request->bk_status,
-            ]
-        );
+        $booking = Booking::find($id);
+
+        $img_path = $booking->bk_slip;
+        if ($img_path) {
+            $image_path = public_path('/' . $img_path);
+            if (File::exists($image_path)) {
+                File::delete($image_path);
+            }
+        }
+        $date = date("Y-m-d");
+        $file = $request->file('bk_slip');
+
+        if ($file) {
+            $bk_slip =  $date . '-slipe-' . auth()->user()->username;
+            $ext = strtolower($file->getClientOriginalExtension());
+            $image_full_name = $bk_slip . '.' . $ext;
+            $uploade_path = 'uploads/slips/';
+            $image_url = $uploade_path . $image_full_name;
+            $file->move($uploade_path, $image_full_name);
+
+            Booking::find($id)->update(
+                [
+                    'bk_std_id' => $request->bk_std_id,
+                    'bk_date' => $request->bk_date,
+                    'bk_str_time' => $request->bk_str_time,
+                    'bk_end_time' => $request->bk_end_time,
+                    'bk_slip' => $image_url,
+                    'bk_status' => 2,
+                    
+                ]
+            );
+        } else {
+            Booking::find($id)->update(
+                [
+                    'bk_std_id' => $request->bk_std_id,
+                    'bk_date' => $request->bk_date,
+                    'bk_str_time' => $request->bk_str_time,
+                    'bk_end_time' => $request->bk_end_time,
+                    'bk_status' => 1,
+
+                ]
+            );
+        }
         Alert::success('สำเร็จ', 'อัพเดทข้อมูลสำเร็จ');
         return redirect()->back()->with('success', 'อัพเดทข้อมูลสำเร็จ');
     }

@@ -53,7 +53,7 @@
                             </div>
                             <div class="clearfix">
                                 <div class="modal-footer">
-                                    <a href="{{ url('deletestadium/' . $std->id) }}" class="btn btn-danger">ลบสนาม</a>
+                                    <button class="btn btn-danger" onclick="deleteStadium('{{ $std->id }}')">ลบสนาม</button>
                                     <button class="btn btn-warning editModal" data-id="{{ $std->id }}"
                                         data-bs-target="#editModal{{ $std->id }}"
                                         data-bs-toggle="modal">แก้ไขข้อมูล</button>
@@ -160,5 +160,43 @@
                 height: 150
             });
         });
+        function deleteStadium(strValue) {
+            Swal.fire({
+                title: "คุณแน่ใจไหม?",
+                text: "คุณจะไม่สามารถย้อนกลับสิ่งนี้ได้!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "แน่ใจ!",
+                cancelButtonText: "ยกเลิก"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/deletestadium/' + strValue,
+                        method: 'POST',
+                        data: {
+                            id: id
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                title: "ลบแล้ว!",
+                                text: "ไฟล์ของคุณถูกลบแล้ว.",
+                                icon: "success"
+                            });
+                        },
+                        error: function(error) {
+                            Swal.fire({
+                                title: "ลบไม่สำเร็จ!",
+                                text: "ไฟล์ของคุณยังไม่ถูกลบ.",
+                                icon: "error"
+                            });
+                            console.log(error);
+                        }
+                    });
+
+                }
+            });
+        }
     </script>
 @endsection

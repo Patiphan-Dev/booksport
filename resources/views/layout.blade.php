@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>เว็บไซต์จองสนามกีฬา {{ isset($title) ? '| ' . $title : '' }}</title>
+    <title>Promplay Demo {{ isset($title) ? '| ' . $title : '' }}</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -35,6 +35,9 @@
         .content {
             height: 100vh - 1vh;
             z-index: 0;
+        }
+        .modal label span {
+            color: red
         }
     </style>
 </head>

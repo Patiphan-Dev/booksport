@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Stadiums;
 
 class ReserveController extends Controller
 {
@@ -14,7 +15,9 @@ class ReserveController extends Controller
         $data = [
             'title' => 'การจอง'
         ];
-        return view('admin.reserve', $data);
+        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
+        $stadiums = Stadiums::all();
+        return view('admin.reserve',compact('bookings','stadiums'), $data);
     }
 
     public function addReserve(Request $request)
@@ -46,12 +49,13 @@ class ReserveController extends Controller
         $update = Booking::find($id)->update(
             [
                 'bk_std_id' => $request->bk_std_id,
-                'bk_username' => $request->bk_username,
+                // 'bk_username' => $request->bk_username,
                 'bk_date' => $request->bk_date,
                 'bk_str_time' => $request->bk_str_time,
                 'bk_end_time' => $request->bk_end_time,
                 'bk_slip' => $request->bk_slip,
                 'bk_status' => $request->bk_status,
+                'bk_node' => $request->bk_node,
             ]
         );
         Alert::success('สำเร็จ', 'อัพเดทข้อมูลสำเร็จ');

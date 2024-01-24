@@ -82,40 +82,90 @@
     @foreach ($history as $row)
         <div class="modal fade" id="eventModal{{ $row->id }}" tabindex="-1" aria-labelledby="eventModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <button type="button" class="btn-close  float-end" data-bs-dismiss="modal"
+                        <button type="button" class="btn-close float-end" data-bs-dismiss="modal"
                             aria-label="Close"></button>
-                        <ul class="list-group list-group-flush">
-                            <a href="#" class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2me-auto">
-                                    <div class="fw-bold">สถานที่ : {{ $row->std_name }}</div>
-                                    <span> วันที่ : {{ $row->bk_date }} </span><br>
-                                    <span>เวลา : {{ $row->bk_str_time }} น. ถึง {{ $row->bk_end_time }} น. </span><br>
-                                    <span>ผู้จอง : คุณ {{ $row->bk_username }} </span><br>
-                                    <span>วันที่จอง : {{ $row->created_at }}</span><br>
+                        <form action="{{ url('updatebooking/' . $row->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row">
+                                <div class="col-12 col-md-7">
+                                    <ul class="list-group list-group-flush">
+                                        <a href="#"
+                                            class="list-group-item d-flex justify-content-between align-items-start">
+                                            <div class="ms-2me-auto">
+                                                <div class="fw-bold">สถานที่ : {{ $row->std_name }}</div>
+                                                <span> วันที่ : {{ $row->bk_date }} </span><br>
+                                                <span>เวลา : {{ $row->bk_str_time }} น. ถึง {{ $row->bk_end_time }} น.
+                                                </span><br>
+                                                <span>ผู้จอง : คุณ {{ $row->bk_username }} </span><br>
+                                                <span>วันที่จอง : {{ $row->created_at }}</span><br>
+                                            </div>
+                                            @if ($row->bk_status == 1)
+                                                <span class="badge bg-warning rounded-pill"> รอชำระเงิน</span>
+                                            @elseif($row->bk_status == 2)
+                                                <span class="badge bg-primary rounded-pill"> รอตรวจสอบ</span>
+                                            @elseif($row->bk_status == 3)
+                                                <span class="badge bg-success rounded-pill"> อนุมัติ</span>
+                                            @else
+                                                <span class="badge bg-danger rounded-pill"> ยกเลิก</span>
+                                            @endif
+                                        </a>
+                                    </ul>
+                                    <hr>
+                                    <div class="row g-0 g-3 needs-validation mb-3" novalidate>
+                                        <div class="col-12 col-md-6">
+                                            <label for="bk_stadium" class="form-label">สนามกีฬา<span>*</span></label>
+                                            <select class="form-select" name="bk_std_id" id="bk_std_id" required>
+                                                <option value="" disabled selected>--- กรุณาเลือกสนาม ---
+                                                </option>
+                                                @foreach ($stadiums as $stadium)
+                                                    <option value="{{ $stadium->id }}"
+                                                        @if ($row->bk_std_id == $stadium->id) selected @endif>
+                                                        {{ $stadium->std_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="bk_date" class="form-label">วันที่จอง
+                                                <span>*</span></label>
+                                            <input type="date" class="form-control" name="bk_date" id="bk_date"
+                                                value="{{ $row->bk_date }}" required>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="bk_str_time" class="form-label">เวลาเข้า
+                                                <span>*</span></label>
+                                            <input type="time" class="form-control" name="bk_str_time"
+                                                id="bk_str_time" value="{{ $row->bk_str_time }}" required>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="bk_end_time" class="form-label">เวลาออก
+                                                <span>*</span></label>
+                                            <input type="time" class="form-control" name="bk_end_time"
+                                                id="bk_end_time" value="{{ $row->bk_end_time }}" required>
+                                        </div>
+                                    </div>
                                 </div>
-                                @if ($row->bk_status == 1)
-                                    <span class="badge bg-warning rounded-pill"> รอชำระเงิน</span>
-                                @elseif($row->bk_status == 2)
-                                    <span class="badge bg-primary rounded-pill"> รอตรวจสอบ</span>
-                                @elseif($row->bk_status == 3)
-                                    <span class="badge bg-success rounded-pill"> อนุมัติ</span>
-                                @else
-                                    <span class="badge bg-danger rounded-pill"> ยกเลิก</span>
-                                @endif
-                            </a>
-                        </ul>
-                        <div class="text-center">
-                            <input type="file" id="image-input" accept="image/*">
-                            <img id="image-preview" alt="Image Preview">
-                        </div>
+                                <div class="col-12 col-md-5">
+                                    <div class="col-12 text-center mt-3">
+                                        <label for="bk_end_time" class="form-label">
+                                            หลักฐานการชำระเงิน <span>*</span>
+                                        </label>
+                                        <img id="img_bk_slip" alt="อัพโหลดสลิปโอนเงิน" @if($row->bk_slip != null) src="/{{$row->bk_slip}}" @endif
+                                            class="mx-auto d-block img-thumbnail mb-3">
+                                        <input type="file" id="bk_slip" name="bk_slip" class="form-control mb-3"
+                                            onchange="displayImage()">
 
-                    </div>
-                    <div class="modal-footer float-end">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                                    aria-label="Close">ยกเลิก</button>
+                                <input type="submit" class="btn btn-success" id="submit" value="บันทึก">
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -124,6 +174,18 @@
 
 
     <style>
+        #img_bk_slip {
+            max-width: 300px;
+            border: 1px solid #88888850;
+            border-radius: 6px;
+            padding: 6px;
+            width: 15vw;
+            height: 50vh;
+            background-color: antiquewhite;
+            align-items: center;
+            text-align: center
+        }
+
         ::-webkit-scrollbar {
             width: 4px;
         }
@@ -146,24 +208,26 @@
     </style>
     {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> --}}
     <script>
-         function previewImage(input) {
+        function displayImage() {
+            const input = document.getElementById("bk_slip");
             const file = input.files[0];
-
             if (file) {
                 const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    const imagePreview = document.getElementById('image-preview');
-                    imagePreview.src = e.target.result;
+                reader.onload = function(event) {
+                    const imageDataUrl = event.target.result;
+                    updateImageSrc(imageDataUrl);
                 };
-
+                reader.onerror = function(error) {
+                    console.error("Error:", error)
+                };
                 reader.readAsDataURL(file);
             }
         }
 
-        document.getElementById('image-input').addEventListener('change', function (event) {
-            previewImage(event.target);
-        });
+        function updateImageSrc(imageDataUrl) {
+            const imageElement = document.getElementById("img_bk_slip");
+            imageElement.src = imageDataUrl;
+        }
     </script>
     <script>
         $(document).ready(function() {
