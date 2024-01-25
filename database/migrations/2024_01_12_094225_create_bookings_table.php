@@ -19,7 +19,8 @@ return new class extends Migration
             $table->time('bk_str_time')->comment('เวลาจอง');
             $table->time('bk_end_time')->comment('เวลาออก');
             $table->string('bk_slip')->nullable()->comment('สลิป');
-            $table->string('bk_status')->default('1')->comment('สถานะการชำระเงิน');
+            $table->text('bk_node')->nullable()->comment('หมายเหตุ');
+            $table->string('bk_status')->default('1')->comment('สถานะ (0.ไม่อนุมัติ 1.รอชำระ 2.รอตรวจสอบ 3.อนุมัติ) ');
             $table->timestamps();
         });
     }
