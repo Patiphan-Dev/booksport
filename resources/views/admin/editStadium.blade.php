@@ -22,7 +22,7 @@
         </div>
         <div class="col-12 mb-3">
             <div class="form-group">
-                <label>สถานะสนาม <span>*</span> </label>
+                <label for="std_status" class="form-label">สถานะสนาม <span>*</span> </label>
                 <div class="form-group clearfix">
                     <div class="btn btn-primary icheck-success">
                         <input class="d-inline" type="radio" id="std_status1" value="1" name="std_status"
@@ -56,11 +56,90 @@
                     </div>
                 </div>
             @endforeach
-            <div class="row justify-content-center" id="gallery{{ $std->id }}">
-            </div>
+            {{-- <div class="row justify-content-center" id="gallery{{ $std->id }}">
+            </div> --}}
+
+            <img id="std_img_path{{ $std->id }}" alt="อัพโหลดสลิปโอนเงิน"
+                @if ($std->bk_slip != null) src="{{ asset($std->bk_slip) }}" @endif
+                class="mx-auto d-block img-thumbnail mb-3 std_img_path">
+            <input type="file" id="img_path{{ $std->id }}" name="bk_slip" class="form-control mb-3"
+                onchange="StadiumImage('{{ $std->id }}')" multiple accept="image/gif, image/jpeg, image/png">
+
+
+            <input type="file" id="imageInput" multiple accept="image/*">
+            <div id="imagePreview"></div>
+
         </div>
     </div>
     <div class="modal-footer">
         <input type="submit" class="btn btn-primary" id="submit" value="บันทึก">
     </div>
 </form>
+<style>
+    #imagePreview {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .previewImage {
+        margin: 5px;
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+    }
+</style>
+<script>
+    function StadiumImage(id) {
+        const input = document.getElementById("img_path" + id);
+        const filesAmount = input.files.length;
+
+        for (i = 0; i < filesAmount; i++) {
+
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                const imageDataUrl = event.target.result;
+                updateStadiumSrc(imageDataUrl, id);
+            };
+            reader.onerror = function(error) {
+                console.error("Error:", error)
+            };
+            reader.readAsDataURL(input.files[i]);
+
+        }
+
+    }
+
+    function updateStadiumSrc(imageDataUrl, id) {
+        const imageElement = document.getElementById("std_img_path" + id);
+        imageElement.src = imageDataUrl;
+    }
+
+
+    document.getElementById('imageInput').addEventListener('change', handleFileSelect);
+
+    function handleFileSelect(event) {
+        const files = event.target.files;
+        const previewContainer = document.getElementById('imagePreview');
+
+        // Clear the existing preview
+        previewContainer.innerHTML = '';
+
+        for (const file of files) {
+            // Check if the file is an image
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const previewImage = document.createElement('img');
+                    previewImage.classList.add('previewImage');
+                    previewImage.src = e.target.result;
+                    previewContainer.appendChild(previewImage);
+                };
+
+                // Read the image file as a data URL
+                reader.readAsDataURL(file);
+            }
+        }
+    }
+</script>

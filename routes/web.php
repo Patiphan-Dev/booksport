@@ -57,9 +57,8 @@ Route::group(['middleware' => ['login_auth']], function () {
         Route::get('/reserve', [ReserveController::class, 'index'])->name('reserve');
         Route::post('/addreserve', [ReserveController::class, 'addReserve'])->name('addReserve');
         Route::get('/editreserve', [ReserveController::class, 'editReserve'])->name('editReserve');
-        Route::post('/deletereserve/{id}', [ReserveController::class, 'deleteReserve'])->name('deleteReserve');
         Route::post('/updatereserve/{id}', [ReserveController::class, 'updateReserve'])->name('updateReserve');
-
+        Route::post('/deletereserve/{id}', [ReserveController::class, 'deleteReserve'])->name('deleteReserve');
 
         Route::get('/payment', [PaymentController::class, 'index'])->name('payment');
         Route::post('/addpayment', [PaymentController::class, 'addPayment'])->name('addPayment');

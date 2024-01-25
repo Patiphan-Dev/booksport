@@ -54,14 +54,14 @@
     </div>
 
     <style>
-        ::-webkit-scrollbar {
+        /* ::-webkit-scrollbar {
             width: 4px;
         }
 
         ::-webkit-scrollbar-thumb {
             background-color: #88888850;
             border-radius: 6px;
-        }
+        } */
 
         .carousel-item {
             width: 100%;

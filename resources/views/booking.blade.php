@@ -5,8 +5,8 @@
             @csrf
             @php
                 $date = date('Y-m-d');
-                $str_time = date('H:00');
-                $end_time = date('H:00', strtotime('+1 hour'));
+                $str_time = date('H:00:00');
+                $end_time = date('H:00:00', strtotime('+1 hour'));
             @endphp
             <div class="row">
                 <div class="col-3 col-md-3">
@@ -163,7 +163,7 @@
                                             <img id="img_bk_slip{{ $row->id }}" alt="อัพโหลดสลิปโอนเงิน"
                                                 @if ($row->bk_slip != null) src="{{ asset($row->bk_slip) }}" @endif
                                                 class="mx-auto d-block img-thumbnail mb-3 img_bk_slip">
-                                            <input type="file" id="bk_slip" name="bk_slip"
+                                            <input type="file" id="bk_slip{{ $row->id }}" name="bk_slip"
                                                 class="form-control mb-3" onchange="displayImage('{{ $row->id }}')">
 
                                         </div>
@@ -174,8 +174,8 @@
                             @if (Auth::user()->username == $row->bk_username)
                                 <hr>
                                 <div class="form-group text-center">
-                                    <div class="btn btn-danger"
-                                        onclick="deleteBooking('{{ $row->id }}')">ยกเลิกการจอง</div>
+                                    <a class="btn btn-danger" onclick="deleteBooking('{{ $row->id }}')">
+                                        ยกเลิกการจอง</a>
                                     <input type="submit" class="btn btn-success" id="submit" value="บันทึก">
                                 </div>
                             @endif
@@ -199,11 +199,11 @@
             text-align: center
         }
 
-        ::-webkit-scrollbar {
+        #calendar ::-webkit-scrollbar {
             width: 4px;
         }
 
-        ::-webkit-scrollbar-thumb {
+        #calendar ::-webkit-scrollbar-thumb {
             background-color: #88888850;
             border-radius: 6px;
         }
@@ -219,6 +219,9 @@
             max-height: 200px;
         }
     </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
     <script>
         function displayImage(id) {
             const input = document.getElementById("bk_slip" + id);
@@ -242,6 +245,13 @@
         }
 
         function deleteBooking(id) {
+            // alert(id);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
             Swal.fire({
                 title: "คุณแน่ใจไหม?",
                 text: "คุณจะไม่สามารถย้อนกลับสิ่งนี้ได้!",
@@ -253,13 +263,19 @@
                 cancelButtonText: "ยกเลิก"
             }).then((result) => {
                 if (result.isConfirmed) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
                     $.ajax({
-                        url: '/deletebooking/' + id,
-                        method: 'POST',
+                        url: 'deletebooking/' + id,
+                        type: 'POST',
                         data: {
                             id: id
                         },
-                        success: function(response) {
+                        success: function(data) {
                             Swal.fire({
                                 title: "ลบแล้ว!",
                                 text: "ไฟล์ของคุณถูกลบแล้ว.",

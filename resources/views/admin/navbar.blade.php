@@ -30,13 +30,13 @@
                 การจอง
             </a>
         </li>
-        <li>
+        {{-- <li>
             <a href="{{ route('payment') }}"
                 class="nav-link text-white {{ $current_route == 'payment' ? 'active' : '' }}">
                 <i class="fa-solid fa-hand-holding-dollar"></i>
                 การชำระเงิน
             </a>
-        </li>
+        </li> --}}
         <li>
             <a href="{{ route('rule') }}" class="nav-link text-white {{ $current_route == 'rule' ? 'active' : '' }}">
                 <i class="fa-solid fa-scale-balanced"></i>

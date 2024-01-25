@@ -50,7 +50,7 @@
                         </tr>
                         <div class="modal fade" id="confirm{{ $row->id }}" tabindex="-1"
                             aria-labelledby="confirmLabel" aria-hidden="true">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="exampleModalLabel">

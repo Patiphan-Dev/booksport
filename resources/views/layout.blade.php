@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Promplay Demo {{ isset($title) ? '| ' . $title : '' }}</title>
 
     <!-- Google Font: Source Sans Pro -->
@@ -31,6 +32,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
     <style>
         .content {
             height: 100vh - 1vh;
@@ -43,7 +45,7 @@
 
         ::-webkit-scrollbar {
             background-color: #91919150;
-            width: 8px;
+            width: 10px;
             cursor: auto;
         }
 

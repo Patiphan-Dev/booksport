@@ -1,7 +1,6 @@
 @extends('admin.layout')
 
 @section('body')
-
     <div class="clearfix">
         <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addstadium">
             เพิ่มสนาม
@@ -21,68 +20,70 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="row g-2">
-            @foreach ($stadiums as $std)
-                @php
-                    $image = explode(',', $std->std_img_path);
-                @endphp
+    <div class="row g-3">
+        @foreach ($stadiums as $std)
+            @php
+                $image = explode(',', $std->std_img_path);
+            @endphp
 
-                <div class="col-6 col-sm-4 col-md-3 text-center">
-                    <a class="card text-center h-100 viewStadium" href="" data-id="{{ $std->std_name }}"
-                        data-bs-toggle="modal" data-bs-target="#StadiumDetail{{ $std->id }}">
-                        <img src="{{ asset($image[0]) }}" class="img-fluid" alt="...">
-                        <div class="card-body">
-                            {{ $std->std_name }}
-                        </div>
-                    </a>
-                </div>
-
-                <div class="modal fade" id="StadiumDetail{{ $std->id }}" tabindex="-1"
-                    aria-labelledby="StadiumDetailLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <div id="StadiumName"></div>
-                                <h1 class="modal-title fs-5">{{ $std->std_name }} </h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body text-left">
-                                @include('admin.DetailsStadium')
-                            </div>
-                            <div class="clearfix">
-                                <div class="modal-footer">
-                                    <button class="btn btn-danger" onclick="deleteStadium('{{ $std->id }}')">ลบสนาม</button>
-                                    <button class="btn btn-warning editModal" data-id="{{ $std->id }}"
-                                        data-bs-target="#editModal{{ $std->id }}"
-                                        data-bs-toggle="modal">แก้ไขข้อมูล</button>
-                                </div>
-                            </div>
-
-                        </div>
+            <div class="col-6 col-sm-4 col-md-3 text-center">
+                <div class="card text-center h-100 viewStadium" data-id="{{ $std->std_name }}"
+                    data-bs-toggle="modal" data-bs-target="#StadiumDetail{{ $std->id }}">
+                    <img src="{{ asset($image[0]) }}" class="img-fluid" alt="...">
+                    <div class="card-body">
+                        {{ $std->std_name }}
                     </div>
-
                 </div>
-                <div class="modal fade" id="editModal{{ $std->id }}" aria-hidden="true"
-                    aria-labelledby="editModalLabel{{ $std->id }}" data-bs-backdrop="static"
-                    data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="editModalLabel">แก้ไขสนามกีฬา</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+            </div>
+
+            <div class="modal fade" id="StadiumDetail{{ $std->id }}" tabindex="-1"
+                aria-labelledby="StadiumDetailLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div id="StadiumName"></div>
+                            <h1 class="modal-title fs-5">{{ $std->std_name }} </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-left">
+                            @include('admin.DetailsStadium')
+                        </div>
+                        <div class="clearfix">
+                            <div class="modal-footer">
+                                <button class="btn btn-danger"
+                                    onclick="deleteStadium('{{ $std->id }}')">ลบสนาม</button>
+                                <button class="btn btn-warning editModal" data-id="{{ $std->id }}"
+                                    data-bs-target="#editModal{{ $std->id }}"
+                                    data-bs-toggle="modal">แก้ไขข้อมูล</button>
                             </div>
-                            <div class="modal-body">
-                                @include('admin.editStadium')
-                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal fade" id="editModal{{ $std->id }}" aria-hidden="true"
+                aria-labelledby="editModalLabel{{ $std->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="editModalLabel">แก้ไขสนามกีฬา</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            @include('admin.editStadium')
                         </div>
                     </div>
                 </div>
-            @endforeach
-        </div>
+            </div>
+        @endforeach
     </div>
+    <style>
+        .viewStadium{
+            cursor: pointer;
+        }
+    </style>
     <script>
         $(document).ready(function() {
 
@@ -160,6 +161,7 @@
                 height: 150
             });
         });
+
         function deleteStadium(id) {
             Swal.fire({
                 title: "คุณแน่ใจไหม?",
