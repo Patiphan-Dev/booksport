@@ -1,4 +1,3 @@
-
 <form action="{{ route('addStadium') }}" method="post" enctype="multipart/form-data">
     @csrf
     <div class="row">
@@ -21,62 +20,59 @@
         </div>
         <div class="col-12 mb-3">
             <label class="form-label">รูปภาพสนาม <span>*</span></label>
-            <input type="file" class="form-control" id="files" name="std_img_path[]"
-                accept="image/gif, image/jpeg, image/png" required multiple>
+            <input type="file" class="form-control" id="imageStadium" name="std_img_path[]"
+                accept="image/gif, image/jpeg, image/png" multiple required>
         </div>
-        <div class="col-12 mb-3">
-            <div id="std_img_path"></div>
-            <div id="max_size"></div>
-            <div class="row justify-content-center" id="gallery">
-            </div>
+        <div class="row mb-3">
+            
+            <div id="imageStadiumPreview"></div>
         </div>
     </div>
     <div class="modal-footer">
         <input type="submit" class="btn btn-primary" id="submit" value="บันทึก">
     </div>
 </form>
+<style>
+    #imagePreview {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .previewImage {
+        margin: 5px;
+        max-width: 15vw;
+        max-height: 30vh;
+        object-fit: cover;
+        border: 1px solid #000009;
+        border-radius: 6px;
+        padding: 2px;
+    }
+</style>
 <script>
-    $(document).ready(function() {
+    document.getElementById('imageStadium').addEventListener('change', handleFileStadium);
 
-        let maxSize = 500000; //5MB
+    function handleFileStadium(event) {
+        const files = event.target.files;
+        const previewContainer = document.getElementById('imageStadiumPreview');
 
-        $("#files").on("change", function(e) {
-            let files = e.target.files,
-                filesLength = files.length;
-            for (let i = 0; i < filesLength; i++) {
-                let f = files[i];
-                if (f.size > maxSize) {
-                    $("#max_size").append("<span class='link-danger'>ขนาดไฟล์: " + f.size +
-                        " KB. ใหญ่เกินไป (กำหนดไม่เกิน 5MB.)<span>");
-                    $("#std_img_path").val("");
-                }
+        // Clear the existing preview
+        previewContainer.innerHTML = '';
 
+        for (const file of files) {
+            // Check if the file is an image
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const previewImage = document.createElement('img');
+                    previewImage.classList.add('previewImage');
+                    previewImage.src = e.target.result;
+                    previewContainer.appendChild(previewImage);
+                };
+
+                // Read the image file as a data URL
+                reader.readAsDataURL(file);
             }
-
-        });
-
-        let imagesPreview = function(input, placeToInsertImagePreview) {
-            if (input.files) {
-                var filesAmount = input.files.length;
-
-                for (i = 0; i < filesAmount; i++) {
-                    var reader = new FileReader();
-
-                    reader.onload = function(event) {
-                        $($.parseHTML('<img class="col-6 col-md-4 mb-3">')).attr('src', event
-                                .target
-                                .result)
-                            .appendTo(
-                                placeToInsertImagePreview);
-                    }
-
-                    reader.readAsDataURL(input.files[i]);
-                }
-            }
-        };
-
-        $('#files').on('change', function() {
-            imagesPreview(this, '#gallery');
-        });
-    });
+        }
+    }
 </script>

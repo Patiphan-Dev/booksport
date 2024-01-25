@@ -43,35 +43,19 @@
         </div>
         <div class="col-12 mb-3">
             <label class="form-label">รูปภาพสนาม <span>*</span></label>
-            <input type="file" class="form-control" id="files{{ $std->id }}" name="std_img_path[]"
-                accept="image/gif, image/jpeg, image/png" multiple>
+            <input type="file" class="form-control" id="imageInput{{ $std->id }}" name="std_img_path[]"
+                accept="image/gif, image/jpeg, image/png" onchange="inputFile('{{ $std->id }}')" multiple>
         </div>
         <div class="row mb-3">
-            <div id="std_img_path{{ $std->id }}"></div>
-            <div id="max_size{{ $std->id }}"></div>
-            @foreach ($image as $key => $img)
-                <div class="col-6 col-md-4 mb-2">
-                    <div class="card" style="max-height:300px">
-                        <img src="{{ asset($img) }}" class="d-block w-100" alt="...">
-                    </div>
-                </div>
-            @endforeach
-            {{-- <div class="row justify-content-center" id="gallery{{ $std->id }}">
-            </div> --}}
-
-            <img id="std_img_path{{ $std->id }}" alt="อัพโหลดสลิปโอนเงิน"
-                @if ($std->bk_slip != null) src="{{ asset($std->bk_slip) }}" @endif
-                class="mx-auto d-block img-thumbnail mb-3 std_img_path">
-            <input type="file" id="img_path{{ $std->id }}" name="bk_slip" class="form-control mb-3"
-                onchange="StadiumImage('{{ $std->id }}')" multiple accept="image/gif, image/jpeg, image/png">
-
-
-            <input type="file" id="imageInput" multiple accept="image/*">
-            <div id="imagePreview"></div>
-
+            <div id="imagePreview{{ $std->id }}">
+                @foreach ($image as $key => $img)
+                    <img src="{{ asset($img) }}" class="previewImage" alt="...">
+                @endforeach
+            </div>
         </div>
     </div>
     <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
         <input type="submit" class="btn btn-primary" id="submit" value="บันทึก">
     </div>
 </form>
@@ -83,44 +67,23 @@
 
     .previewImage {
         margin: 5px;
-        width: 100px;
-        height: 100px;
+        max-width: 15vw;
+        max-height: 30vh;
         object-fit: cover;
+        border: 1px solid #000009;
+        border-radius: 6px;
+        padding: 2px;
     }
 </style>
 <script>
-    function StadiumImage(id) {
-        const input = document.getElementById("img_path" + id);
-        const filesAmount = input.files.length;
-
-        for (i = 0; i < filesAmount; i++) {
-
-            const reader = new FileReader();
-
-            reader.onload = function(event) {
-                const imageDataUrl = event.target.result;
-                updateStadiumSrc(imageDataUrl, id);
-            };
-            reader.onerror = function(error) {
-                console.error("Error:", error)
-            };
-            reader.readAsDataURL(input.files[i]);
-
-        }
-
+    function inputFile(id) {
+        document.getElementById('imageInput' + id);
+        handleFileSelect(event, id);
     }
 
-    function updateStadiumSrc(imageDataUrl, id) {
-        const imageElement = document.getElementById("std_img_path" + id);
-        imageElement.src = imageDataUrl;
-    }
-
-
-    document.getElementById('imageInput').addEventListener('change', handleFileSelect);
-
-    function handleFileSelect(event) {
+    function handleFileSelect(event, id) {
         const files = event.target.files;
-        const previewContainer = document.getElementById('imagePreview');
+        const previewContainer = document.getElementById('imagePreview' + id);
 
         // Clear the existing preview
         previewContainer.innerHTML = '';

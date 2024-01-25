@@ -1,6 +1,6 @@
 @extends('layout')
 @section('body')
-    <div class="card p-5 mt-3">
+    <div class="card py-md-5 p-3 mt-3">
         <form action="{{ route('addBooking') }}" method="post" enctype="multipart/form-data">
             @csrf
             @php
@@ -8,9 +8,9 @@
                 $str_time = date('H:00:00');
                 $end_time = date('H:00:00', strtotime('+1 hour'));
             @endphp
-            <div class="row">
-                <div class="col-3 col-md-3">
-                    <label for="stadium_id">สนามกีฬา :</label>
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-6 col-md-3">
+                    <label for="stadium_id" class="form-label">สนามกีฬา :</label>
                     <select class="form-select" name="bk_std_id" id="bk_std_id" required>
                         <option value="" disabled selected>--- กรุณาเลือกสนาม ---</option>
                         @foreach ($stadiums as $stadium)
@@ -22,23 +22,27 @@
                     </select>
                 </div>
                 <div class="col-12 col-sm-6 col-md-2">
-                    <label for="bk_date">วันที่จอง : </label>
+                    <label for="bk_date" class="form-label">วันที่จอง : </label>
                     <input type="date" class="form-control" name="bk_date" id="bk_date" value="{{ $date }}"
                         required>
                 </div>
                 <div class="col-12 col-sm-6 col-md-2">
-                    <label for="bk_str_time">เวลาเข้า : </label>
+                    <label for="bk_str_time" class="form-label">เวลาเข้า : </label>
                     <input type="time" class="form-control" name="bk_str_time" id="bk_str_time"
                         value="{{ $str_time }}" required>
                 </div>
                 <div class="col-12 col-sm-6 col-md-2">
-                    <label for="bk_end_time">เวลาออก : </label>
+                    <label for="bk_end_time" class="form-label">เวลาออก : </label>
                     <input type="time" class="form-control" name="bk_end_time" id="bk_end_time"
                         value="{{ $end_time }}" required>
                 </div>
                 <div class="col-12 col-sm-6 col-md-2">
-                    <label></label>
-                    <input type="submit" class="form-control btn btn-primary" value="จองสนาม">
+                    <label for="submit" class="form-label"></label>
+                    <div class="my-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-regular fa-calendar-plus"></i> จองสนาม
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>
@@ -59,14 +63,15 @@
                     @else
                         <ul class="list-group list-group-flush">
                             @foreach ($history as $row)
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#eventModal{{ $row->id }}"
-                                    class="list-group-item d-flex justify-content-between align-items-start">
-                                    <div class="me-auto">
-                                        <div class="fw-bold">สถานที่ : {{ $row->std_name }}</div>
-                                        วันที่ : {{ $row->bk_date }} <br>
-                                        เวลา : {{ $row->bk_str_time }} น. ถึง {{ $row->bk_end_time }} น.
-                                    </div>
-
+                                <div class="list-group-item d-flex justify-content-between align-items-start">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#eventModal{{ $row->id }}"
+                                        class="text-dark d-flex link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                                        <div class="me-auto">
+                                            <div class="fw-bold">สถานที่ : {{ $row->std_name }}</div>
+                                            วันที่ : {{ $row->bk_date }} <br>
+                                            เวลา : {{ $row->bk_str_time }} น. ถึง {{ $row->bk_end_time }} น.
+                                        </div>
+                                    </a>
                                     @if ($row->bk_status == 1)
                                         <span class="badge bg-warning rounded-pill"> รอชำระเงิน</span>
                                     @elseif($row->bk_status == 2)
@@ -74,9 +79,12 @@
                                     @elseif($row->bk_status == 3)
                                         <span class="badge bg-success rounded-pill"> อนุมัติ</span>
                                     @else
-                                        <span class="badge bg-danger rounded-pill"> ไม่อนุมัติ</span>
+                                        <span class="badge bg-danger rounded-pill" data-bs-toggle="popover"
+                                            data-bs-placement="top" data-bs-title="หมายเหตุ"
+                                            data-bs-content="{{ $row->bk_node }}">
+                                            ไม่อนุมัติ</span>
                                     @endif
-                                </a>
+                                </div>
                             @endforeach
                         </ul>
                     @endif
@@ -185,7 +193,6 @@
             </div>
         </div>
     @endforeach
-
     <style>
         .img_bk_slip {
             max-width: 300px;
@@ -219,9 +226,6 @@
             max-height: 200px;
         }
     </style>
-
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
     <script>
         function displayImage(id) {
             const input = document.getElementById("bk_slip" + id);

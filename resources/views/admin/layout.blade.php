@@ -33,6 +33,7 @@
             height: 100vh - 1vh;
             z-index: 0;
         }
+
         .modal label span {
             color: red
         }
@@ -40,16 +41,18 @@
 </head>
 
 <body>
-
+ @include('admin.navbar')
     <main class="d-flex flex-nowrap" style="height: 100vh">
-        @include('admin.navbar')
+       
+        @include('admin.sidebar')
+
         <div class="container">
             <section class="content">
                 @include('sweetalert::alert')
                 <div class="content-header">
                     <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
+                        <div class="clearfix m-2">
+                            <div class="float-start">
                                 <h1 class="m-0"> {{ isset($title) ? '' . $title : '' }}</h1>
                             </div>
                         </div>

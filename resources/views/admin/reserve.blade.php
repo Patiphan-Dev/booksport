@@ -55,7 +55,7 @@
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="exampleModalLabel">
                                             <i class="fa-regular fa-pen-to-square"></i>
-                                            แก้ไขข้อมูลสนาม
+                                            แก้ไขข้อมูลการจอง {{$row->created_at}}
                                         </h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>

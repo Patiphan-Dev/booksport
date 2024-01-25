@@ -39,9 +39,6 @@ class BookingController extends Controller
 
     public function addBooking(Request $request)
     {
-        // $booking = Booking::where('bk_std_id', $request->bk_std_id)
-        //     ->where('bk_date',  $request->bk_date)
-        //     ->get();
         $bk_std_id = $request->bk_std_id;
         $bk_date = $request->bk_date;
         $checkin = $request->bk_str_time;
@@ -87,29 +84,10 @@ class BookingController extends Controller
             Alert::success('สำเร็จ', 'จองสนามสำเสร็จ');
             return redirect()->back()->with('สำเร็จ', 'จองสนามสำเสร็จ');
         } else {
-            // foreach ($booking as $bk) {
-            //     if (($bk->bk_str_time >= $request->bk_str_time && $bk->bk_str_time >= $request->bk_end_time) || ($bk->bk_end_time <= $request->bk_str_time && $bk->bk_end_time <= $request->bk_end_time)) {
-            //         dd($bk->bk_str_time, $bk->bk_end_time, $request->bk_str_time, $request->bk_end_time);
-            //         //บันทึกข้อมูล;
-            //         $booking = new Booking;
-            //         $booking->bk_std_id = $request->bk_std_id;
-            //         $booking->bk_username = auth()->user()->username;
-            //         $booking->bk_date = $request->bk_date;
-            //         $booking->bk_str_time = $request->bk_str_time;
-            //         $booking->bk_end_time = $request->bk_end_time;
-            //         $booking->bk_slip = $request->bk_slip;
-            //         $booking->bk_status = 1;
-            //         $booking->save();
-
-            //         Alert::success('สำเร็จ', 'จองสนามสำเสร็จ2');
-            //         return redirect()->back()->with('สำเร็จ', 'จองสนามสำเสร็จ2');
-            //     } else {
-            // dd($bk->bk_str_time, $bk->bk_end_time, $request->bk_str_time, $request->bk_end_time);
 
             Alert::error('ไม่สำเร็จ', 'ไม่สามารถจองในช่วงเวลาดังกล่าวได้');
             return redirect()->back()->with('ไม่สำเร็จ', 'ไม่สามารถจองในช่วงเวลาดังกล่าวได้');
-            // }
-            // }
+       
         }
     }
 
@@ -123,19 +101,21 @@ class BookingController extends Controller
     {
         $booking = Booking::find($id);
 
-        $img_path = $booking->bk_slip;
-        if ($img_path) {
-            $image_path = public_path($img_path);
-            if (File::exists($image_path)) {
-                File::delete($image_path);
-            }
-        }
         $date = date("Y-m-d");
         $time = date("His");
         // dd($date, $time);
         $file = $request->file('bk_slip');
 
         if ($file) {
+
+            $img_path = $booking->bk_slip;
+            if ($img_path) {
+                $image_path = public_path($img_path);
+                if (File::exists($image_path)) {
+                    File::delete($image_path);
+                }
+            }
+
             $bk_slip =  $date . '-' . $time . '-slipe-' . auth()->user()->username;
             $ext = strtolower($file->getClientOriginalExtension());
             $image_full_name = $bk_slip . '.' . $ext;

@@ -18,7 +18,7 @@ class ReserveController extends Controller
         ];
         $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
         $stadiums = Stadiums::all();
-        return view('admin.reserve',compact('bookings','stadiums'), $data);
+        return view('admin.reserve', compact('bookings', 'stadiums'), $data);
     }
 
     public function addReserve(Request $request)
@@ -49,19 +49,21 @@ class ReserveController extends Controller
     {
         $booking = Booking::find($id);
 
-        $img_path = $booking->bk_slip;
-        if ($img_path) {
-            $image_path = public_path('/'.$img_path);
-            if (File::exists($image_path)) {
-                File::delete($image_path);
-            }
-        }
         $date = date("Y-m-d");
         $time = date("His");
         // dd($date, $time);
         $file = $request->file('bk_slip');
 
         if ($file) {
+
+            $img_path = $booking->bk_slip;
+            if ($img_path) {
+                $image_path = public_path('/' . $img_path);
+                if (File::exists($image_path)) {
+                    File::delete($image_path);
+                }
+            }
+
             $bk_slip =  $date . '-' . $time . '-slipe-' . auth()->user()->username;
             $ext = strtolower($file->getClientOriginalExtension());
             $image_full_name = $bk_slip . '.' . $ext;
@@ -77,6 +79,7 @@ class ReserveController extends Controller
                     'bk_end_time' => $request->bk_end_time,
                     'bk_slip' => $image_url,
                     'bk_status' => $request->bk_status,
+                    'bk_node' => $request->bk_node,
                 ]
             );
         } else {
@@ -87,6 +90,7 @@ class ReserveController extends Controller
                     'bk_str_time' => $request->bk_str_time,
                     'bk_end_time' => $request->bk_end_time,
                     'bk_status' => $request->bk_status,
+                    'bk_node' => $request->bk_node,
                 ]
             );
         }

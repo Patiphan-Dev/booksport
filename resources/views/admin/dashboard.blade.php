@@ -1,8 +1,8 @@
 @extends('admin.layout')
 @section('body')
     <div class="container text-center">
-        <div class="row g-2">
-            <div class="col-3">
+        <div class="row g-3">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <div class="card text-center">
                     <div class="card-body">
                         <i class="fa-solid fa-bookmark"></i>
@@ -14,7 +14,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <div class="card text-center">
                     <div class="card-body">
                         <i class="fa-solid fa-book-bookmark"></i>
@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <div class="card text-center">
                     <div class="card-body">
                         <i class="fa-solid fa-hand-holding-dollar"></i>
@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <div class="card text-center">
                     <div class="card-body">
                         <i class="fa-solid fa-medal"></i>

@@ -1,9 +1,9 @@
 @extends('admin.layout')
 
 @section('body')
-    <div class="clearfix">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4">
         <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addstadium">
-            เพิ่มสนาม
+            <i class="fa-solid fa-plus"></i> เพิ่มสนาม
         </button>
         <div class="modal fade" id="addstadium" aria-hidden="true" aria-labelledby="addstadiumLabel" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered  modal-lg">
@@ -19,7 +19,6 @@
             </div>
         </div>
     </div>
-
     <div class="row g-3">
         @foreach ($stadiums as $std)
             @php
@@ -27,12 +26,11 @@
             @endphp
 
             <div class="col-6 col-sm-4 col-md-3 text-center">
-                <div class="card text-center h-100 viewStadium" data-id="{{ $std->std_name }}"
-                    data-bs-toggle="modal" data-bs-target="#StadiumDetail{{ $std->id }}">
+                <div class="card text-center h-100 viewStadium" data-id="{{ $std->std_name }}" data-bs-toggle="modal"
+                    data-bs-target="#StadiumDetail{{ $std->id }}">
                     <img src="{{ asset($image[0]) }}" class="img-fluid" alt="...">
-                    <div class="card-body">
-                        {{ $std->std_name }}
-                    </div>
+
+                    <h3>{{ $std->std_name }}</h3>
                 </div>
             </div>
 
@@ -46,7 +44,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-left">
-                            @include('admin.DetailsStadium')
+                            @include('admin.detailsStadium')
                         </div>
                         <div class="clearfix">
                             <div class="modal-footer">
@@ -80,7 +78,7 @@
         @endforeach
     </div>
     <style>
-        .viewStadium{
+        .viewStadium {
             cursor: pointer;
         }
     </style>

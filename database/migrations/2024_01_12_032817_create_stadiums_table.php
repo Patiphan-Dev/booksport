@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('std_name')->nullable()->comment('ชื่อสนาม');
             $table->double('std_price', 7)->nullable()->comment('ราคาสนาม');
-            $table->string('std_details')->nullable()->comment('รายละเอียดสนาม');
-            $table->string('std_facilities')->nullable()->comment('สิ่งอำนวยสะดวกสนาม');
+            $table->text('std_details')->nullable()->comment('รายละเอียดสนาม');
+            $table->text('std_facilities')->nullable()->comment('สิ่งอำนวยสะดวกสนาม');
             $table->text('std_img_path')->nullable()->comment('รูปภาพ');
             $table->string('std_status')->default('1')->comment('สถานะสนาม');
 
