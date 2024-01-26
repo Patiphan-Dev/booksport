@@ -1,15 +1,15 @@
 @extends('layout')
 @section('body')
-<style>
-    .custom-popover {
-        --bs-popover-max-width: 100%;
-        --bs-popover-border-color: red;
-        --bs-popover-header-bg: red;
-        --bs-popover-header-color: #fff;
-        --bs-popover-body-padding-x: 1rem;
-        --bs-popover-body-padding-y: .5rem;
-    }
-</style>
+    <style>
+        .custom-popover {
+            --bs-popover-max-width: 100%;
+            --bs-popover-border-color: red;
+            --bs-popover-header-bg: red;
+            --bs-popover-header-color: #fff;
+            --bs-popover-body-padding-x: 1rem;
+            --bs-popover-body-padding-y: .5rem;
+        }
+    </style>
     <script>
         $(document).ready(function() {
             $('[data-toggle="tooltip"]').tooltip()
@@ -132,7 +132,10 @@
                                     @elseif($row->bk_status == 3)
                                         <span class="badge bg-success rounded-pill"> อนุมัติ</span>
                                     @else
-                                        <span class="badge bg-danger rounded-pill cursor-pointer" data-bs-custom-class="custom-popover" data-bs-container="body" data-bs-toggle="popover" data-bs-title="หมายเหตุ" data-bs-placement="top" data-bs-content="{{ $row->bk_node }}">
+                                        <span class="badge bg-danger rounded-pill cursor-pointer"
+                                            data-bs-custom-class="custom-popover" data-bs-container="body"
+                                            data-bs-toggle="popover" data-bs-title="หมายเหตุ" data-bs-placement="top"
+                                            data-bs-content="{{ $row->bk_node }}">
                                             ไม่อนุมัติ</span>
                                     @endif
                                 </div>
@@ -176,7 +179,11 @@
                                             @elseif($row->bk_status == 3)
                                                 <span class="badge bg-success rounded-pill"> อนุมัติ</span>
                                             @else
-                                                <span class="badge bg-danger rounded-pill"> ไม่อนุมัติ</span>
+                                                <span class="badge bg-danger rounded-pill cursor-pointer"
+                                                    data-bs-custom-class="custom-popover" data-bs-container="body"
+                                                    data-bs-toggle="popover" data-bs-title="หมายเหตุ"
+                                                    data-bs-placement="top" data-bs-content="{{ $row->bk_node }}">
+                                                    ไม่อนุมัติ</span>
                                             @endif
 
                                         </div>
