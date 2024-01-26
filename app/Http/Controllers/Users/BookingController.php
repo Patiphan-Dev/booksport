@@ -8,6 +8,7 @@ use App\Models\Booking;
 use App\Models\Stadiums;
 use RealRashid\SweetAlert\Facades\Alert;
 use File;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -39,6 +40,7 @@ class BookingController extends Controller
 
     public function addBooking(Request $request)
     {
+        // เช็กช่วงเวลาที่จอง
         $bk_std_id = $request->bk_std_id;
         $bk_date = $request->bk_date;
         $checkin = $request->bk_str_time;
@@ -67,6 +69,17 @@ class BookingController extends Controller
             ->first();
 
 
+        // คำนวณจำนวนชั่วโมง
+        $hoursCheckIn = Carbon::parse($request->bk_str_time);
+        $hoursCheckOut = Carbon::parse($request->bk_end_time);
+        // Calculate the difference in minutes
+        $minutes = $hoursCheckIn->diffInMinutes($hoursCheckOut);
+
+        $getprice = Stadiums::find($request->bk_std_id);
+
+        dd($getprice->std_price,  $minutes);
+
+
 
 
         // dd($booking);
@@ -87,7 +100,6 @@ class BookingController extends Controller
 
             Alert::error('ไม่สำเร็จ', 'ไม่สามารถจองในช่วงเวลาดังกล่าวได้');
             return redirect()->back()->with('ไม่สำเร็จ', 'ไม่สามารถจองในช่วงเวลาดังกล่าวได้');
-       
         }
     }
 
@@ -99,15 +111,53 @@ class BookingController extends Controller
 
     public function updateBooking(Request $request, $id)
     {
+        // คำนวณจำนวนชั่วโมง
+        $hoursCheckIn = Carbon::parse($request->bk_str_time);
+        $hoursCheckOut = Carbon::parse($request->bk_end_time);
+        $totalHours = $hoursCheckIn->diffInHours($hoursCheckOut);
+        // dd($totalHours);
+
+        // เช็กช่วงเวลาที่จอง
+        $bk_std_id = $request->bk_std_id;
+        $bk_date = $request->bk_date;
+        $checkin = $request->bk_str_time;
+        $checkout = $request->bk_end_time;
+
+        $bookings = Booking::where(function ($query) use ($id, $bk_std_id, $bk_date, $checkin, $checkout) {
+            $query->where(function ($query) use ($id, $bk_std_id, $bk_date, $checkin, $checkout) {
+                $query->where('id', '!=', $id)
+                    ->where('bk_std_id', $bk_std_id)
+                    ->where('bk_date', $bk_date)
+                    ->where('bk_str_time', '>=', $checkin)
+                    ->where('bk_str_time', '<', $checkout);
+            })
+                ->orWhere(function ($query) use ($id, $bk_std_id, $bk_date, $checkin, $checkout) {
+                    $query->where('id', '!=', $id)
+                        ->where('bk_std_id', $bk_std_id)
+                        ->where('bk_date', $bk_date)
+                        ->where('bk_end_time', '>', $checkin)
+                        ->where('bk_end_time', '<=', $checkout);
+                });
+        })
+            ->orWhere(function ($query) use ($id, $bk_std_id, $bk_date, $checkin, $checkout) {
+                $query->where('id', '!=', $id)
+                    ->where('bk_std_id', $bk_std_id)
+                    ->where('bk_date', $bk_date)
+                    ->where('bk_str_time', '<=', $checkin)
+                    ->where('bk_end_time', '>=', $checkout);
+            })
+            ->first();
+
+        // ตึงข้อมูลตามไอดีมาตรวจสอบสลิป
         $booking = Booking::find($id);
 
         $date = date("Y-m-d");
         $time = date("His");
-        // dd($date, $time);
         $file = $request->file('bk_slip');
 
         if ($file) {
 
+            // ลบรูปภาพในโฟลเดอร์
             $img_path = $booking->bk_slip;
             if ($img_path) {
                 $image_path = public_path($img_path);
@@ -116,6 +166,7 @@ class BookingController extends Controller
                 }
             }
 
+            // เพิ่มรูปภาพเข้าไปใหม่
             $bk_slip =  $date . '-' . $time . '-slipe-' . auth()->user()->username;
             $ext = strtolower($file->getClientOriginalExtension());
             $image_full_name = $bk_slip . '.' . $ext;
@@ -123,26 +174,41 @@ class BookingController extends Controller
             $image_url = $uploade_path . $image_full_name;
             $file->move($uploade_path, $image_full_name);
 
-            Booking::find($id)->update(
-                [
-                    'bk_std_id' => $request->bk_std_id,
-                    'bk_date' => $request->bk_date,
-                    'bk_str_time' => $request->bk_str_time,
-                    'bk_end_time' => $request->bk_end_time,
-                    'bk_slip' => $image_url,
-                    'bk_status' => 2,
-                ]
-            );
+            if ($bookings == null) {
+                // อัพเดทข้อมูลการจอง
+                Booking::find($id)->update(
+                    [
+                        'bk_std_id' => $request->bk_std_id,
+                        'bk_date' => $request->bk_date,
+                        'bk_str_time' => $request->bk_str_time,
+                        'bk_end_time' => $request->bk_end_time,
+                        'bk_slip' => $image_url,
+                        'bk_status' => 2,
+                    ]
+                );
+                Alert::success('สำเร็จ', 'รอตรวจสอบจากแอดมิน');
+                return redirect()->back()->with('สำเร็จ', 'รอตรวจสอบจากแอดมิน');
+            } else {
+                Alert::error('ไม่สำเร็จ', 'ไม่สามารถจองในช่วงเวลาดังกล่าวได้');
+                return redirect()->back()->with('ไม่สำเร็จ', 'ไม่สามารถจองในช่วงเวลาดังกล่าวได้');
+            }
         } else {
-            Booking::find($id)->update(
-                [
-                    'bk_std_id' => $request->bk_std_id,
-                    'bk_date' => $request->bk_date,
-                    'bk_str_time' => $request->bk_str_time,
-                    'bk_end_time' => $request->bk_end_time,
-                    'bk_status' => 1,
-                ]
-            );
+            if ($bookings == null) {
+                Booking::find($id)->update(
+                    [
+                        'bk_std_id' => $request->bk_std_id,
+                        'bk_date' => $request->bk_date,
+                        'bk_str_time' => $request->bk_str_time,
+                        'bk_end_time' => $request->bk_end_time,
+                        'bk_status' => 1,
+                    ]
+                );
+                Alert::success('สำเร็จ', 'รอตรวจสอบจากแอดมิน');
+                return redirect()->back()->with('สำเร็จ', 'รอตรวจสอบจากแอดมิน');
+            } else {
+                Alert::error('ไม่สำเร็จ', 'ไม่สามารถจองในช่วงเวลาดังกล่าวได้');
+                return redirect()->back()->with('ไม่สำเร็จ', 'ไม่สามารถจองในช่วงเวลาดังกล่าวได้');
+            }
         }
         Alert::success('สำเร็จ', 'อัพเดทข้อมูลสำเร็จ');
         return redirect()->back()->with('success', 'อัพเดทข้อมูลสำเร็จ');

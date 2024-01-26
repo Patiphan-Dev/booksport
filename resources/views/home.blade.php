@@ -3,29 +3,29 @@
     <div class="row">
         <div id="carouselStadiums" class="carousel slide">
             <div class="row">
-                <div class="col-2 overflow-y-auto">
+                <div class="col-3 overflow-y-auto mt-3">
                     <div class="carousel-indicators">
                         @foreach ($stadiums as $key => $std)
                             @php
                                 $image = explode(',', $std->std_img_path);
                             @endphp
                             <img src="{{ asset($image[0]) }}" data-bs-target="#carouselStadiums"
-                                data-bs-slide-to="{{ $key }}" class="{{ $key == 0 ? 'active' : '' }}"
+                                data-bs-slide-to="{{ $key }}" class="rounded img-thumbnail {{ $key == 0 ? 'active' : '' }}"
                                 aria-current="true" aria-label="Slide {{ $key }}">
                         @endforeach
                     </div>
                 </div>
-                <div class="col-10">
+                <div class="col-9">
                     <div class="carousel-inner">
                         @foreach ($stadiums as $key => $std)
                             @php
                                 $image = explode(',', $std->std_img_path);
                             @endphp
                             <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                <img src="{{ asset($image[0]) }}" class="d-block w-100" alt="...">
+                                <img src="{{ asset($image[0]) }}" class="rounded img-thumbnail d-block w-100" alt="...">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h2>{{ $std->std_name }}</h2>
-                                    <h6>{{ $std->std_price }} / ครั้ง</h6>
+                                    <h6>{{ $std->std_price }} / ชั่วโมง</h6>
 
                                     <a href="{{ route('booking', ['id' => $std->id]) }}" class="btn btn-warning btn-sm">
                                         <i class="fa-solid fa-check"></i> จองสนาม
@@ -54,15 +54,6 @@
     </div>
 
     <style>
-        /* ::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background-color: #88888850;
-            border-radius: 6px;
-        } */
-
         .carousel-item {
             width: 100%;
             max-height: 500px;
@@ -88,18 +79,4 @@
             height: 100%;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
-        // $(document).ready(function() {
-        //     $('.getStadium').on('click', function(e) {
-        //         e.preventDefault();
-        //         const id = $(this).data('id');
-        //         const currentUrl = window.location.href;
-        //         const newUrl = '?=' + id;
-        //         window.history.pushState({
-        //             path: newUrl
-        //         }, '', newUrl);
-        //     });
-        // });
-    </script>
 @endsection

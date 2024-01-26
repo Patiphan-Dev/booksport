@@ -81,7 +81,7 @@
                                         @endphp
                                         <img src="{{ asset($image[0]) }}" data-bs-target="#carouselStadiums"
                                             data-bs-slide-to="{{ $key }}" class="bd-placeholder-img"
-                                            width="100%" height="100" aria-current="true">
+                                            width="100%" height="85" aria-current="true">
                                         <div class="col-lg-8">
                                             <h5 class="mb-0">{{ $std->std_name }}</h5>
                                             <span class="text-body-secondary">ราคา {{ $std->std_price }} บาท /

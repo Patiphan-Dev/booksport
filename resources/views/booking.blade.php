@@ -1,20 +1,57 @@
 @extends('layout')
 @section('body')
+    <script>
+        // $(document).ready(function() {
+        //     $('#bk_std_id').on('change', function() {
+        //         $('#bk_price').val($(':selected', $(this)).data('bk_price'));
+        //     });
+        // });
+
+        function calculateMinutes() {
+            // Get the input values
+            const bookInTime = document.getElementById("bk_str_time").value;
+            const bookOutTime = document.getElementById("bk_end_time").value;
+            // Get the selected option
+            var selectedOption = $('#bk_std_id option:selected');
+            // Retrieve the data-price attribute value
+            var roomPrice = parseFloat(selectedOption.data('price'));
+
+            // Convert the input values to Date objects
+            const bookInDate = new Date(`2000-01-01T${bookInTime}:00Z`);
+            const bookOutDate = new Date(`2000-01-01T${bookOutTime}:00Z`);
+
+            // Calculate the time difference in minutes
+            const timeDifference = (bookOutDate - bookInDate) / (1000 * 60);
+
+            const totalPrice = (roomPrice / 60) * timeDifference
+            // Display the result
+            document.getElementById("result").innerText = `Time difference: ${timeDifference} minutes`;
+            document.getElementById("roomPrice").innerText = `Price : ${roomPrice}`;
+            document.getElementById("totalPrice").innerText = `Price : ${totalPrice}`;
+
+
+        }
+    </script>
+    {{-- form booking  --}}
     <div class="card py-md-5 p-3 mt-3">
         <form action="{{ route('addBooking') }}" method="post" enctype="multipart/form-data">
             @csrf
             @php
                 $date = date('Y-m-d');
-                $str_time = date('H:00:00');
-                $end_time = date('H:00:00', strtotime('+1 hour'));
+                $str_time = date('00:00:00');
+                $end_time = date('00:00:00', strtotime('+1 hour'));
             @endphp
             <div class="row justify-content-center">
-                <div class="col-12 col-sm-6 col-md-3">
+                <div id="result"></div>
+                <div id="roomPrice"></div>
+                <div id="totalPrice"></div>
+
+                <div class="col-12 col-sm-6 col-md-2">
                     <label for="stadium_id" class="form-label">สนามกีฬา :</label>
-                    <select class="form-select" name="bk_std_id" id="bk_std_id" required>
+                    <select class="form-select" name="bk_std_id" id="bk_std_id" required onchange="calculateMinutes()">
                         <option value="" disabled selected>--- กรุณาเลือกสนาม ---</option>
                         @foreach ($stadiums as $stadium)
-                            <option value="{{ $stadium->id }}"
+                            <option value="{{ $stadium->id }}" data-price="{{ $stadium->std_price }}"
                                 @if (!empty($search)) @if ($search->id == $stadium->id) selected @endif
                                 @endif>
                                 {{ $stadium->std_name }}</option>
@@ -28,18 +65,18 @@
                 </div>
                 <div class="col-12 col-sm-6 col-md-2">
                     <label for="bk_str_time" class="form-label">เวลาเข้า : </label>
-                    <input type="time" class="form-control" name="bk_str_time" id="bk_str_time"
-                        value="{{ $str_time }}" required>
+                    <input type="time" class="form-control" name="bk_str_time" id="bk_str_time" value="" required
+                        onchange="calculateMinutes()">
                 </div>
                 <div class="col-12 col-sm-6 col-md-2">
                     <label for="bk_end_time" class="form-label">เวลาออก : </label>
-                    <input type="time" class="form-control" name="bk_end_time" id="bk_end_time"
-                        value="{{ $end_time }}" required>
+                    <input type="time" class="form-control" name="bk_end_time" id="bk_end_time" value="" required
+                        onchange="calculateMinutes()">
                 </div>
                 <div class="col-12 col-sm-6 col-md-2">
                     <label for="submit" class="form-label"></label>
                     <div class="my-2">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary w-100">
                             <i class="fa-regular fa-calendar-plus"></i> จองสนาม
                         </button>
                     </div>
@@ -51,9 +88,12 @@
     <div class="card mt-3">
         <div class="card-body">
             <div class="row">
+                {{-- ปฏิทิน --}}
                 <div class="col-12 col-md-8">
                     <div id="calendar"></div>
                 </div>
+
+                {{-- ประวัติการจอง --}}
                 <div class="col-12 col-md-4">
                     <h3>ประวัติการจอง</h3>
                     @if (count($history) == 0)
@@ -92,6 +132,8 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal edit booking --}}
     @foreach ($bookings as $row)
         <div class="modal fade" id="eventModal{{ $row->id }}" tabindex="-1" aria-labelledby="eventModalLabel"
             aria-hidden="true">
@@ -105,8 +147,7 @@
                             <div class="row">
                                 <div class="col-12 @if (Auth::user()->username == $row->bk_username) col-lg-7 @endif">
                                     <ul class="list-group list-group-flush">
-                                        <a href="#"
-                                            class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="list-group-item d-flex justify-content-between align-items-start">
                                             <div class="ms-2me-auto">
                                                 <div class="fw-bold">สถานที่ : {{ $row->std_name }}</div>
                                                 <span> วันที่ : {{ $row->bk_date }} </span><br>
@@ -114,6 +155,8 @@
                                                 </span><br>
                                                 <span>ผู้จอง : คุณ {{ $row->bk_username }} </span><br>
                                                 <span>วันที่จอง : {{ $row->created_at }}</span><br>
+
+
                                             </div>
                                             @if ($row->bk_status == 1)
                                                 <span class="badge bg-warning rounded-pill"> รอชำระเงิน</span>
@@ -124,7 +167,14 @@
                                             @else
                                                 <span class="badge bg-danger rounded-pill"> ไม่อนุมัติ</span>
                                             @endif
-                                        </a>
+
+                                        </div>
+                                        @if ($row->bk_status == 0)
+                                            <span>หมายเหตุ <span class="text-danger">***</span></span>
+                                            <small class="text-danger">
+                                                {{ $row->bk_node }}
+                                            </small>
+                                        @endif
                                     </ul>
                                     @if (Auth::user()->username == $row->bk_username)
                                         <hr>
@@ -193,6 +243,7 @@
             </div>
         </div>
     @endforeach
+
     <style>
         .img_bk_slip {
             max-width: 300px;
@@ -226,6 +277,8 @@
             max-height: 200px;
         }
     </style>
+
+    {{-- JS อัพโหลดสลิปโอนเงิน --}}
     <script>
         function displayImage(id) {
             const input = document.getElementById("bk_slip" + id);
@@ -300,6 +353,7 @@
             });
         }
     </script>
+    {{-- JS set URL  --}}
     <script>
         $(document).ready(function() {
             var id = $('#bk_std_id').val();
@@ -327,6 +381,7 @@
             $('#bk_std_id').val(id);
         });
     </script>
+    {{-- JS ปฏิทิน  --}}
     <script>
         var calendar; // สร้างตัวแปรไว้ด้านนอก เพื่อให้สามารถอ้างอิงแบบ global ได้
         $(document).ready(function() {

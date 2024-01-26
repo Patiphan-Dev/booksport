@@ -3,6 +3,7 @@
         ->route()
         ->getName();
 @endphp
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 position-sticky fixed-top">{{-- fixed-top --}}
     <div class="container">
         <a class="navbar-brand" href="{{ URL('/') }}">Your Logo</a>
@@ -22,7 +23,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link fw-bold py-1 {{ $current_route == 'getStadium' ? 'active' : '' }}"
-                        href="{{ route('getStadium',['id'=>1]) }}">สนามกีฬา</a>
+                        href="{{ route('getStadium', ['id' => 1]) }}">สนามกีฬา</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link fw-bold py-1 {{ $current_route == 'bookingAll' ? 'active' : '' }}"
@@ -41,8 +42,8 @@
                     </li>
                 @else
                     <li class="nav-item dropdown">
-                        <a class="nav-link fw-bold py-1 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                        <a class="nav-link fw-bold py-1 dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             ยินดีต้อนรับ คุณ {{ Auth::user()->username }}
                         </a>
                         <ul class="dropdown-menu">
