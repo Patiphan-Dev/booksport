@@ -135,7 +135,8 @@
                                         <span class="badge bg-danger rounded-pill cursor-pointer"
                                             data-bs-custom-class="custom-popover" data-bs-container="body"
                                             data-bs-toggle="popover" data-bs-title="หมายเหตุ" data-bs-placement="top"
-                                            data-bs-content="{{ $row->bk_node }}">
+                                            data-bs-content="{{ $row->bk_node }}" data-toggle="tooltip"
+                                            data-placement="top" title="กดดูหมายเหตุ">
                                             ไม่อนุมัติ</span>
                                     @endif
                                 </div>
@@ -169,8 +170,6 @@
                                                 </span><br>
                                                 <span>ผู้จอง : คุณ {{ $row->bk_username }} </span><br>
                                                 <span>วันที่จอง : {{ $row->created_at }}</span><br>
-
-
                                             </div>
                                             @if ($row->bk_status == 1)
                                                 <span class="badge bg-warning rounded-pill"> รอชำระเงิน</span>
@@ -182,7 +181,8 @@
                                                 <span class="badge bg-danger rounded-pill cursor-pointer"
                                                     data-bs-custom-class="custom-popover" data-bs-container="body"
                                                     data-bs-toggle="popover" data-bs-title="หมายเหตุ"
-                                                    data-bs-placement="top" data-bs-content="{{ $row->bk_node }}">
+                                                    data-bs-placement="top" data-bs-content="{{ $row->bk_node }}"
+                                                    data-toggle="tooltip" data-placement="top">
                                                     ไม่อนุมัติ</span>
                                             @endif
 
