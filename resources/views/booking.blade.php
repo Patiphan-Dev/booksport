@@ -46,7 +46,7 @@
         }
     </script>
     {{-- form booking  --}}
-    <div class="card py-md-5 p-3 mt-3">
+    <div class="card py-md-5 p-3 mt-3 border border-primary">
         <form action="{{ route('addBooking') }}" method="post" enctype="multipart/form-data">
             @csrf
             @php
