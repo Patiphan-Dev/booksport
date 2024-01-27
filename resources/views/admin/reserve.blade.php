@@ -66,32 +66,48 @@
                             </button>
                         </td>
                     </tr>
-                    <div class="modal fade" id="confirm{{ $row->id }}" tabindex="-1" aria-labelledby="confirmLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                        <i class="fa-regular fa-pen-to-square"></i>
-                                        แก้ไขข้อมูลการจอง {{ $row->created_at }}
-                                    </h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    @include('admin.editReserve')
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 @endforeach
             </tbody>
         </table>
     </div>
+
+
+    @foreach ($bookings as $key => $row)
+        <div class="modal fade" id="confirm{{ $row->id }}" tabindex="-1" aria-labelledby="confirmLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                            แก้ไขข้อมูลการจอง {{ $row->created_at }}
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @include('admin.editReserve')
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    <style>
+        .edit_bk_slip {
+            max-width: 300px;
+            border: 1px solid #88888850;
+            border-radius: 6px;
+            padding: 6px;
+            width: 15vw;
+            height: 40vh;
+            background-color: rgb(255, 242, 228);
+            align-items: center;
+            text-align: center
+        }
+    </style>
     {{-- dataTables --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
-
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/rowreorder/1.4.1/js/dataTables.rowReorder.min.js"></script>
     <script>
@@ -154,4 +170,5 @@
             });
         }
     </script>
+
 @endsection

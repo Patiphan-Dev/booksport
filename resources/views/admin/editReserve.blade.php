@@ -3,47 +3,53 @@
     <div class="row">
         <div class="col-12 col-md-7">
             <div class="row">
-                <div class="col-12 col-md-6 mb-3">
+                <div class="col-12 col-md-12 mb-3">
                     <label for="bk_stadium" class="form-label">สนามกีฬา<span>*</span></label>
-                    <select class="form-select" name="bk_std_id" id="bk_std_id" required>
+                    <select class="form-select" name="bk_std_id" id="modal_bk_std_id{{ $row->id }}"
+                        onchange="modalCalculate('{{ $row->id }}')" required>
                         <option value="" disabled selected>--- กรุณาเลือกสนาม ---
                         </option>
                         @foreach ($stadiums as $stadium)
-                            <option value="{{ $stadium->id }}" @if ($row->bk_std_id == $stadium->id) selected @endif>
+                            <option value="{{ $stadium->id }}" data-price="{{$stadium->std_price}}"
+                                @if ($row->bk_std_id == $stadium->id) selected @endif>
                                 {{ $stadium->std_name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-12 col-md-6 mb-3">
                     <label for="bk_price" class="form-label">ราคา/ชั่วโมง : </label>
-                    <input type="text" class="form-control" name="bk_price" id="modal_bk_price" value="" disabled required>
+                    <input type="text" class="form-control" name="bk_price" id="modal_bk_price{{ $row->id }}"
+                        value="{{ $row->bk_price }}" disabled required>
                 </div>
                 <div class="col-12 col-md-6 mb-3">
                     <label for="bk_date" class="form-label">วันที่จอง
                         <span>*</span></label>
-                    <input type="date" class="form-control" name="bk_date" id="bk_date" value="{{ $row->bk_date }}"
-                        required>
+                    <input type="date" class="form-control" name="bk_date" id="modal_bk_date{{ $row->id }}"
+                        value="{{ $row->bk_date }}" required>
                 </div>
                 <div class="col-12 col-md-6 mb-3">
                     <label for="bk_str_time" class="form-label">เวลาเข้า
                         <span>*</span></label>
-                    <input type="time" class="form-control" name="bk_str_time" id="bk_str_time"
-                        value="{{ $row->bk_str_time }}" required>
+                    <input type="time" class="form-control" name="bk_str_time"
+                        id="modal_bk_str_time{{ $row->id }}" value="{{ $row->bk_str_time }}"
+                        onchange="modalCalculate('{{ $row->id }}')" required>
                 </div>
                 <div class="col-12 col-md-6 mb-3">
                     <label for="bk_end_time" class="form-label">เวลาออก
                         <span>*</span></label>
-                    <input type="time" class="form-control" name="bk_end_time" id="bk_end_time"
-                        value="{{ $row->bk_end_time }}" required>
+                    <input type="time" class="form-control" name="bk_end_time"
+                        id="modal_bk_end_time{{ $row->id }}" value="{{ $row->bk_end_time }}"
+                        onchange="modalCalculate('{{ $row->id }}')" required>
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 mb-3">
                     <label for="bk_sumtime" class="form-label">เวลาเช่า (นาที)</label>
-                    <input type="text" class="form-control" name="bk_sumtime" id="modal_bk_sumtime" value="" disabled
-                        required>
+                    <input type="text" class="form-control" name="bk_sumtime"
+                        id="modal_bk_sumtime{{ $row->id }}" value="{{ $row->bk_sumtime }}" disabled required>
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 mb-3">
-                    <label for="bk_total_price" class="form-label">ราคารวม</label>
-                    <input type="text" class="form-control" name="bk_total_price" id="modal_bk_total_price" value="" disabled
+                    <label for="bk_total_price" class="form-label">ราคารวม (บาท)</label>
+                    <input type="text" class="form-control" name="bk_total_price"
+                        id="modal_bk_total_price{{ $row->id }}" value="{{ $row->bk_total_price }}" disabled
                         required>
                 </div>
                 <div class="col-12 mb-3">
@@ -116,19 +122,18 @@
             <div class="col text-center">
                 <label for="bk_slip" class="form-label">หลักฐานการชำระเงิน
                     <span>*</span></label>
-                <img alt="อัพโหลดสลิปโอนเงิน" @if ($row->bk_slip != null) src="{{ asset($row->bk_slip) }}" @endif
-                    id="edit_bk_slip{{ $row->id }}" class="mx-auto d-block img-thumbnail mb-3 edit_bk_slip">
-                <input type="file" id="edit_slip{{ $row->id }}" name="bk_slip" class="form-control mb-3"
-                    onchange="slipImage('{{ $row->id }}')">
+                <img alt="อัพโหลดสลิปโอนเงิน"
+                    @if ($row->bk_slip != null) src="{{ asset($row->bk_slip) }}" @endif
+                    id="edit_bk_slip{{ $row->id }}"
+                    class="mx-auto d-block img-thumbnail mb-3 edit_bk_slip">
+                <input type="file" id="edit_slip{{ $row->id }}" name="bk_slip"
+                    class="form-control mb-3" onchange="slipImage('{{ $row->id }}')">
             </div>
         </div>
     </div>
-
-
-
-
     <div class="form-group text-center mb-3">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">ยกเลิก</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+            aria-label="Close">ยกเลิก</button>
         <input type="submit" class="btn btn-success" id="submit" value="บันทึก">
     </div>
 </form>
@@ -168,12 +173,12 @@
     }
 </script>
 <script>
-    function modalCalculate() {
+   function modalCalculate(id) {
         // Get the input values
-        const bookInTime = document.getElementById("modal_bk_str_time").value;
-        const bookOutTime = document.getElementById("modal_bk_end_time").value;
+        const bookInTime = document.getElementById("modal_bk_str_time" + id).value;
+        const bookOutTime = document.getElementById("modal_bk_end_time" + id).value;
         // Get the selected option
-        var selectedOption = $('#modal_bk_std_id option:selected');
+        var selectedOption = $('#modal_bk_std_id'+id+' option:selected');
         // Retrieve the data-price attribute value
         var price = parseFloat(selectedOption.data('price'));
         // Convert the input values to Date objects
@@ -189,8 +194,8 @@
         const roundedNumber = Math.round(totalPrice);
 
         // Display
-        document.getElementById("modal_bk_price").value = `${price}`;
-        document.getElementById("modal_bk_sumtime").value = `${timeDifference}`;
-        document.getElementById("modal_bk_total_price").value = `${roundedNumber}`;
+        document.getElementById("modal_bk_price" + id).value = `${price}`;
+        document.getElementById("modal_bk_sumtime" + id).value = `${timeDifference}`;
+        document.getElementById("modal_bk_total_price" + id).value = `${roundedNumber}`;
     }
 </script>
