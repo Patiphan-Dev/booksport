@@ -33,7 +33,7 @@
                     <a href="{{ route('reserve') }}"
                         class="nav-link text-white fw-bold py-1 {{ $current_route == 'reserve' ? 'active' : '' }}">
                         <i class="fa-solid fa-bookmark"></i>
-                        การจอง
+                        รายงานการจอง
                     </a>
                 </li>
                 <li>

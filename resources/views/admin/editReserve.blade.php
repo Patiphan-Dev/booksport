@@ -15,6 +15,10 @@
                     </select>
                 </div>
                 <div class="col-12 col-md-6 mb-3">
+                    <label for="bk_price" class="form-label">ราคา/ชั่วโมง : </label>
+                    <input type="text" class="form-control" name="bk_price" id="modal_bk_price" value="" disabled required>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
                     <label for="bk_date" class="form-label">วันที่จอง
                         <span>*</span></label>
                     <input type="date" class="form-control" name="bk_date" id="bk_date" value="{{ $row->bk_date }}"
@@ -32,7 +36,16 @@
                     <input type="time" class="form-control" name="bk_end_time" id="bk_end_time"
                         value="{{ $row->bk_end_time }}" required>
                 </div>
-
+                <div class="col-12 col-sm-6 col-md-6 mb-3">
+                    <label for="bk_sumtime" class="form-label">เวลาเช่า (นาที)</label>
+                    <input type="text" class="form-control" name="bk_sumtime" id="modal_bk_sumtime" value="" disabled
+                        required>
+                </div>
+                <div class="col-12 col-sm-6 col-md-6 mb-3">
+                    <label for="bk_total_price" class="form-label">ราคารวม</label>
+                    <input type="text" class="form-control" name="bk_total_price" id="modal_bk_total_price" value="" disabled
+                        required>
+                </div>
                 <div class="col-12 mb-3">
                     <label class="mb-3" for="bk_status">
                         สถานะ <span>*</span>
@@ -152,5 +165,32 @@
     function updateSlipSrc(imageDataUrl, id) {
         const imageElement = document.getElementById("edit_bk_slip" + id);
         imageElement.src = imageDataUrl;
+    }
+</script>
+<script>
+    function modalCalculate() {
+        // Get the input values
+        const bookInTime = document.getElementById("modal_bk_str_time").value;
+        const bookOutTime = document.getElementById("modal_bk_end_time").value;
+        // Get the selected option
+        var selectedOption = $('#modal_bk_std_id option:selected');
+        // Retrieve the data-price attribute value
+        var price = parseFloat(selectedOption.data('price'));
+        // Convert the input values to Date objects
+        const bookInDate = new Date(`2000-01-01T${bookInTime}:00Z`);
+        const bookOutDate = new Date(`2000-01-01T${bookOutTime}:00Z`);
+
+        // Calculate the time difference in minutes
+        const timeDifference = (bookOutDate - bookInDate) / (1000 * 60);
+
+        // Calculate the Total Price 
+        const totalPrice = (price / 60) * timeDifference
+
+        const roundedNumber = Math.round(totalPrice);
+
+        // Display
+        document.getElementById("modal_bk_price").value = `${price}`;
+        document.getElementById("modal_bk_sumtime").value = `${timeDifference}`;
+        document.getElementById("modal_bk_total_price").value = `${roundedNumber}`;
     }
 </script>

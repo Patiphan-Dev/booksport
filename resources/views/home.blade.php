@@ -52,31 +52,4 @@
             </div>
         </div>
     </div>
-
-    <style>
-        .carousel-item {
-            width: 100%;
-            max-height: 500px;
-            border-top: 10px solid transparent;
-        }
-
-        .carousel-indicators {
-            position: static !important;
-            display: block !important;
-            width: 100%;
-            max-height: 150px;
-            margin-right: 0;
-            margin-bottom: 1rem;
-            margin-left: 0;
-        }
-
-        .carousel-indicators [data-bs-target].active {
-            opacity: 1;
-        }
-
-        .carousel-indicators [data-bs-target] {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
 @endsection

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Promplay Demo {{ isset($title) ? '| ' . $title : '' }}</title>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -34,11 +34,6 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <style>
-        .content {
-            height: 100vh - 1vh;
-            z-index: 0;
-        }
-
         .modal label span {
             color: red
         }
@@ -94,7 +89,7 @@
 </head>
 
 <body>
-   
+
 
     @include('navbar')
     <div class="container">
@@ -107,7 +102,7 @@
         </section>
     </div>
     @include('footer')
-    
+
 
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"

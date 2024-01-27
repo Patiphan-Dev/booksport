@@ -9,142 +9,112 @@
             --bs-popover-body-padding-x: 1rem;
             --bs-popover-body-padding-y: .5rem;
         }
+
+        .img_bk_slip {
+            max-width: 300px;
+            border: 1px solid #88888850;
+            border-radius: 6px;
+            padding: 6px;
+            width: 15vw;
+            height: 40vh;
+            background-color: rgb(255, 242, 228);
+            align-items: center;
+            text-align: center
+        }
+
+        #calendar ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #calendar ::-webkit-scrollbar-thumb {
+            background-color: #88888850;
+            border-radius: 6px;
+        }
+
+        .carousel-item {
+            width: 100%;
+            max-height: 500px;
+            border-top: 10px solid transparent;
+        }
+
+        #image-preview {
+            max-width: 100%;
+            max-height: 200px;
+        }
     </style>
     <script>
         $(document).ready(function() {
-            $('[data-toggle="tooltip"]').tooltip()
+            var id = $('#bk_std_id').val();
 
-            const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-            const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(
-                popoverTriggerEl))
-
+            $('#bk_std_id').on('click', function(e) {
+                const id = $('#bk_std_id').val();
+                $.ajax({
+                    url: '/booking/' + id,
+                    method: 'GET',
+                    data: {
+                        id: id
+                    },
+                    success: function(response) {
+                        e.preventDefault();
+                        const newUrl = '/booking/' + id;
+                        window.history.pushState({
+                            path: newUrl
+                        }, '', newUrl);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+            $('#bk_std_id').val(id);
         });
-
-        function calculateMinutes() {
-            // Get the input values
-            const bookInTime = document.getElementById("bk_str_time").value;
-            const bookOutTime = document.getElementById("bk_end_time").value;
-            // Get the selected option
-            var selectedOption = $('#bk_std_id option:selected');
-            // Retrieve the data-price attribute value
-            var roomPrice = parseFloat(selectedOption.data('price'));
-
-            // Convert the input values to Date objects
-            const bookInDate = new Date(`2000-01-01T${bookInTime}:00Z`);
-            const bookOutDate = new Date(`2000-01-01T${bookOutTime}:00Z`);
-
-            // Calculate the time difference in minutes
-            const timeDifference = (bookOutDate - bookInDate) / (1000 * 60);
-
-            const totalPrice = (roomPrice / 60) * timeDifference
-            // Display the result
-            document.getElementById("result").innerText = `Time difference: ${timeDifference} minutes`;
-            document.getElementById("roomPrice").innerText = `Price : ${roomPrice}`;
-            document.getElementById("totalPrice").innerText = `Price : ${totalPrice}`;
-
-
-        }
     </script>
-    {{-- form booking  --}}
-    <div class="card py-md-5 p-3 mt-3 border border-primary">
-        <form action="{{ route('addBooking') }}" method="post" enctype="multipart/form-data">
-            @csrf
-            @php
-                $date = date('Y-m-d');
-                $str_time = date('00:00:00');
-                $end_time = date('00:00:00', strtotime('+1 hour'));
-            @endphp
-            <div class="row justify-content-center">
-                <div id="result"></div>
-                <div id="roomPrice"></div>
-                <div id="totalPrice"></div>
-
-                <div class="col-12 col-sm-6 col-md-2">
-                    <label for="stadium_id" class="form-label">สนามกีฬา :</label>
-                    <select class="form-select" name="bk_std_id" id="bk_std_id" required onchange="calculateMinutes()">
-                        <option value="" disabled selected>--- กรุณาเลือกสนาม ---</option>
-                        @foreach ($stadiums as $stadium)
-                            <option value="{{ $stadium->id }}" data-price="{{ $stadium->std_price }}"
-                                @if (!empty($search)) @if ($search->id == $stadium->id) selected @endif
-                                @endif>
-                                {{ $stadium->std_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-12 col-sm-6 col-md-2">
-                    <label for="bk_date" class="form-label">วันที่จอง : </label>
-                    <input type="date" class="form-control" name="bk_date" id="bk_date" value="{{ $date }}"
-                        required>
-                </div>
-                <div class="col-12 col-sm-6 col-md-2">
-                    <label for="bk_str_time" class="form-label">เวลาเข้า : </label>
-                    <input type="time" class="form-control" name="bk_str_time" id="bk_str_time" value="" required
-                        onchange="calculateMinutes()">
-                </div>
-                <div class="col-12 col-sm-6 col-md-2">
-                    <label for="bk_end_time" class="form-label">เวลาออก : </label>
-                    <input type="time" class="form-control" name="bk_end_time" id="bk_end_time" value="" required
-                        onchange="calculateMinutes()">
-                </div>
-                <div class="col-12 col-sm-6 col-md-2">
-                    <label for="submit" class="form-label"></label>
-                    <div class="my-2">
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="fa-regular fa-calendar-plus"></i> จองสนาม
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
+    <div class="row bg-dark rounded-bottom-5" id="booking">
+        <div class="booking-form py-md-4 mt-3">
+            @include('formBooking')
+        </div>
     </div>
-
-    <div class="card mt-3">
-        <div class="card-body">
-            <div class="row">
-                {{-- ปฏิทิน --}}
-                <div class="col-12 col-md-8">
-                    <div id="calendar"></div>
+    <div class="row mt-5">
+        {{-- ปฏิทิน --}}
+        <div class="col-12 col-md-8 mb-5">
+            <div id="calendar"></div>
+        </div>
+        {{-- ประวัติการจอง --}}
+        <div class="col-12 col-md-4">
+            <h3>ประวัติการจอง</h3>
+            @if (count($history) == 0)
+                <div class="alert alert-warning" role="alert">
+                    ไม่มีประวัติการจองสนาม !!
                 </div>
-
-                {{-- ประวัติการจอง --}}
-                <div class="col-12 col-md-4">
-                    <h3>ประวัติการจอง</h3>
-                    @if (count($history) == 0)
-                        <div class="alert alert-warning" role="alert">
-                            ไม่มีประวัติการจองสนาม !!
-                        </div>
-                    @else
-                        <ul class="list-group list-group-flush">
-                            @foreach ($history as $row)
-                                <div class="list-group-item d-flex justify-content-between align-items-start">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#eventModal{{ $row->id }}"
-                                        class="text-dark d-flex link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
-                                        <div class="me-auto">
-                                            <div class="fw-bold">สถานที่ : {{ $row->std_name }}</div>
-                                            วันที่ : {{ $row->bk_date }} <br>
-                                            เวลา : {{ $row->bk_str_time }} น. ถึง {{ $row->bk_end_time }} น.
-                                        </div>
-                                    </a>
-                                    @if ($row->bk_status == 1)
-                                        <span class="badge bg-warning rounded-pill"> รอชำระเงิน</span>
-                                    @elseif($row->bk_status == 2)
-                                        <span class="badge bg-primary rounded-pill"> รอตรวจสอบ</span>
-                                    @elseif($row->bk_status == 3)
-                                        <span class="badge bg-success rounded-pill"> อนุมัติ</span>
-                                    @else
-                                        <span class="badge bg-danger rounded-pill cursor-pointer"
-                                            data-bs-custom-class="custom-popover" data-bs-container="body"
-                                            data-bs-toggle="popover" data-bs-title="หมายเหตุ" data-bs-placement="top"
-                                            data-bs-content="{{ $row->bk_node }}" data-toggle="tooltip"
-                                            data-placement="top" title="กดดูหมายเหตุ">
-                                            ไม่อนุมัติ</span>
-                                    @endif
+            @else
+                <ul class="list-group list-group-flush">
+                    @foreach ($history as $row)
+                        <div class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#eventModal{{ $row->id }}"
+                                class="text-dark d-flex link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                                <div class="me-auto">
+                                    <div class="fw-bold">สถานที่ : {{ $row->std_name }}</div>
+                                    วันที่ : {{ $row->bk_date }} <br>
+                                    เวลา : {{ $row->bk_str_time }} น. ถึง {{ $row->bk_end_time }} น.
                                 </div>
-                            @endforeach
-                        </ul>
-                    @endif
-                </div>
-            </div>
+                            </a>
+                            @if ($row->bk_status == 1)
+                                <span class="badge bg-warning rounded-pill"> รอชำระเงิน</span>
+                            @elseif($row->bk_status == 2)
+                                <span class="badge bg-primary rounded-pill"> รอตรวจสอบ</span>
+                            @elseif($row->bk_status == 3)
+                                <span class="badge bg-success rounded-pill"> อนุมัติ</span>
+                            @else
+                                <span class="badge bg-danger rounded-pill cursor-pointer"
+                                    data-bs-custom-class="custom-popover" data-bs-container="body" data-bs-toggle="popover"
+                                    data-bs-title="หมายเหตุ" data-bs-placement="top" data-bs-content="{{ $row->bk_node }}"
+                                    data-toggle="tooltip" data-placement="top" title="กดดูหมายเหตุ">
+                                    ไม่อนุมัติ</span>
+                            @endif
+                        </div>
+                    @endforeach
+                </ul>
+            @endif
         </div>
     </div>
 
@@ -196,36 +166,59 @@
                                     </ul>
                                     @if (Auth::user()->username == $row->bk_username)
                                         <hr>
-                                        <div class="row g-0 g-3 needs-validation mb-3" novalidate>
-                                            <div class="col-12 col-md-6">
-                                                <label for="bk_stadium" class="form-label">สนามกีฬา<span>*</span></label>
-                                                <select class="form-select" name="bk_std_id" id="bk_std_id" required>
+                                        <div class="row g-3 needs-validation mb-3" novalidate>
+                                            <div class="col-12">
+                                                <label for="bk_stadium" class="form-label">สนามกีฬา <span>*</span></label>
+                                                <select class="form-select" name="bk_std_id"
+                                                    id="modal_bk_std_id{{ $row->id }}"
+                                                    onchange="modalCalculate('{{ $row->id }}')" required>
                                                     <option value="" disabled selected>--- กรุณาเลือกสนาม ---
                                                     </option>
                                                     @foreach ($stadiums as $stadium)
                                                         <option value="{{ $stadium->id }}"
+                                                            data-price="{{ $stadium->std_price }}"
                                                             @if ($row->bk_std_id == $stadium->id) selected @endif>
                                                             {{ $stadium->std_name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-12 col-md-6">
+                                                <label for="bk_price" class="form-label">ราคา/ชั่วโมง : </label>
+                                                <input type="text" class="form-control" name="bk_price"
+                                                    id="modal_bk_price{{ $row->id }}" value="" disabled
+                                                    required>
+                                            </div>
+                                            <div class="col-12 col-md-6">
                                                 <label for="bk_date" class="form-label">วันที่จอง
                                                     <span>*</span></label>
-                                                <input type="date" class="form-control" name="bk_date" id="bk_date"
+                                                <input type="date" class="form-control" name="bk_date" id="modal_bk_date{{ $row->id }}"
                                                     value="{{ $row->bk_date }}" required>
                                             </div>
                                             <div class="col-12 col-md-6">
                                                 <label for="bk_str_time" class="form-label">เวลาเข้า
                                                     <span>*</span></label>
                                                 <input type="time" class="form-control" name="bk_str_time"
-                                                    id="bk_str_time" value="{{ $row->bk_str_time }}" required>
+                                                    id="modal_bk_str_time{{ $row->id }}" value="{{ $row->bk_str_time }}"
+                                                    onchange="modalCalculate('{{ $row->id }}')" required>
                                             </div>
                                             <div class="col-12 col-md-6">
                                                 <label for="bk_end_time" class="form-label">เวลาออก
                                                     <span>*</span></label>
                                                 <input type="time" class="form-control" name="bk_end_time"
-                                                    id="bk_end_time" value="{{ $row->bk_end_time }}" required>
+                                                    id="modal_bk_end_time{{ $row->id }}" value="{{ $row->bk_end_time }}"
+                                                    onchange="modalCalculate('{{ $row->id }}')" required>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="bk_sumtime" class="form-label">เวลาเช่า (นาที)</label>
+                                                <input type="text" class="form-control" name="bk_sumtime"
+                                                    id="modal_bk_sumtime{{ $row->id }}"
+                                                    value="{{ $row->bk_sumtime }}" disabled required>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="bk_total_price" class="form-label">ราคารวม</label>
+                                                <input type="text" class="form-control" name="bk_total_price"
+                                                    id="modal_bk_total_price{{ $row->id }}"
+                                                    value="{{ $row->bk_total_price }}" disabled required>
                                             </div>
                                         </div>
                                     @endif
@@ -261,41 +254,18 @@
             </div>
         </div>
     @endforeach
-    <style>
-        .img_bk_slip {
-            max-width: 300px;
-            border: 1px solid #88888850;
-            border-radius: 6px;
-            padding: 6px;
-            width: 15vw;
-            height: 40vh;
-            background-color: rgb(255, 242, 228);
-            align-items: center;
-            text-align: center
-        }
 
-        #calendar ::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        #calendar ::-webkit-scrollbar-thumb {
-            background-color: #88888850;
-            border-radius: 6px;
-        }
-
-        .carousel-item {
-            width: 100%;
-            max-height: 500px;
-            border-top: 10px solid transparent;
-        }
-
-        #image-preview {
-            max-width: 100%;
-            max-height: 200px;
-        }
-    </style>
     {{-- JS อัพโหลดสลิปโอนเงิน --}}
     <script>
+        $(document).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip()
+
+            const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+            const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(
+                popoverTriggerEl))
+
+        });
+
         function displayImage(id) {
             const input = document.getElementById("bk_slip" + id);
             const file = input.files[0];
@@ -336,15 +306,12 @@
                 cancelButtonText: "ยกเลิก"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $.ajaxSetup({
+                    $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-
-                    $.ajax({
+                        },
                         url: 'deletebooking/' + id,
-                        type: 'POST',
+                        method: 'POST',
                         data: {
                             id: id
                         },
@@ -353,49 +320,23 @@
                                 title: "ลบแล้ว!",
                                 text: "ไฟล์ของคุณถูกลบแล้ว.",
                                 icon: "success"
+                            }).then(() => {
+                                location.reload();
                             });
                         },
-                        error: function(error) {
+                        error: function(xhr, status, error) {
                             Swal.fire({
                                 title: "ลบไม่สำเร็จ!",
                                 text: "ไฟล์ของคุณยังไม่ถูกลบ.",
                                 icon: "error"
                             });
-                            console.log(error);
+                            console.log("AJAX Request Error:", status, error);
                         }
                     });
 
                 }
             });
         }
-    </script>
-    {{-- JS set URL  --}}
-    <script>
-        $(document).ready(function() {
-            var id = $('#bk_std_id').val();
-
-            $('#bk_std_id').on('click', function(e) {
-                const id = $('#bk_std_id').val();
-                $.ajax({
-                    url: '/booking/' + id,
-                    method: 'GET',
-                    data: {
-                        id: id
-                    },
-                    success: function(response) {
-                        e.preventDefault();
-                        const newUrl = '/booking/' + id;
-                        window.history.pushState({
-                            path: newUrl
-                        }, '', newUrl);
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            });
-            $('#bk_std_id').val(id);
-        });
     </script>
     {{-- JS ปฏิทิน  --}}
     <script>
@@ -470,5 +411,33 @@
 
             calendar.render();
         })
+    </script>
+
+    <script>
+        function modalCalculate(id) {
+            // Get the input values
+            const bookInTime = document.getElementById("modal_bk_str_time" + id).value;
+            const bookOutTime = document.getElementById("modal_bk_end_time" + id).value;
+            // Get the selected option
+            var selectedOption = $('#modal_bk_std_id' + id 'option:selected');
+            // Retrieve the data-price attribute value
+            var price = parseFloat(selectedOption.data('price'));
+            // Convert the input values to Date objects
+            const bookInDate = new Date(`2000-01-01T${bookInTime}:00Z`);
+            const bookOutDate = new Date(`2000-01-01T${bookOutTime}:00Z`);
+
+            // Calculate the time difference in minutes
+            const timeDifference = (bookOutDate - bookInDate) / (1000 * 60);
+
+            // Calculate the Total Price 
+            const totalPrice = (price / 60) * timeDifference
+
+            const roundedNumber = Math.round(totalPrice);
+
+            // Display
+            document.getElementById("modal_bk_price" + id).value = `${price}`;
+            document.getElementById("modal_bk_sumtime" + id).value = `${timeDifference}`;
+            document.getElementById("modal_bk_total_price" + id).value = `${roundedNumber}`;
+        }
     </script>
 @endsection

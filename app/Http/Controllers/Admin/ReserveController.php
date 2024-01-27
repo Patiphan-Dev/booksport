@@ -26,26 +26,69 @@ class ReserveController extends Controller
 
     public function addReserve(Request $request)
     {
+        // เช็กช่วงเวลาที่จอง
+        $bk_std_id = $request->bk_std_id;
+        $bk_date = $request->bk_date;
+        $checkin = $request->bk_str_time;
+        $checkout = $request->bk_end_time;
+
+        $reserve = Booking::where(function ($query) use ($bk_std_id, $bk_date, $checkin, $checkout) {
+            $query->where(function ($query) use ($bk_std_id, $bk_date, $checkin, $checkout) {
+                $query->where('bk_std_id', $bk_std_id)
+                    ->where('bk_date', $bk_date)
+                    ->where('bk_str_time', '>=', $checkin)
+                    ->where('bk_str_time', '<', $checkout);
+            })
+                ->orWhere(function ($query) use ($bk_std_id, $bk_date, $checkin, $checkout) {
+                    $query->where('bk_std_id', $bk_std_id)
+                        ->where('bk_date', $bk_date)
+                        ->where('bk_end_time', '>', $checkin)
+                        ->where('bk_end_time', '<=', $checkout);
+                });
+        })
+            ->orWhere(function ($query) use ($bk_std_id, $bk_date, $checkin, $checkout) {
+                $query->where('bk_std_id', $bk_std_id)
+                    ->where('bk_date', $bk_date)
+                    ->where('bk_str_time', '<=', $checkin)
+                    ->where('bk_end_time', '>=', $checkout);
+            })
+            ->first();
+
+
         // คำนวณจำนวนชั่วโมง
         $hoursCheckIn = Carbon::parse($request->bk_str_time);
         $hoursCheckOut = Carbon::parse($request->bk_end_time);
-        $totalHours = $hoursCheckIn->diffInHours($hoursCheckOut);
-        // dd($totalHours);
+        // Calculate the difference in minutes
+        $minutes = $hoursCheckIn->diffInMinutes($hoursCheckOut);
 
-        //บันทึกข้อมูล
-        $reserve = new Booking;
-        $reserve->bk_std_id = $request->bk_std_id;
-        $reserve->bk_username = $request->bk_username;
-        $reserve->bk_date = $request->bk_date;
-        $reserve->bk_str_time = $request->bk_str_time;
-        $reserve->bk_end_time = $request->bk_end_time;
-        $reserve->bk_slip = $request->bk_slip;
-        $reserve->bk_status = $request->bk_status;
-        $reserve->save();
+        $getprice = Stadiums::find($request->bk_std_id);
 
-        // แจ้งเตือน
-        Alert::success('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
-        return redirect()->back()->with('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
+        $price = ($getprice->std_price / 60) * $minutes;
+        $totalPrice = round($price);
+        // dd($getprice->std_price,  $minutes, $totalPrice);
+
+
+        // dd($booking);
+        if ($reserve == null) {
+            //บันทึกข้อมูล;
+            $reserve = new Booking;
+            $reserve->bk_std_id = $request->bk_std_id;
+            $reserve->bk_username = auth()->user()->username;
+            $reserve->bk_date = $request->bk_date;
+            $reserve->bk_str_time = $request->bk_str_time;
+            $reserve->bk_end_time = $request->bk_end_time;
+            $reserve->bk_sumtime = $minutes;
+            $reserve->bk_total_price = $totalPrice;
+            $reserve->bk_status = 1;
+            $reserve->save();
+
+            Alert::success('สำเร็จ', 'จองสนามสำเสร็จ');
+            return redirect()->back()->with('สำเร็จ', 'จองสนามสำเสร็จ');
+        } else {
+
+            Alert::error('ไม่สำเร็จ', 'ไม่สามารถจองในช่วงเวลาดังกล่าวได้');
+            return redirect()->back()->with('ไม่สำเร็จ', 'ไม่สามารถจองในช่วงเวลาดังกล่าวได้');
+        }
     }
 
     public function editReserve($id)
@@ -56,12 +99,6 @@ class ReserveController extends Controller
 
     public function updateReserve(Request $request, $id)
     {
-        // คำนวณจำนวนชั่วโมง
-        $hoursCheckIn = Carbon::parse($request->bk_str_time);
-        $hoursCheckOut = Carbon::parse($request->bk_end_time);
-        $totalHours = $hoursCheckIn->diffInHours($hoursCheckOut);
-        // dd($totalHours);
-
         // เช็กช่วงเวลาที่จอง
         $bk_std_id = $request->bk_std_id;
         $bk_date = $request->bk_date;
@@ -93,8 +130,21 @@ class ReserveController extends Controller
             })
             ->first();
 
-        // ตึงข้อมูลตามไอดีมาตรวจสอบสลิป
 
+        // คำนวณจำนวนชั่วโมง
+        $hoursCheckIn = Carbon::parse($request->bk_str_time);
+        $hoursCheckOut = Carbon::parse($request->bk_end_time);
+        // Calculate the difference in minutes
+        $minutes = $hoursCheckIn->diffInMinutes($hoursCheckOut);
+
+        $getprice = Stadiums::find($request->bk_std_id);
+
+        $price = ($getprice->std_price / 60) * $minutes;
+        $totalPrice = round($price);
+        // dd($getprice->std_price,  $minutes, $totalPrice);
+
+
+        // ตึงข้อมูลตามไอดีมาตรวจสอบสลิป
         $booking = Booking::find($id);
 
         $date = date("Y-m-d");
@@ -126,6 +176,8 @@ class ReserveController extends Controller
                         'bk_str_time' => $request->bk_str_time,
                         'bk_end_time' => $request->bk_end_time,
                         'bk_slip' => $image_url,
+                        'bk_sumtime' => $minutes,
+                        'bk_total_price' => $totalPrice,
                         'bk_status' => $request->bk_status,
                         'bk_node' => $request->bk_node,
                     ]
@@ -144,6 +196,8 @@ class ReserveController extends Controller
                         'bk_date' => $request->bk_date,
                         'bk_str_time' => $request->bk_str_time,
                         'bk_end_time' => $request->bk_end_time,
+                        'bk_sumtime' => $minutes,
+                        'bk_total_price' => $totalPrice,
                         'bk_status' => $request->bk_status,
                         'bk_node' => $request->bk_node,
                     ]
@@ -161,7 +215,7 @@ class ReserveController extends Controller
 
     public function deleteReserve($id)
     {
-        $delete = Booking::find($id)->delete();
+        Booking::find($id)->delete();
         Alert::success('สำเร็จ', 'ลบข้อมูสำเร็จ');
         return redirect()->back()->with('success', 'ลบข้อมูสำเร็จ');
     }

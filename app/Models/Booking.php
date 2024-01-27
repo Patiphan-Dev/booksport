@@ -16,8 +16,8 @@ class Booking extends Model
         'bk_end_time',
         'bk_slip',
         'bk_node',
+        'bk_sumtime',
         'bk_total_price',
-        'bk_hour',
         'bk_status',
     ];
 }

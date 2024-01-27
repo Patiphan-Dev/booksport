@@ -77,9 +77,9 @@ class BookingController extends Controller
 
         $getprice = Stadiums::find($request->bk_std_id);
 
-        dd($getprice->std_price,  $minutes);
-
-
+        $price = ($getprice->std_price / 60) * $minutes;
+        $totalPrice = round($price);
+        // dd($getprice->std_price,  $minutes, $totalPrice);
 
 
         // dd($booking);
@@ -91,6 +91,8 @@ class BookingController extends Controller
             $booking->bk_date = $request->bk_date;
             $booking->bk_str_time = $request->bk_str_time;
             $booking->bk_end_time = $request->bk_end_time;
+            $booking->bk_sumtime = $minutes;
+            $booking->bk_total_price = $totalPrice;
             $booking->bk_status = 1;
             $booking->save();
 
@@ -111,12 +113,6 @@ class BookingController extends Controller
 
     public function updateBooking(Request $request, $id)
     {
-        // คำนวณจำนวนชั่วโมง
-        $hoursCheckIn = Carbon::parse($request->bk_str_time);
-        $hoursCheckOut = Carbon::parse($request->bk_end_time);
-        $totalHours = $hoursCheckIn->diffInHours($hoursCheckOut);
-        // dd($totalHours);
-
         // เช็กช่วงเวลาที่จอง
         $bk_std_id = $request->bk_std_id;
         $bk_date = $request->bk_date;
@@ -147,6 +143,20 @@ class BookingController extends Controller
                     ->where('bk_end_time', '>=', $checkout);
             })
             ->first();
+
+
+        // คำนวณจำนวนชั่วโมง
+        $hoursCheckIn = Carbon::parse($request->bk_str_time);
+        $hoursCheckOut = Carbon::parse($request->bk_end_time);
+        // Calculate the difference in minutes
+        $minutes = $hoursCheckIn->diffInMinutes($hoursCheckOut);
+
+        $getprice = Stadiums::find($request->bk_std_id);
+
+        $price = ($getprice->std_price / 60) * $minutes;
+        $totalPrice = round($price);
+        // dd($getprice->std_price,  $minutes, $totalPrice);
+
 
         // ตึงข้อมูลตามไอดีมาตรวจสอบสลิป
         $booking = Booking::find($id);
@@ -183,6 +193,8 @@ class BookingController extends Controller
                         'bk_str_time' => $request->bk_str_time,
                         'bk_end_time' => $request->bk_end_time,
                         'bk_slip' => $image_url,
+                        'bk_sumtime' => $minutes,
+                        'bk_total_price' => $totalPrice,
                         'bk_status' => 2,
                     ]
                 );
@@ -200,6 +212,8 @@ class BookingController extends Controller
                         'bk_date' => $request->bk_date,
                         'bk_str_time' => $request->bk_str_time,
                         'bk_end_time' => $request->bk_end_time,
+                        'bk_sumtime' => $minutes,
+                        'bk_total_price' => $totalPrice,
                         'bk_status' => 1,
                     ]
                 );
@@ -216,17 +230,8 @@ class BookingController extends Controller
 
     public function deleteBooking($id)
     {
-        $booking = Booking::find($id);
-        // dd($booking,$id);
-        // $img_paths = $booking->bk_slip;
-        // if ($img_paths != null) {
-        //     $image_path = public_path('/' . $booking->bk_slip);
-        //     if (File::exists($image_path)) {
-        //         File::delete($image_path);
-        //     }
-        // }
-        // Booking::find($id)->delete();
+        Booking::find($id);
         Alert::success('สำเร็จ', 'ลบข้อมูสำเร็จ');
-        return redirect()->url('/booking')->with('success', 'ลบข้อมูสำเร็จ');
+        return redirect()->back()->with('success', 'ลบข้อมูสำเร็จ');
     }
 }
