@@ -10,8 +10,9 @@
                                 $image = explode(',', $std->std_img_path);
                             @endphp
                             <img src="{{ asset($image[0]) }}" data-bs-target="#carouselStadiums"
-                                data-bs-slide-to="{{ $key }}" class="rounded img-thumbnail {{ $key == 0 ? 'active' : '' }}"
-                                aria-current="true" aria-label="Slide {{ $key }}">
+                                data-bs-slide-to="{{ $key }}"
+                                class="rounded img-thumbnail {{ $key == 0 ? 'active' : '' }}" aria-current="true"
+                                aria-label="Slide {{ $key }}">
                         @endforeach
                     </div>
                 </div>
@@ -22,7 +23,8 @@
                                 $image = explode(',', $std->std_img_path);
                             @endphp
                             <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                <img src="{{ asset($image[0]) }}" class="rounded img-thumbnail d-block w-100" alt="...">
+                                <img src="{{ asset($image[0]) }}" class="rounded img-thumbnail d-block w-100"
+                                    alt="...">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h2>{{ $std->std_name }}</h2>
                                     <h6>{{ $std->std_price }} / ชั่วโมง</h6>
@@ -51,5 +53,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <hr>
+    <div class="row">
+        {!! $rules->rule_detail !!}
     </div>
 @endsection

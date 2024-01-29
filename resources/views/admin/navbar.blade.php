@@ -7,7 +7,9 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 position-sticky d-block d-md-none">
     {{-- fixed-top --}}
     <div class="container">
-        <a class="navbar-brand" href="{{ URL('/') }}">Your Logo</a>
+        <a class="navbar-brand" href="{{ URL('/') }}">
+            <img src="{{ asset('assets/images/Icons.png') }}" alt="" style="width:10vw">
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -47,7 +49,8 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown">
                     <div class="dropdown">
-                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                        <a href="#"
+                            class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="https://github.com/mdo.png" alt="" width="32" height="32"
                                 class="rounded-circle me-2">

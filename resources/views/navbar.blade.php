@@ -6,7 +6,9 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 position-sticky fixed-top">{{-- fixed-top --}}
     <div class="container">
-        <a class="navbar-brand animate___animated animate_bounce animate_infinte" href="{{ URL('/') }}">Your Logo</a>
+        <a class="navbar-brand" href="{{ URL('/') }}">
+            <img src="{{ asset('assets/images/liverpool-logo.jpg') }}" alt="" style="width:5vw;height:5vh" class="border border-danger">
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

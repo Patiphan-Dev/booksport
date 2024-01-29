@@ -32,7 +32,7 @@ Route::post('/register', [AuthController::class, 'postRegister'])->name('postReg
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/stadium/{id}', [StadiumController::class, 'getStadium'])->name('getStadium');
-
+Route::get('/rule', [RuleController::class, 'index'])->name('rule');
 
 Route::group(['middleware' => ['login_auth']], function () {
 
@@ -60,10 +60,9 @@ Route::group(['middleware' => ['login_auth']], function () {
         Route::post('/updatereserve/{id}', [ReserveController::class, 'updateReserve'])->name('updateReserve');
         Route::post('/deletereserve/{id}', [ReserveController::class, 'deleteReserve'])->name('deleteReserve');
 
-        Route::get('/rule', [RuleController::class, 'index'])->name('rule');
+
         Route::post('/addrule', [RuleController::class, 'addRule'])->name('addRule');
         Route::post('/updaterule', [RuleController::class, 'updateRule'])->name('updateRule');
-
 
     });
 });
