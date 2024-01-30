@@ -26,6 +26,7 @@ use App\Http\Controllers\Users\BookingController;
 
 Route::get('/login', [AuthController::class, 'getLogin'])->name('getLogin');
 Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
+
 Route::get('/register', [AuthController::class, 'getRegister'])->name('getRegister');
 Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
 
@@ -34,7 +35,7 @@ Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/stadium/{id}', [StadiumController::class, 'getStadium'])->name('getStadium');
 Route::get('/rule', [RuleController::class, 'index'])->name('rule');
 
-Route::group(['middleware' => ['login_auth']], function () {
+Route::group(['middleware' => ['login_auth']], function () { // ล็อคอินถึงจะเข้าได้
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -45,7 +46,8 @@ Route::group(['middleware' => ['login_auth']], function () {
     Route::post('/updatebooking/{id}', [BookingController::class, 'updateBooking'])->name('updateBooking');
     Route::post('/deletebooking/{id}', [BookingController::class, 'deleteBooking'])->name('deleteBooking');
 
-    Route::group(['middleware' => ['admin_auth']], function () {
+    Route::group(['middleware' => ['admin_auth']], function () { // สถานะ 9 หรือแอดมินถึงจะเข้าได้
+
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/stadium', [StadiumController::class, 'index'])->name('stadium');
