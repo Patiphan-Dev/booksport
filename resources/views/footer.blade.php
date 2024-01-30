@@ -4,7 +4,7 @@
         ->getName();
 @endphp
 
-<div class="bg-dark">
+<div class="bg-dark footer">
     <footer class="container py-3 mt-3">
         <ul class="nav justify-content-center border-bottom pb-3 mb-3">
             <li class="nav-item">

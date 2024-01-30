@@ -3,13 +3,19 @@
         ->route()
         ->getName();
 @endphp
+<style>
+    .drg{
+        align-items-center
+    }
+</style>
 <div class="d-flex d-none d-md-block flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
+    <div class="text-center align-items-center">
     <a class="navbar-brand" href="{{ URL('/') }}">
-        <img src="{{ asset('assets/images/Icons.png') }}" alt="" style="width:10vw">
-    </a>
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <img src="{{ asset('assets/images/logo.png') }}" alt="" style="width:10vw">
+    </a><br>
+    <a href="/" class="align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
         <span class="fs-4">ระบบจองสนามกีฬา</span>
-    </a>
+    </a></div>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">

@@ -12,7 +12,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
     <!-- Ionicons -->
-    {{-- <link rel="icon" type="image/x-icon" href="{{ asset('assets/logo.gif') }}"> --}}
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/logo.png') }}">
     <!-- Tempusdominus Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -27,68 +27,12 @@
 </head>
 
 <body>
-    {{-- <div class="row justify-content-center mt-5">
-        <div class="col-md-8">
-
-            <div class="card">
-                <div class="card-header">สมัครสมาชิก</div>
-                <div class="card-body">
-                    <form action="{{ route('postRegister') }}" method="post">
-                        @csrf
-                        <div class="mb-3 row">
-                            <label for="username" class="col-md-4 col-form-label text-md-end text-start">Username</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control @error('username') is-invalid @enderror"
-                                    id="username" name="username" value="{{ old('username') }}">
-                                @if ($errors->has('username'))
-                                    <span class="text-danger">{{ $errors->first('username') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="email" class="col-md-4 col-form-label text-md-end text-start">Email
-                                Address</label>
-                            <div class="col-md-6">
-                                <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                    id="email" name="email" value="{{ old('email') }}">
-                                @if ($errors->has('email'))
-                                    <span class="text-danger">{{ $errors->first('email') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="password" class="col-md-4 col-form-label text-md-end text-start">Password</label>
-                            <div class="col-md-6">
-                                <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                    id="password" name="password">
-                                @if ($errors->has('password'))
-                                    <span class="text-danger">{{ $errors->first('password') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="password_confirmation"
-                                class="col-md-4 col-form-label text-md-end text-start">Confirm Password</label>
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" id="password_confirmation"
-                                    name="password_confirmation">
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <input type="submit" class="col-md-3 offset-md-5 btn btn-primary" value="Register">
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> --}}
     <div class="container">
         <section class="ftco-section register">
             <div class="row justify-content-center">
                 <div class="col-md-12 col-lg-10">
                     <div class="wrap d-md-flex">
-                        <div class="img" style="background-image: url(login-register/images/bg-1.jpg);">
+                        <div class="img" style="background-image: url(assets/images/login.png);">
                         </div>
                         <div class="login-wrap p-3 p-md-5">
                             <div class="d-flex">

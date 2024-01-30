@@ -3,11 +3,15 @@
         ->route()
         ->getName();
 @endphp
-
+<style>
+    .navbar-collapse{
+        text-align: center;
+    }  
+</style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 position-sticky fixed-top">{{-- fixed-top --}}
     <div class="container">
         <a class="navbar-brand" href="{{ URL('/') }}">
-            <img src="{{ asset('assets/images/liverpool-logo.jpg') }}" alt="" style="width:5vw;height:5vh" class="border border-danger">
+            <img src="{{ asset('assets/images/logo.png') }}" alt="" style="width: 100%;height:8vh" class="border border-white">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

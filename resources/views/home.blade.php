@@ -56,6 +56,6 @@
     </div>
     <hr>
     <div class="row">
-        {!! $rules->rule_detail !!}
+       @if ($rules != null)  {!! $rules->rule_detail !!} @endif
     </div>
 @endsection

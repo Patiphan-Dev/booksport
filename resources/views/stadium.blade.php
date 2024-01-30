@@ -66,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 mt-3">
             <div class="position-sticky" style="top: 5.5rem;">
                 <div class="card">
                     <div class="card-body">
@@ -74,14 +74,14 @@
                         <ul class="list-unstyled">
                             @foreach ($stadiums as $key => $std)
                                 <li @if ($stadium->id == $std->id) hidden @endif>
-                                    <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
+                                    <a class="d-flex flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
                                         href="{{ route('getStadium', ['id' => $std->id]) }}">
                                         @php
                                             $image = explode(',', $std->std_img_path);
                                         @endphp
                                         <img src="{{ asset($image[0]) }}" data-bs-target="#carouselStadiums"
                                             data-bs-slide-to="{{ $key }}" class="bd-placeholder-img"
-                                            width="100%" height="85" aria-current="true">
+                                            aria-current="true" style="width:30vw;height:10vh">
                                         <div class="col-lg-8">
                                             <h5 class="mb-0">{{ $std->std_name }}</h5>
                                             <span class="text-body-secondary">ราคา {{ $std->std_price }} บาท /

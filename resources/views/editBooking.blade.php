@@ -116,6 +116,19 @@
     @endif
 </form>
 
+<style>
+    .img_bk_slip {
+        max-width: 300px;
+        border: 1px solid #88888850;
+        border-radius: 6px;
+        padding: 6px;
+        width: 55vw;
+        height: 40vh;
+        background-color: rgb(255, 242, 228);
+        align-items: center;
+        text-align: center
+    }
+</style>
 {{-- JS อัพโหลดสลิปโอนเงิน --}}
 <script>
     $(document).ready(function() {
@@ -199,7 +212,6 @@
         });
     }
 </script>
-
 
 <script>
     function modalCalculate(id) {

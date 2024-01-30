@@ -3,12 +3,16 @@
         ->route()
         ->getName();
 @endphp
-
+<style>
+    .navbar-collapse {
+        text-align: center;
+    }
+</style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 position-sticky d-block d-md-none">
     {{-- fixed-top --}}
     <div class="container">
         <a class="navbar-brand" href="{{ URL('/') }}">
-            <img src="{{ asset('assets/images/Icons.png') }}" alt="" style="width:10vw">
+            <img src="{{ asset('assets/images/logo.png') }}" alt="" style="width:10vw">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,19 +52,16 @@
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown">
-                    <div class="dropdown">
-                        <a href="#"
-                            class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://github.com/mdo.png" alt="" width="32" height="32"
-                                class="rounded-circle me-2">
-                            <strong>{{ Auth::user()->username }}</strong>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                            <li><a class="dropdown-item" href="{{ route('logout') }}">ออกจากระบบ <i
-                                        class="fa-solid fa-right-from-bracket"></i></a></li>
-                        </ul>
-                    </div>
+                    <a href="#" class="align-items-center text-white text-decoration-none dropdown-toggle"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://github.com/mdo.png" alt="" width="32" height="32"
+                            class="rounded-circle me-2">
+                        <strong>{{ Auth::user()->username }}</strong>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                        <li><a class="dropdown-item" href="{{ route('logout') }}">ออกจากระบบ <i
+                                    class="fa-solid fa-right-from-bracket"></i></a></li>
+                    </ul>
                 </li>
             </ul>
         </div>
