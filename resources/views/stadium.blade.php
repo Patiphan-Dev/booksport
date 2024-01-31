@@ -48,7 +48,7 @@
     </div>
 
     <div class="row mb-5">
-        <div class="col-md-8">
+        <div class="col-md-8 mb-3">
             <div class="card">
                 <div class="card-body">
                     <h2 class="pb-4 mb-4 fst-italic border-bottom">
@@ -66,8 +66,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mt-3">
-            <div class="position-sticky" style="top: 5.5rem;">
+        <div class="col-md-4">
+            <div class="position-sticky" style="top: 8.5rem;">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="fst-italic">สนามกีฬาเพิ่มเติม</h4>

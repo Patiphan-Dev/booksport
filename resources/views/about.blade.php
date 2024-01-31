@@ -2,7 +2,7 @@
 @section('body')
     <div class="row mt-2 gy-3 gy-md-4 gy-lg-4 align-items-lg-center">
         <div class="col-12 col-lg-6 col-xl-5">
-            <img class="img-fluid rounded" loading="lazy" src="https://bootstrapbrain.com/demo/components/abouts/about-1/assets/img/about-img-1.jpg" alt="About 1">
+            <img class="img-fluid rounded" loading="lazy" src="{{ asset('assets/images/login.png') }}" alt="About 1">
         </div>
         <div class="col-12 col-lg-6 col-xl-7">
             <div class="row justify-content-xl-center">
