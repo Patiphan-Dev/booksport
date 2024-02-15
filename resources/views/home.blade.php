@@ -27,15 +27,16 @@
                                     alt="...">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h2>{{ $std->std_name }}</h2>
-                                    <h6>{{ $std->std_price }} / ชั่วโมง</h6>
+                                    <h4>{{ $std->std_price }} / ชั่วโมง</h4>
 
-                                    <a href="{{ route('booking', ['id' => $std->id]) }}" class="btn btn-warning btn-sm">
+                                    {{-- <a href="{{ route('booking', ['id' => $std->id]) }}" class="btn btn-warning btn-sm">
                                         <i class="fa-solid fa-check"></i> จองสนาม
                                     </a>
                                     <a href="{{ route('getStadium', ['id' => $std->id]) }}"
                                         class="btn btn-primary btn-sm getStadium"> ดูข้อมูลเพิ่มเติม
-                                    </a>
+                                    </a> --}}
                                 </div>
+
                             </div>
                         @endforeach
 
@@ -50,12 +51,27 @@
                             <span class="visually-hidden">Next</span>
                         </button>
                     </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-center mt-3">
+                        <a href="{{ route('booking', ['id' => $std->id]) }}" class="btn btn-warning btn-sm d-block">
+                            <i class="fa-solid fa-check"></i> จองสนาม
+                        </a>
+                        <a href="{{ route('getStadium', ['id' => $std->id]) }}"
+                            class="btn btn-primary btn-sm getStadium d-block">
+                            ดูข้อมูลเพิ่มเติม
+                        </a>
+                    </div>
                 </div>
+
             </div>
+
+
         </div>
+
     </div>
     <hr>
     <div class="row">
-       @if ($rules != null)  {!! $rules->rule_detail !!} @endif
+        @if ($rules != null)
+            {!! $rules->rule_detail !!}
+        @endif
     </div>
 @endsection
