@@ -173,6 +173,9 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
                         url: '/deletestadium/' + id,
                         method: 'POST',
                         data: {
@@ -181,17 +184,20 @@
                         success: function(response) {
                             Swal.fire({
                                 title: "ลบแล้ว!",
-                                text: "ไฟล์ของคุณถูกลบแล้ว.",
+                                text: "สนามของคุณถูกลบแล้ว.",
                                 icon: "success"
+                            }).then(() => {
+                                // Reload the page after successful deletion
+                                location.reload();
                             });
                         },
-                        error: function(error) {
+                        error: function(xhr, status, error) {
                             Swal.fire({
                                 title: "ลบไม่สำเร็จ!",
-                                text: "ไฟล์ของคุณยังไม่ถูกลบ.",
+                                text: "สนามของคุณยังไม่ถูกลบ.",
                                 icon: "error"
                             });
-                            console.log(error);
+                            // console.log("AJAX Request Error:", status, error);
                         }
                     });
 
