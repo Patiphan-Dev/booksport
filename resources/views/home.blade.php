@@ -52,11 +52,11 @@
                         </button>
                     </div>
                     <div class="d-grid gap-2 d-md-flex justify-content-center mt-3">
-                        <a href="{{ route('booking', ['id' => $std->id]) }}" class="btn btn-warning btn-sm d-block">
+                        <a href="{{ route('booking', ['id' => $std->id]) }}" class="btn btn-warning d-block">
                             <i class="fa-solid fa-check"></i> จองสนาม
                         </a>
                         <a href="{{ route('getStadium', ['id' => $std->id]) }}"
-                            class="btn btn-primary btn-sm getStadium d-block">
+                            class="btn btn-primary getStadium d-block">
                             ดูข้อมูลเพิ่มเติม
                         </a>
                     </div>
