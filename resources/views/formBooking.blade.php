@@ -1,8 +1,4 @@
 <style>
-    #booking {
-        background-image: url("https://png.pngtree.com/thumb_back/fw800/background/20230721/pngtree-desolate-soccer-arena-in-the-evening-depicted-in-3d-image_3869215.jpg");
-        background-color: #737475;
-    }
 
     .booking-form {
         max-width: 400px;

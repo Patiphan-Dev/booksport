@@ -69,9 +69,9 @@
 
     </div>
     <hr>
-    <div class="row">
+    {{-- <div class="row">
         @if ($rules != null)
             {!! $rules->rule_detail !!}
         @endif
-    </div>
+    </div> --}}
 @endsection

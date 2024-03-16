@@ -1,6 +1,12 @@
 @extends('layout')
 @section('body')
     <style>
+        #booking {
+            background-image: url("assets/images/victory-ribbon-wallpaper-mural-plain.jpg");
+            background-color: #737475;
+            background-size: 100% 100%;
+        }
+
         .custom-popover {
             --bs-popover-max-width: 100%;
             --bs-popover-border-color: red;
@@ -31,7 +37,7 @@
         }
     </style>
 
-    <div class="row bg-dark rounded-bottom-5" id="booking">
+    <div class="row bg-dark rounded-bottom-5 d-block w-100" id="booking">
         <div class="booking-form py-md-4 mt-3">
             @include('formBooking')
         </div>
