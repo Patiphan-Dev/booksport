@@ -15,5 +15,7 @@ class Stadiums extends Model
         'std_facilities',
         'std_img_path',
         'std_status',
+        'std_supperuser',
+
     ];
 }

@@ -19,5 +19,6 @@ class Booking extends Model
         'bk_sumtime',
         'bk_total_price',
         'bk_status',
+
     ];
 }

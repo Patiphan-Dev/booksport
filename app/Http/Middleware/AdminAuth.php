@@ -16,11 +16,11 @@ class AdminAuth
     public function handle(Request $request, Closure $next): Response
     {
         if(auth()->check()){
-            if(auth()->user()->status != '9'){
-                return redirect()->route('getLogin')->with('error', 'คุณไม่ใช่แอดมิน !!');
+            if(auth()->user()->status < '7'){
+                return redirect()->route('getLogin')->with('error', 'คุณไม่มีสิทธิ์เข้าถึงหน้านี้ !!');
             }
         }else{
-            return redirect()->route('getLogin')->with('error', 'คุณไม่ใช่แอดมิน !!');
+            return redirect()->route('getLogin')->with('error', 'คุณไม่มีสิทธิ์เข้าถึงหน้านี้ !!');
         }
         return $next($request);
     }

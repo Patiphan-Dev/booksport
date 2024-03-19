@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Stadiums;
-use App\Models\Rule;
 
 class HomeController extends Controller
 {
@@ -15,8 +14,7 @@ class HomeController extends Controller
             'title' => 'หน้าแรก'
         ];
         $stadiums = Stadiums::all();
-        $rules = Rule::find(1);
-        return view('home', compact('stadiums','rules'), $data);
+        return view('home', compact('stadiums'), $data);
     }
 
     public function about()

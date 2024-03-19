@@ -1,21 +1,20 @@
 @php
-    $current_route = request()
-        ->route()
-        ->getName();
+    $current_route = request()->route()->getName();
 @endphp
 <style>
-    .drg{
+    .drg {
         align-items-center
     }
 </style>
 <div class="d-flex d-none d-md-block flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
     <div class="text-center align-items-center">
-    <a class="navbar-brand" href="{{ URL('/') }}">
-        <img src="{{ asset('assets/images/logo.png') }}" alt="" style="width:10vw">
-    </a><br>
-    <a href="/" class="align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-        <span class="fs-4">ระบบจองสนามกีฬา</span>
-    </a></div>
+        <a class="navbar-brand" href="{{ URL('/') }}">
+            <img src="{{ asset('assets/images/logo.png') }}" alt="" style="width:10vw">
+        </a><br>
+        <a href="/" class="align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <span class="fs-4">ระบบจองสนามกีฬา</span>
+        </a>
+    </div>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
@@ -25,6 +24,15 @@
                 แดชบอร์ด
             </a>
         </li>
+        @if (auth()->user()->status == 9)
+            <li>
+                <a href="{{ route('user') }}"
+                    class="nav-link text-white {{ $current_route == 'user' ? 'active' : '' }}">
+                    <i class="fa-solid fa-users"></i>
+                    ผู้ใช้งาน
+                </a>
+            </li>
+        @endif
         <li>
             <a href="{{ route('stadium') }}"
                 class="nav-link text-white {{ $current_route == 'stadium' ? 'active' : '' }}">
@@ -37,12 +45,6 @@
                 class="nav-link text-white {{ $current_route == 'reserve' ? 'active' : '' }}">
                 <i class="fa-solid fa-bookmark"></i>
                 รายงานการจอง
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('rule') }}" class="nav-link text-white {{ $current_route == 'rule' ? 'active' : '' }}">
-                <i class="fa-solid fa-scale-balanced"></i>
-                กฎกติกา
             </a>
         </li>
     </ul>

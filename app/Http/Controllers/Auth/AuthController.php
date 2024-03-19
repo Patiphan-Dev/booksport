@@ -42,7 +42,7 @@ class AuthController extends Controller
                 return redirect()->route('home')->with('success', 'เข้าสู่ระบบสำเร็จ');
             }
             
-            if (auth()->user()->status == 9) {
+            if (auth()->user()->status >= 7) {
                 Alert::success('สำเร็จ', 'เข้าสู่ระบบสำเร็จ');
                 return redirect()->route('dashboard')->with('success', 'เข้าสู่ระบบสำเร็จ');
             }

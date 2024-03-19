@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Stadiums;
+use App\Models\User;
+
 use RealRashid\SweetAlert\Facades\Alert;
 use File;
 
@@ -17,13 +19,24 @@ class StadiumController extends Controller
         ];
 
         $id = $request->input('id');
+        $users = User::where('status', '!=', '9')->get();
+        if (auth()->user()->status == 9) {
+            $stadiums = Stadiums::join('users', 'stadiums.std_supperuser', 'users.id')
+            ->select('users.username', 'stadiums.*')
+            ->get();
+        } else {
+            $stadiums = Stadiums::where('std_supperuser', auth()->user()->id)
+            ->join('users', 'stadiums.std_supperuser', 'users.id')
+            ->select('users.username', 'stadiums.*')
+            ->get();
+        }
 
-        $stadiums = Stadiums::all();
-        return view('admin.stadium', compact('stadiums'), $data);
+        return view('admin.stadium', compact('stadiums', 'users'), $data);
     }
 
     public function addStadium(Request $request)
     {
+        // dd($request);
         $date = date("Y-m-d");
 
         if ($files = $request->file('std_img_path')) {
@@ -46,7 +59,9 @@ class StadiumController extends Controller
             $stadium->std_price = $request->std_price;
             $stadium->std_facilities = $request->std_facilities;
             $stadium->std_img_path = $std_img_path;
+            $stadium->std_supperuser = $request->std_supperuser;
             $stadium->std_status = '1';
+
             $stadium->save();
         }
 
@@ -96,7 +111,9 @@ class StadiumController extends Controller
                         'std_price' => $request->std_price,
                         'std_facilities' => $request->std_facilities,
                         'std_img_path' => $std_img_path,
+                        'std_supperuser' => $request->std_supperuser,
                         'std_status' => $request->std_status,
+
                     ]
                 );
             }
@@ -108,6 +125,7 @@ class StadiumController extends Controller
                     'std_details' => $request->std_details,
                     'std_price' => $request->std_price,
                     'std_facilities' => $request->std_facilities,
+                    'std_supperuser' => $request->std_supperuser,
                     'std_status' => $request->std_status,
                 ]
             );
@@ -139,6 +157,6 @@ class StadiumController extends Controller
         ];
         $stadiums = Stadiums::all();
         $stadium = Stadiums::find($id);
-        return view('stadium', compact('stadium','stadiums'), $data);
+        return view('stadium', compact('stadium', 'stadiums'), $data);
     }
 }

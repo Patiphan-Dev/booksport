@@ -1,11 +1,20 @@
 <form action="{{ route('addStadium') }}" method="post" enctype="multipart/form-data">
     @csrf
     <div class="row">
-        <div class="col-12 col-md-6 mb-3">
+        <div class="col-12 col-md-4 mb-3">
+            <label for="std_supperuser" class="form-label">ชื่อเจ้าของสนาม <span>*</span></label>
+            <select class="form-select" name="std_supperuser" id="std_supperuser" required  @if(auth()->user()->status != 9) readonly @endif>
+                {{-- <option value="" disabled selected>--- กรุณาเลือกเจ้าของสนาม ---</option> --}}
+                @foreach ($users as $user)
+                    <option value="{{ $user->id }}" @if(auth()->user()->username == $user->username) selected @endif >{{ $user->username }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-12 col-md-4 mb-3">
             <label for="std_name" class="form-label">ชื่อสนาม <span>*</span></label>
             <input type="text" class="form-control" id="std_name" name="std_name" placeholder="สนามกีฬา" required>
         </div>
-        <div class="col-12 col-md-6 mb-3">
+        <div class="col-12 col-md-4 mb-3">
             <label for="std_price" class="form-label">ราคา <span>*</span></label>
             <input type="number" class="form-control" id="std_price" name="std_price" placeholder="999" required>
 

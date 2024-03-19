@@ -29,6 +29,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('user') }}" class="nav-link text-white {{ $current_route == 'user' ? 'active' : '' }}">
+                        <i class="fa-solid fa-users"></i>
+                        ผู้ใช้งาน
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('stadium') }}"
                         class="nav-link text-white fw-bold py-1 {{ $current_route == 'stadium' ? 'active' : '' }}">
                         <i class="fa-solid fa-medal"></i>
@@ -40,13 +46,6 @@
                         class="nav-link text-white fw-bold py-1 {{ $current_route == 'reserve' ? 'active' : '' }}">
                         <i class="fa-solid fa-bookmark"></i>
                         รายงานการจอง
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('rule') }}"
-                        class="nav-link text-white fw-bold py-1 {{ $current_route == 'rule' ? 'active' : '' }}">
-                        <i class="fa-solid fa-scale-balanced"></i>
-                        กฎกติกา
                     </a>
                 </li>
             </ul>

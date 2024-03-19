@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('stadiums', function (Blueprint $table) {
             $table->id();
+            $table->string('std_supperuser')->nullable()->comment('เจ้าของสนาม');
             $table->string('std_name')->nullable()->comment('ชื่อสนาม');
             $table->double('std_price', 7)->nullable()->comment('ราคาสนาม');
             $table->text('std_details')->nullable()->comment('รายละเอียดสนาม');

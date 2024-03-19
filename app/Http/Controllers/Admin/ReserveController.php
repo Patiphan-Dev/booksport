@@ -17,10 +17,28 @@ class ReserveController extends Controller
         $data = [
             'title' => 'การจอง'
         ];
-        // ดึงข้อมูลตาราง bookings join ตาราง stadium
-        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
-        //ดึงข้อมูลตาราง Stadiums ทั้งหมด
-        $stadiums = Stadiums::all();
+
+        if (auth()->user()->status == 9) {
+            // ดึงข้อมูลตาราง bookings join ตาราง stadium
+            $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')
+                ->select('bookings.*', 'stadiums.std_name')
+                ->orderBy('created_at', 'desc')
+                ->get();
+            //ดึงข้อมูลตาราง Stadiums ทั้งหมด
+            $stadiums = Stadiums::join('users', 'stadiums.std_supperuser', 'users.id')
+                ->select('users.username', 'stadiums.*')
+                ->get();
+        } else {
+            $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')
+                ->join('users', 'stadiums.std_supperuser', 'users.id')
+                ->select('users.username', 'bookings.*', 'stadiums.std_name')
+                ->where('stadiums.std_supperuser', auth()->user()->id)
+                ->orderBy('created_at', 'desc')->get();
+
+            $stadiums = Stadiums::where('std_supperuser', auth()->user()->id)
+                ->join('users', 'stadiums.std_supperuser', 'users.id')
+                ->select('users.username', 'stadiums.*')->get();
+        }
         return view('admin.reserve', compact('bookings', 'stadiums'), $data);
     }
 

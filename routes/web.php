@@ -4,10 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\StadiumController;
 use App\Http\Controllers\Admin\ReserveController;
-use App\Http\Controllers\Admin\PaymentController;
-use App\Http\Controllers\Admin\RuleController;
 
 use App\Http\Controllers\Users\HomeController;
 use App\Http\Controllers\Users\BookingController;
@@ -30,10 +29,11 @@ Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
 Route::get('/register', [AuthController::class, 'getRegister'])->name('getRegister');
 Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
 
+Route::get('/navbar', [HomeController::class, 'index'])->name('navbar');
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/stadium/{id}', [StadiumController::class, 'getStadium'])->name('getStadium');
-Route::get('/rule', [RuleController::class, 'index'])->name('rule');
 
 Route::group(['middleware' => ['login_auth']], function () { // ล็อคอินถึงจะเข้าได้
 
@@ -62,9 +62,10 @@ Route::group(['middleware' => ['login_auth']], function () { // ล็อคอ�
         Route::post('/updatereserve/{id}', [ReserveController::class, 'updateReserve'])->name('updateReserve');
         Route::post('/deletereserve/{id}', [ReserveController::class, 'deleteReserve'])->name('deleteReserve');
 
-
-        Route::post('/addrule', [RuleController::class, 'addRule'])->name('addRule');
-        Route::post('/updaterule', [RuleController::class, 'updateRule'])->name('updateRule');
-
+        Route::get('/user', [UserController::class, 'index'])->name('user');
+        Route::post('/adduser', [UserController::class, 'addUser'])->name('addUser');
+        Route::get('/edituser', [UserController::class, 'editUser'])->name('editUser');
+        Route::post('/updateuser/{id}', [UserController::class, 'updateUser'])->name('updateUser');
+        Route::post('/deleteuser/{id}', [UserController::class, 'deleteUser'])->name('deleteUser');
     });
 });

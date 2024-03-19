@@ -29,8 +29,8 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link fw-bold py-1 {{ $current_route == 'getStadium' ? 'active' : '' }}"
-                        href="{{ route('getStadium', ['id' => 1]) }}">สนามกีฬา</a>
-                </li>
+                        href="{{ route('getStadium', ['id' => $stadiums[0]->id]) }}">สนามกีฬา</a>
+                </li> 
                 <li class="nav-item">
                     <a class="nav-link fw-bold py-1 {{ $current_route == 'bookingAll' ? 'active' : '' }}"
                         href="{{ route('bookingAll') }}">จองสนาม</a>
