@@ -1,6 +1,22 @@
 @extends('admin.layout')
 
 @section('body')
+    <style>
+        #imagePreview {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .previewImage {
+            margin: 5px;
+            max-width: 25vw;
+            max-height: 35vh;
+            object-fit: cover;
+            border: 1px solid #000009;
+            border-radius: 6px;
+            padding: 2px;
+        }
+    </style>
     <div class="d-grid gap-2 d-md-flex justify-content-end">
         <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#adduser">
             <i class="fa-solid fa-plus"></i> เพิ่มผู้ใช้งาน
@@ -13,25 +29,25 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('addUser') }}" method="post">
+                        <form action="{{ route('addUser') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group mb-3">
-                                <label class="label" for="username">ชื่อผู้ใช้</label>
+                                <label class="label" for="username">ชื่อผู้ใช้ <span>*</span></label>
                                 <input type="text" class="form-control" placeholder="Username" id="username"
                                     name="username" required>
                             </div>
                             <div class="form-group mb-3">
-                                <label class="label" for="email">อีเมล</label>
+                                <label class="label" for="email">อีเมล <span>*</span></label>
                                 <input type="email" class="form-control" placeholder="email" id="email" name="email"
                                     required>
                             </div>
                             <div class="form-group mb-3">
-                                <label class="label" for="password">รหัสผ่าน</label>
+                                <label class="label" for="password">รหัสผ่าน <span>*</span></label>
                                 <input type="password" class="form-control" id="password" name="password"
                                     placeholder="Password" required>
                             </div>
-                            <div class="form-group mb-5">
-                                <label class="label" for="status">สถานะผู้ใช้</label>
+                            <div class="form-group mb-3">
+                                <label class="label" for="status">สถานะผู้ใช้ <span>*</span></label>
                                 <select class="form-select" aria-label="Default select example" id="status"
                                     name="status" required>
                                     <option disabled selected>--- กรุณาเลือกสถานะผู้ใช้ ---</option>
@@ -40,7 +56,18 @@
                                     <option value="9">แอดมิน</option>
                                 </select>
                             </div>
+                            <div class="form-group mb-3">
+                                <label for="PayDeposit" class="form-label">
+                                    QR Code ชำระเงินค่าสนาม
+                                </label>
+                                <input type="file" class="form-control" id="qrcode" name="qrcode"
+                                    accept="image/jpeg, image/png">
+                            </div>
+                            <div class="form-group mb-5 text-center">
+                                <div id="qrcodePreview"></div>
+                            </div>
                             <input type="submit" class="btn btn-primary float-end" value="บันทึก">
+
                         </form>
                     </div>
                 </div>
@@ -108,25 +135,20 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('updateUser', ['id' => $row->id]) }}" method="post">
+                        <form action="{{ route('updateUser', ['id' => $row->id]) }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group mb-3">
-                                <label class="label" for="username">ชื่อผู้ใช้</label>
+                                <label class="label" for="username">ชื่อผู้ใช้ <span>*</span></label>
                                 <input type="text" class="form-control" placeholder="Username" id="username"
                                     name="username" value="{{ $row->username }}" required>
                             </div>
                             <div class="form-group mb-3">
-                                <label class="label" for="email">อีเมล</label>
+                                <label class="label" for="email">อีเมล <span>*</span></label>
                                 <input type="email" class="form-control" placeholder="email" id="email"
                                     name="email" value="{{ $row->email }}" required>
                             </div>
                             <div class="form-group mb-3">
-                                <label class="label" for="password">รหัสผ่าน</label>
-                                <input type="password" class="form-control" id="password" name="password"
-                                    placeholder="Password" value="{{ $row->password }}" required>
-                            </div>
-                            <div class="form-group mb-5">
-                                <label class="label" for="status">สถานะผู้ใช้</label>
+                                <label class="label" for="status">สถานะผู้ใช้ <span>*</span></label>
                                 <select class="form-select" aria-label="Default select example" id="status"
                                     name="status" required>
                                     <option disabled>--- กรุณาเลือกสถานะผู้ใช้ ---</option>
@@ -140,6 +162,16 @@
                                         แอดมิน
                                     </option>
                                 </select>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label">รูปภาพสนาม <span>*</span></label>
+                                <input type="file" class="form-control" id="imageInput{{ $row->id }}" name="qrcode"
+                                    accept="image/gif, image/jpeg, image/png" onchange="inputFile('{{ $row->id }}')" multiple>
+                            </div>
+                            <div class="form-group mb-5 text-center">
+                                <div id="imagePreview{{ $row->id }}">
+                                        <img src="{{ asset($row->qrcode) }}" class="previewImage" alt="...">
+                                </div>
                             </div>
                             <input type="submit" class="btn btn-primary float-end" value="บันทึก">
                         </form>
@@ -204,6 +236,65 @@
 
                 }
             });
+        }
+    </script>
+    <script>
+        document.getElementById('qrcode').addEventListener('change', handleFileQRCode);
+
+        function handleFileQRCode(event) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById('qrcodePreview');
+
+            // Clear the existing preview
+            previewContainer.innerHTML = '';
+
+            for (const file of files) {
+                // Check if the file is an image
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        const previewImage = document.createElement('img');
+                        previewImage.classList.add('previewImage');
+                        previewImage.src = e.target.result;
+                        previewContainer.appendChild(previewImage);
+                    };
+
+                    // Read the image file as a data URL
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
+    </script>
+    <script>
+        function inputFile(id) {
+            document.getElementById('imageInput' + id);
+            handleFileSelect(event, id);
+        }
+    
+        function handleFileSelect(event, id) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById('imagePreview' + id);
+    
+            // Clear the existing preview
+            previewContainer.innerHTML = '';
+    
+            for (const file of files) {
+                // Check if the file is an image
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+    
+                    reader.onload = function(e) {
+                        const previewImage = document.createElement('img');
+                        previewImage.classList.add('previewImage');
+                        previewImage.src = e.target.result;
+                        previewContainer.appendChild(previewImage);
+                    };
+    
+                    // Read the image file as a data URL
+                    reader.readAsDataURL(file);
+                }
+            }
         }
     </script>
 @endsection

@@ -26,6 +26,7 @@
             <thead>
                 <tr class="text-center">
                     <th scope="col">#</th>
+                    <th scope="col">เจ้าของสนาม</th>
                     <th scope="col">สนาม</th>
                     <th scope="col">ชื่อผู้จอง</th>
                     <th scope="col">วันที่จอง</th>
@@ -39,6 +40,7 @@
                 @foreach ($bookings as $key => $row)
                     <tr>
                         <th scope="row">{{ $key + 1 }}</th>
+                        <td>{{ $row->username }}</td>
                         <td>{{ $row->std_name }}</td>
                         <td>{{ $row->bk_username }}</td>
                         <td>{{ $row->bk_date }}</td>

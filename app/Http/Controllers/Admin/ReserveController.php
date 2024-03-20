@@ -21,7 +21,8 @@ class ReserveController extends Controller
         if (auth()->user()->status == 9) {
             // ดึงข้อมูลตาราง bookings join ตาราง stadium
             $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')
-                ->select('bookings.*', 'stadiums.std_name')
+                ->join('users', 'stadiums.std_supperuser', 'users.id')
+                ->select('users.username', 'bookings.*', 'stadiums.std_name')
                 ->orderBy('created_at', 'desc')
                 ->get();
             //ดึงข้อมูลตาราง Stadiums ทั้งหมด

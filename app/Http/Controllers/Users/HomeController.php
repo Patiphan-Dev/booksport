@@ -22,6 +22,7 @@ class HomeController extends Controller
         $data = [
             'title' => 'เกี่ยวกับเรา'
         ];
-        return view('about', $data);
+        $stadiums = Stadiums::all();
+        return view('about', compact('stadiums'), $data);
     }
 }

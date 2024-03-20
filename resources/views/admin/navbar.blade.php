@@ -1,7 +1,5 @@
 @php
-    $current_route = request()
-        ->route()
-        ->getName();
+    $current_route = request()->route()->getName();
 @endphp
 <style>
     .navbar-collapse {
@@ -28,12 +26,15 @@
                         แดชบอร์ด
                     </a>
                 </li>
-                <li>
-                    <a href="{{ route('user') }}" class="nav-link text-white {{ $current_route == 'user' ? 'active' : '' }}">
-                        <i class="fa-solid fa-users"></i>
-                        ผู้ใช้งาน
-                    </a>
-                </li>
+                @if (auth()->user()->status == 9)
+                    <li>
+                        <a href="{{ route('user') }}"
+                            class="nav-link text-white {{ $current_route == 'user' ? 'active' : '' }}">
+                            <i class="fa-solid fa-users"></i>
+                            ผู้ใช้งาน
+                        </a>
+                    </li>
+                @endif
                 <li>
                     <a href="{{ route('stadium') }}"
                         class="nav-link text-white fw-bold py-1 {{ $current_route == 'stadium' ? 'active' : '' }}">

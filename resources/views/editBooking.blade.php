@@ -92,6 +92,10 @@
         @if (Auth::user()->username == $row->bk_username)
             <div class="col-12 col-lg-5">
                 <div class="col-12 text-center mt-3">
+                    <img src="{{ asset('assets/images/qrcode.jpg') }}" id="qrcode" alt="อัพโหลดสลิปโอนเงิน"
+                        class="mb-3 img_bk_slip">
+                </div>
+                <div class="col-12 text-center mt-3">
                     <label for="bk_end_time" class="form-label">
                         หลักฐานการชำระเงิน <span>*</span>
                     </label>
@@ -100,7 +104,6 @@
                         class="mx-auto d-block img-thumbnail mb-3 img_bk_slip">
                     <input type="file" id="bk_slip{{ $row->id }}" name="bk_slip" class="form-control mb-3"
                         onchange="displayImage('{{ $row->id }}')">
-
                 </div>
             </div>
         @endif
@@ -118,11 +121,11 @@
 
 <style>
     .img_bk_slip {
-        max-width: 300px;
+        max-width: 200px;
         border: 1px solid #88888850;
         border-radius: 6px;
         padding: 6px;
-        width: 55vw;
+        width: 50vw;
         height: 40vh;
         background-color: rgb(255, 242, 228);
         align-items: center;

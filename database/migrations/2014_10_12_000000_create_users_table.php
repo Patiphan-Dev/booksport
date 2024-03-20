@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('username')->nullable()->comment('ชื่อผู้ใช้งาน');
             $table->string('email')->unique()->comment('อีเมล');
             $table->string('password')->nullable()->comment('รหัสผ่าน');
+            $table->string('qrcode')->nullable()->comment('qrcode ชำระเงิน');
             $table->string('status')->default('1')->comment('สถานะ');
             $table->rememberToken();
             $table->timestamps();

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Hash;
+use File;
 
 class UserController extends Controller
 {
@@ -22,22 +23,24 @@ class UserController extends Controller
 
     public function addUser(Request $request)
     {
+        $date = date("Y-m-d");
 
-        //บันทึกข้อมูล
-        // $user = new User;
-        // $user->username = $request->username;
-        // $user->email = $request->email;
-        // $user->password = Hash::make($request->password);
-        // $user->status = $request->status;
-        // $user->save();
+        if ($file = $request->file('qrcode')) {
+            $qrcode =  $request->username . '-' . $date . '-qrcode';
+            $ext = strtolower($file->getClientOriginalExtension());
+            $image_full_name = $qrcode . '.' . $ext;
+            $uploade_path = 'uploads/qrcode/';
+            $image_url = $uploade_path . $image_full_name;
+            $file->move($uploade_path, $image_full_name);
 
-        User::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'status' => $request->status,
-
-        ]);
+            User::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'qrcode' => $image_url,
+                'status' => $request->status,
+            ]);
+        }
 
         Alert::success('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
         return redirect()->back()->with('สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
@@ -51,15 +54,34 @@ class UserController extends Controller
 
     public function updateUser(Request $request, $id)
     {
-        //อัพเดทข้อมูล
-        User::find($id)->update(
-            [
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'status' => $request->status,
-            ]
-        );
+        $user = User::find($id);
+        $img = $user->std_img_path;
+        $image_path = public_path('/' . $img);
+        if (File::exists($image_path)) {
+            File::delete($image_path);
+        }
+
+        $date = date("Y-m-d");
+
+        if ($file = $request->file('qrcode')) {
+            $qrcode =  $request->username . '-' . $date . '-qrcode';
+            $ext = strtolower($file->getClientOriginalExtension());
+            $image_full_name = $qrcode . '.' . $ext;
+            $uploade_path = 'uploads/qrcode/';
+            $image_url = $uploade_path . $image_full_name;
+            $file->move($uploade_path, $image_full_name);
+
+            //อัพเดทข้อมูล
+            User::find($id)->update(
+                [
+                    'username' => $request->username,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'qrcode' => $image_url,
+                    'status' => $request->status,
+                ]
+            );
+        }
 
         Alert::success('สำเร็จ', 'อัพเดทข้อมูลสำเร็จ');
         return redirect()->back()->with('success', 'อัพเดทข้อมูลสำเร็จ');
