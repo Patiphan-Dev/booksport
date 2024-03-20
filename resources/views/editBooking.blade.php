@@ -92,10 +92,10 @@
         @if (Auth::user()->username == $row->bk_username)
             <div class="col-12 col-lg-5">
                 <div class="col-12 text-center mt-3">
-                    <img src="{{ asset('assets/images/qrcode.jpg') }}" id="qrcode" alt="อัพโหลดสลิปโอนเงิน"
+                    <img src="{{ asset($row->qrcode) }}" id="qrcode" alt="อัพโหลดสลิปโอนเงิน"
                         class="mb-3 img_bk_slip">
                 </div>
-                <div class="col-12 text-center mt-3">
+                <div class="col-12 text-center mt-2">
                     <label for="bk_end_time" class="form-label">
                         หลักฐานการชำระเงิน <span>*</span>
                     </label>
@@ -121,7 +121,7 @@
 
 <style>
     .img_bk_slip {
-        max-width: 200px;
+        max-width: 220px;
         border: 1px solid #88888850;
         border-radius: 6px;
         padding: 6px;

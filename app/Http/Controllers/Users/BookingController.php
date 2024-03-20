@@ -17,9 +17,18 @@ class BookingController extends Controller
         $data = [
             'title' => 'จองสนามกีฬา'
         ];
-        $booking = Booking::where('bk_std_id', $id)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
-        $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->paginate(10);
-        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
+        $booking = Booking::where('bk_std_id', $id)
+            ->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')
+            ->select('users.username', 'users.qrcode', 'bookings.*', 'stadiums.std_name')
+            ->orderBy('created_at', 'desc')->get();
+        $history = Booking::where('bk_username', auth()->user()->username)
+            ->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')
+            ->join('users', 'stadiums.std_supperuser', 'users.id')
+            ->select('users.username', 'users.qrcode', 'bookings.*', 'stadiums.std_name')
+            ->orderBy('created_at', 'desc')->paginate(10);
+        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')
+            ->select('bookings.*', 'stadiums.std_name')
+            ->orderBy('created_at', 'desc')->get();
         $search = Stadiums::find($id);
         $stadiums = Stadiums::all();
         return view('booking', compact('booking', 'bookings', 'stadiums', 'search', 'history'), $data);
@@ -30,9 +39,21 @@ class BookingController extends Controller
         $data = [
             'title' => 'จองสนามกีฬา'
         ];
-        $booking = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
-        $history = Booking::where('bk_username', auth()->user()->username)->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
-        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')->select('bookings.*', 'stadiums.std_name')->orderBy('created_at', 'desc')->get();
+        $booking = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')
+            ->join('users', 'stadiums.std_supperuser', 'users.id')
+            ->select('users.qrcode', 'bookings.*', 'stadiums.std_name')
+            ->orderBy('created_at', 'desc')->get();
+        $history = Booking::where('bk_username', auth()->user()->username)
+            ->join('stadiums', 'bookings.bk_std_id', 'stadiums.id')
+            ->join('users', 'stadiums.std_supperuser', 'users.id')
+            ->select('users.qrcode', 'bookings.*', 'stadiums.std_name')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $bookings = Booking::join('stadiums', 'bookings.bk_std_id', 'stadiums.id')
+            ->join('users', 'stadiums.std_supperuser', 'users.id')
+            ->select('users.qrcode', 'bookings.*', 'stadiums.std_name')
+            ->orderBy('created_at', 'desc')
+            ->get();
         $stadiums = Stadiums::all();
         $search = '';
         return view('booking', compact('booking', 'bookings', 'stadiums', 'search', 'history'), $data);
