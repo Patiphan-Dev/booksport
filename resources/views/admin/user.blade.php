@@ -57,8 +57,8 @@
                                 </select>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="PayDeposit" class="form-label">
-                                    QR Code ชำระเงินค่าสนาม
+                                <label for="qrcode" class="form-label">
+                                    QR Code รับเงินค่าสนาม
                                 </label>
                                 <input type="file" class="form-control" id="qrcode" name="qrcode"
                                     accept="image/jpeg, image/png">
@@ -164,7 +164,9 @@
                                 </select>
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label">รูปภาพสนาม <span>*</span></label>
+                                <label for="qrcode" class="form-label">
+                                    QR Code รับเงินค่าสนาม
+                                </label>
                                 <input type="file" class="form-control" id="imageInput{{ $row->id }}" name="qrcode"
                                     accept="image/gif, image/jpeg, image/png" onchange="inputFile('{{ $row->id }}')" multiple>
                             </div>
