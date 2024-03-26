@@ -3,12 +3,20 @@
     <div class="row">
         <div class="col-12 col-md-4 mb-3">
             <label for="std_supperuser" class="form-label">ชื่อเจ้าของสนาม <span>*</span></label>
-            <select class="form-select" name="std_supperuser" id="std_supperuser" required  @if(auth()->user()->status != 9) readonly @endif>
-                {{-- <option value="" disabled selected>--- กรุณาเลือกเจ้าของสนาม ---</option> --}}
-                @foreach ($users as $user)
-                    <option value="{{ $user->id }}" @if(auth()->user()->username == $user->username) selected @endif >{{ $user->username }}</option>
-                @endforeach
-            </select>
+            @if (auth()->user()->status != 9)
+                <input type="text" class="form-control" id="std_supperuser" name="std_supperuser"
+                    value="{{ auth()->user()->id }}" hidden required>
+                <input type="text" class="form-control" id="std_gm" name="std_gm"
+                    value="{{ auth()->user()->username }}" disabled>
+            @else
+                <select class="form-select" name="std_supperuser" id="std_supperuser" required>
+                    <option value="" disabled selected>--- กรุณาเลือกเจ้าของสนาม ---</option>
+                    @foreach ($users as $user)
+                        <option value="{{ $user->id }}" @if (auth()->user()->username == $user->username) selected @endif>
+                            {{ $user->username }}</option>
+                    @endforeach
+                </select>
+            @endif
         </div>
         <div class="col-12 col-md-4 mb-3">
             <label for="std_name" class="form-label">ชื่อสนาม <span>*</span></label>
@@ -33,7 +41,7 @@
                 accept="image/gif, image/jpeg, image/png" multiple required>
         </div>
         <div class="row mb-3">
-            
+
             <div id="imageStadiumPreview"></div>
         </div>
     </div>

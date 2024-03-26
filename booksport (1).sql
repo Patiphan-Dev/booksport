@@ -187,12 +187,12 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@gmail.com', '$2y$12$CtcifXzC8QGbYTy/0EpsguzzyCgiOY0qG/tPNjh5aQJ/1Bs8U9vva', '9', 'CCTcwxCHTxkPlfkex5DAJLVb0D1DTW6qpAEmYB4x8HdEFSARLegAP0OBkZp5', '2024-03-19 02:36:38', '2024-03-19 02:36:38'),
-(2, 'gm1', 'gm1@gmail.com', '$2y$12$lLuJVntvF.SS0Y7kYLgtZOgO2a0mGe/ggNKEIUET/ZCoFtq2hKDYS', '7', 'Ssd1jUhhYexRzsE9S0spqGCqbMFxTZX4Zy8fJ9khMGgPeCZyBCZUqEp64eu2', '2024-03-19 08:57:41', '2024-03-19 09:46:15'),
-(3, 'gm2', 'gm2@gmail.com', '$2y$12$Jc/k5gy2jV2fdCevdW.ztO5yJ9jMDu3/WbYE9JeUOUJCNTmQAMxGS', '7', 'tNHEvoP4xuoYLQuDxm227M6L6RYBCtfA1QJWaW26DbqluQ2N5CEXVLiMwHW2', '2024-03-19 09:45:51', '2024-03-19 09:45:51'),
-(4, 'user1', 'user1@gmail.com', '$2y$12$4jjxWUQ9rRlkcbVXeOHvVe/iJutHbHtjrj4pU4ELaJ31kzB6ZS3US', '1', 'W5UVEuuvdsE5dfG0RAQdeX7ma04uheJ7W4MJWHshES80ofdgWP1JK9O6bXdv', '2024-03-19 10:07:15', '2024-03-19 10:07:15'),
-(5, 'user2', 'user2@gmail.com', '$2y$12$RskQB7DotvYafztwb.II8uWN7HSIfWFaGEv.XY3/AaTWfREY.lO7G', '1', 'ErJhcvVBICNt3rMYw1l6PwPCwLtqIYCwOypBUsbNI5WJRTTVpWTOXU6ilOj5', '2024-03-19 10:08:33', '2024-03-19 10:08:33');
+INSERT INTO `users` (`id`, `username`, `email`, `password`,`qrcode`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'admin@gmail.com', '$2y$12$CtcifXzC8QGbYTy/0EpsguzzyCgiOY0qG/tPNjh5aQJ/1Bs8U9vva','', '9', 'CCTcwxCHTxkPlfkex5DAJLVb0D1DTW6qpAEmYB4x8HdEFSARLegAP0OBkZp5', '2024-03-19 02:36:38', '2024-03-19 02:36:38'),
+(2, 'gm1', 'gm1@gmail.com', '$2y$12$lLuJVntvF.SS0Y7kYLgtZOgO2a0mGe/ggNKEIUET/ZCoFtq2hKDYS','', '7', 'Ssd1jUhhYexRzsE9S0spqGCqbMFxTZX4Zy8fJ9khMGgPeCZyBCZUqEp64eu2', '2024-03-19 08:57:41', '2024-03-19 09:46:15'),
+(3, 'gm2', 'gm2@gmail.com', '$2y$12$Jc/k5gy2jV2fdCevdW.ztO5yJ9jMDu3/WbYE9JeUOUJCNTmQAMxGS', '','7', 'tNHEvoP4xuoYLQuDxm227M6L6RYBCtfA1QJWaW26DbqluQ2N5CEXVLiMwHW2', '2024-03-19 09:45:51', '2024-03-19 09:45:51'),
+(4, 'user1', 'user1@gmail.com', '$2y$12$4jjxWUQ9rRlkcbVXeOHvVe/iJutHbHtjrj4pU4ELaJ31kzB6ZS3US','', '1', 'W5UVEuuvdsE5dfG0RAQdeX7ma04uheJ7W4MJWHshES80ofdgWP1JK9O6bXdv', '2024-03-19 10:07:15', '2024-03-19 10:07:15'),
+(5, 'user2', 'user2@gmail.com', '$2y$12$RskQB7DotvYafztwb.II8uWN7HSIfWFaGEv.XY3/AaTWfREY.lO7G', '','1', 'ErJhcvVBICNt3rMYw1l6PwPCwLtqIYCwOypBUsbNI5WJRTTVpWTOXU6ilOj5', '2024-03-19 10:08:33', '2024-03-19 10:08:33');
 
 --
 -- Indexes for dumped tables
